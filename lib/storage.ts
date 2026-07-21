@@ -1,4 +1,4 @@
-import { Article, RssSource, RssImportedArticle, UserSubscription, SubscriptionPlan, UserProfile, AuthProvider } from '@/types';
+import { Article, RssSource, RssImportedArticle, UserSubscription, SubscriptionPlan, UserProfile, AuthProvider, NewsletterSettings } from '@/types';
 import { ARTICLES, RSS_SOURCES, RSS_IMPORTED } from './mockData';
 
 const KEYS = {
@@ -18,6 +18,14 @@ const KEYS = {
 
 const DEFAULT_SUBSCRIPTION: UserSubscription = {
   isPremium: false,
+};
+
+export const DEFAULT_NEWSLETTER_SETTINGS: NewsletterSettings = {
+  dailyNews: true,
+  sandReport: true,
+  smartGadget: true,
+  marketingAlerts: true,
+  agreedAt: '2026. 07. 21',
 };
 
 // Admin Credentials
@@ -68,13 +76,17 @@ export const storage = {
     }
   },
 
-  // User Authentication Methods
+  // User Authentication & Newsletter Preferences
   getCurrentUser(): UserProfile | null {
     if (typeof window === 'undefined') return null;
     const data = localStorage.getItem(KEYS.CURRENT_USER);
     if (!data) return null;
     try {
-      return JSON.parse(data);
+      const parsed: UserProfile = JSON.parse(data);
+      if (!parsed.newsletterSettings) {
+        parsed.newsletterSettings = DEFAULT_NEWSLETTER_SETTINGS;
+      }
+      return parsed;
     } catch {
       return null;
     }
@@ -83,10 +95,21 @@ export const storage = {
   setCurrentUser(user: UserProfile | null) {
     if (typeof window === 'undefined') return;
     if (user) {
+      if (!user.newsletterSettings) {
+        user.newsletterSettings = DEFAULT_NEWSLETTER_SETTINGS;
+      }
       localStorage.setItem(KEYS.CURRENT_USER, JSON.stringify(user));
     } else {
       localStorage.removeItem(KEYS.CURRENT_USER);
     }
+  },
+
+  updateNewsletterSettings(settings: NewsletterSettings): UserProfile | null {
+    const user = this.getCurrentUser();
+    if (!user) return null;
+    user.newsletterSettings = settings;
+    this.setCurrentUser(user);
+    return user;
   },
 
   loginSocial(provider: 'google' | 'naver'): UserProfile {
@@ -102,9 +125,11 @@ export const storage = {
       createdAt: new Date().toISOString(),
       isPremium: false,
       isAdmin: false,
+      newsletterSettings: DEFAULT_NEWSLETTER_SETTINGS,
     };
 
     this.setCurrentUser(profile);
+    this.addSubscriber(profile.email);
     return profile;
   },
 
@@ -121,6 +146,7 @@ export const storage = {
       createdAt: new Date().toISOString(),
       isPremium: isAdmin,
       isAdmin,
+      newsletterSettings: DEFAULT_NEWSLETTER_SETTINGS,
     };
 
     if (isAdmin) {
@@ -135,6 +161,7 @@ export const storage = {
     }
 
     this.setCurrentUser(profile);
+    this.addSubscriber(profile.email);
     return profile;
   },
 
@@ -153,6 +180,7 @@ export const storage = {
         createdAt: new Date().toISOString(),
         isPremium: true,
         isAdmin: true,
+        newsletterSettings: DEFAULT_NEWSLETTER_SETTINGS,
       };
       this.setCurrentUser(adminProfile);
       return adminProfile;
@@ -175,10 +203,16 @@ export const storage = {
         createdAt: new Date().toISOString(),
         isPremium: false,
         isAdmin: false,
+        newsletterSettings: DEFAULT_NEWSLETTER_SETTINGS,
       };
     }
 
+    if (!foundUser.newsletterSettings) {
+      foundUser.newsletterSettings = DEFAULT_NEWSLETTER_SETTINGS;
+    }
+
     this.setCurrentUser(foundUser);
+    this.addSubscriber(foundUser.email);
     return foundUser;
   },
 

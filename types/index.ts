@@ -26,6 +26,14 @@ export interface Author {
 
 export type AuthProvider = 'google' | 'naver' | 'email';
 
+export interface NewsletterSettings {
+  dailyNews: boolean;       // 사료 & 습식캔 데일리 검증
+  sandReport: boolean;      // 모래 & 배변용품 성분 분석
+  smartGadget: boolean;     // 스마트 가전 & 캣타워 실험실
+  marketingAlerts: boolean; // 이벤트 및 소식 알림
+  agreedAt: string;
+}
+
 export interface UserProfile {
   id: string;
   name: string;
@@ -35,6 +43,7 @@ export interface UserProfile {
   createdAt: string;
   isPremium?: boolean;
   isAdmin?: boolean;
+  newsletterSettings?: NewsletterSettings;
 }
 
 export interface Category {

@@ -12,7 +12,7 @@ import { CATEGORIES, AUTHORS, BREEDS } from '@/lib/mockData';
 import { storage } from '@/lib/storage';
 import { Article, CategorySlug, UserSubscription } from '@/types';
 import { getArticleAccessStatus } from '@/lib/utils';
-import { Sparkles, TrendingUp, ChevronRight, Mail, Send, Award, BookOpen, Flame, Lock, Crown, Clock, ShieldCheck, Box, Zap, ShoppingBag } from 'lucide-react';
+import { Sparkles, TrendingUp, ChevronRight, Mail, Send, Award, BookOpen, Flame, Lock, Crown, Clock, ShieldCheck, Box, Zap, ShoppingBag, Bell } from 'lucide-react';
 import { useToast } from '@/components/ui/Toast';
 
 export default function HomePage() {
@@ -20,7 +20,6 @@ export default function HomePage() {
   const [articles, setArticles] = useState<Article[]>([]);
   const [subscription, setSubscription] = useState<UserSubscription>({ isPremium: false });
   const [selectedCategory, setSelectedCategory] = useState<CategorySlug | 'all'>('all');
-  const [newsletterEmail, setNewsletterEmail] = useState('');
 
   useEffect(() => {
     setArticles(storage.getArticles());
@@ -45,18 +44,6 @@ export default function HomePage() {
   const filteredArticles = selectedCategory === 'all'
     ? articles
     : articles.filter((a) => a.category === selectedCategory);
-
-  const handleSubscribe = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newsletterEmail.trim()) return;
-    const success = storage.addSubscriber(newsletterEmail.trim());
-    if (success) {
-      showToast('일간 리터페이퍼 상품 검증 뉴스레터 구독이 완료되었습니다!');
-    } else {
-      showToast('이미 구독 등록된 이메일 주소입니다.', 'info');
-    }
-    setNewsletterEmail('');
-  };
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FAF8F5] dark:bg-[#1A1A1A] text-[#333333] dark:text-[#FAF8F5] font-sans">
@@ -267,7 +254,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Newsletter Subscription CTA Banner */}
+        {/* Dedicated Newsletter Subscription Banner (No Manual Input Required) */}
         <section className="rounded-3xl bg-white dark:bg-[#242424] border border-[#EAE6DF] dark:border-[#333333] p-8 sm:p-12 text-center shadow-xs relative overflow-hidden">
           <div className="max-w-xl mx-auto space-y-4">
             <div className="w-12 h-12 rounded-2xl bg-[#C19A6B]/20 text-[#C19A6B] flex items-center justify-center mx-auto font-bold">
@@ -277,24 +264,17 @@ export default function HomePage() {
               매일 아침 배달되는 리터페이퍼(Litter Paper) 검증 리포트
             </h2>
             <p className="text-xs sm:text-sm text-[#666666] dark:text-[#A0A0A0] leading-relaxed">
-              실패 없는 반려용품 구매 가이드. 신제품 분광 분석부터 성분 표기 해독까지 이메일로 받아보세요.
+              별도의 이메일 입력 없이 회원가입 시 자동 수신 설정됩니다.<br />
+              내 관심 카테고리별 수신 여부는 뉴스레터 알림 설정 페이지에서 언제든 직접 맞춤 변경할 수 있습니다.
             </p>
-            <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-3 pt-2 max-w-md mx-auto">
-              <input
-                type="email"
-                value={newsletterEmail}
-                onChange={(e) => setNewsletterEmail(e.target.value)}
-                placeholder="이메일 주소를 입력하세요"
-                required
-                className="flex-1 px-4 py-3 rounded-2xl bg-[#FAF8F5] dark:bg-[#1A1A1A] border border-[#EAE6DF] dark:border-[#333333] text-sm focus:outline-hidden focus:border-[#C19A6B]"
-              />
-              <button
-                type="submit"
-                className="px-6 py-3 rounded-2xl bg-[#333333] text-white font-extrabold text-sm hover:bg-[#C19A6B] transition-colors shrink-0 shadow-md flex items-center justify-center gap-1.5"
+            <div className="pt-2">
+              <Link
+                href="/newsletter"
+                className="px-8 py-3.5 rounded-2xl bg-[#FF8A00] text-white font-extrabold text-sm hover:bg-[#e07900] transition-colors shrink-0 shadow-md inline-flex items-center gap-2"
               >
-                <Send className="w-4 h-4" /> 무료 구독하기
-              </button>
-            </form>
+                <Bell className="w-4 h-4 text-white" /> 뉴스레터 알림 설정하기
+              </Link>
+            </div>
           </div>
         </section>
       </main>

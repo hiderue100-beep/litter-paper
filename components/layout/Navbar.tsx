@@ -16,7 +16,8 @@ import {
   Crown,
   User,
   LogOut,
-  ChevronDown
+  ChevronDown,
+  Mail
 } from 'lucide-react';
 import { LitterPaperLogo } from '../ui/LitterPaperLogo';
 import { SearchModal } from '../editorial/SearchModal';
@@ -92,8 +93,8 @@ export function Navbar() {
               <Crown className="w-3.5 h-3.5" /> 프리미엄 멤버십
             </Link>
             <span className="text-[#555555]">|</span>
-            <Link href="/newsletter" className="hover:text-white transition-colors flex items-center gap-1 font-semibold">
-              <Sparkles className="w-3 h-3 text-[#C19A6B]" /> 검증 리포트 구독
+            <Link href="/newsletter" className="hover:text-white transition-colors flex items-center gap-1 font-bold text-[#C19A6B]">
+              <Mail className="w-3.5 h-3.5" /> 뉴스레터 구독
             </Link>
           </div>
         </div>
@@ -120,7 +121,7 @@ export function Navbar() {
             </Link>
 
             {/* Desktop Navigation Links */}
-            <nav className="hidden md:flex items-center gap-8 text-sm font-bold text-[#666666] dark:text-[#A0A0A0]">
+            <nav className="hidden md:flex items-center gap-7 text-sm font-bold text-[#666666] dark:text-[#A0A0A0]">
               <Link
                 href="/category/nutrition"
                 className={`transition-colors ${
@@ -175,6 +176,19 @@ export function Navbar() {
               >
                 <ShieldCheck className="w-4 h-4 text-[#C19A6B]" />
                 내돈내산 검증
+              </Link>
+
+              {/* Dedicated Top Newsletter Link (Matching Newneek Style) */}
+              <Link
+                href="/newsletter"
+                className={`transition-colors flex items-center gap-1 text-[#C19A6B] font-extrabold ${
+                  pathname === '/newsletter'
+                    ? 'border-b-2 border-[#C19A6B] pb-1'
+                    : 'hover:text-[#333333] dark:hover:text-[#FAF8F5]'
+                }`}
+              >
+                <Mail className="w-4 h-4" />
+                뉴스레터
               </Link>
             </nav>
 
@@ -259,6 +273,14 @@ export function Navbar() {
                           )}
                         </div>
                       </div>
+
+                      <Link
+                        href="/newsletter"
+                        onClick={() => setIsUserMenuOpen(false)}
+                        className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-[#FAF8F5] dark:hover:bg-[#1A1A1A] font-bold text-[#C19A6B]"
+                      >
+                        <Mail className="w-4 h-4" /> 뉴스레터 알림 설정
+                      </Link>
 
                       <Link
                         href="/bookmarks"
@@ -353,6 +375,13 @@ export function Navbar() {
               className="block py-2 text-base font-medium text-[#C19A6B]"
             >
               🛡️ 내돈내산 검증
+            </Link>
+            <Link
+              href="/newsletter"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="block py-2 text-base font-extrabold text-[#C19A6B]"
+            >
+              📧 뉴스레터 구독 및 알림 설정
             </Link>
             <div className="pt-3 border-t border-[#EAE6DF] dark:border-[#333333] flex justify-between text-xs text-[#666666]">
               <Link href="/premium" onClick={() => setIsMobileMenuOpen(false)}>프리미엄 멤버십</Link>
