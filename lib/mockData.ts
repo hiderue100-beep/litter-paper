@@ -98,8 +98,17 @@ export const AUTHORS: Author[] = [
   },
 ];
 
+export const TRENDING_KEYWORDS = [
+  '벤토나이트 먼지',
+  'AAFCO 습식캔',
+  '자동화장실 300g 센서',
+  '원목 캣폴 100kg',
+  'DM 단백질 환산',
+  '내돈내산 리뷰',
+];
+
 const now = new Date();
-const fourHoursAgo = new Date(now.getTime() - 4 * 3600 * 1000).toISOString();
+const seventeenHoursAgo = new Date(now.getTime() - 17.42 * 3600 * 1000).toISOString(); // ~06:34:51 remaining live
 const twelveHoursAgo = new Date(now.getTime() - 12 * 3600 * 1000).toISOString();
 const threeDaysAgo = new Date(now.getTime() - 72 * 3600 * 1000).toISOString();
 const fiveDaysAgo = new Date(now.getTime() - 120 * 3600 * 1000).toISOString();
@@ -108,19 +117,19 @@ const eighteenHoursFromNow = new Date(now.getTime() + 18 * 3600 * 1000).toISOStr
 export const ARTICLES: Article[] = [
   {
     id: 'art-1',
-    slug: 'bentonite-cat-litter-dust-test-2026',
-    title: '벤토나이트 10종 먼지 분광 측정 & 30초 결분력 몰빵 실험',
-    subtitle: '광고에 속지 마세요. 2m 낙하 기류 먼지 발생량(ppm) 및 소변 모래 뭉침 강도를 정밀 수치로 공개합니다.',
-    summary: '시중 대표 벤토나이트 고양이 모래 10종을 무작위 구매하여 2m 낙하 분광 먼지 측정기 수치와 30초 굳기 결분력을 내돈내산으로 비교 검증한 리포트입니다.',
-    category: 'veterinary', // mapped to 모래 & 배변용품
+    slug: 'cat-bentonite-litter-dust-test-2026',
+    title: '고양이 벤토나이트 모래 10종 먼지 및 30초 결분력 실측 비교',
+    subtitle: '2m 낙하 분광 먼지 측정기와 50ml 응집력 테스트로 검증한 100% 내돈내산 리포트',
+    summary: '인기 벤토나이트 모래 10종을 직접 무작위 구매하여 2m 높이 낙하 시 미세먼지 수치(ppm) 및 소변 반응 응집력을 30초 간격으로 정밀 측정했습니다.',
+    category: 'veterinary',
     categoryName: '모래 & 배변용품',
-    tags: ['벤토나이트', '모래테스트', '내돈내산', '결분력', '먼지 측정'],
+    tags: ['벤토나이트', '모래먼지', '결분력', '사막화', '내돈내산'],
     author: AUTHORS[1],
-    coverImage: 'https://images.unsplash.com/photo-1548802673-380ab8ebc7b7?w=1200&auto=format&fit=crop&q=80',
+    coverImage: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=1200&auto=format&fit=crop&q=80',
     readingTime: 6,
     difficulty: '중급 (Medium)',
-    publishedAt: fourHoursAgo, // Live 24h Free countdown active!
-    updatedAt: fourHoursAgo,
+    publishedAt: seventeenHoursAgo, // Live 24h Free countdown active!
+    updatedAt: seventeenHoursAgo,
     likes: 542,
     views: 8900,
     commentsCount: 48,
@@ -178,253 +187,219 @@ export const ARTICLES: Article[] = [
     updatedAt: threeDaysAgo,
     likes: 412,
     views: 6200,
-    commentsCount: 31,
+    commentsCount: 32,
+    isHero: false,
     isFeatured: true,
     isTrending: true,
     isEditorsPick: true,
     aiGenerated: false,
-    status: 'archived',
+    status: 'published',
     freeAccessDurationHours: 24,
     isPremium: true,
     isPremiumOnly: false,
+    seoTitle: '주식 캔 20종 DM 성분 분석 - LITTER PAPER',
+    seoDescription: '건조 중량 기준 영양 성분 분석 결과.',
     content: `
-<h2>1. 습식 캔 라벨의 착시 현상: DM 환산법</h2>
-<p>습식 캔 라벨에 적힌 조단백 10%는 수분이 포함된 상태입니다. 수분을 제외한 실제 건조 상태 단백질 함량(DM)을 구하는 공식: <code>(조단백질 % ÷ (100 - 수분 %)) × 100</code></p>
+<h2>1. 습식 캔 조단백 수치의 함정</h2>
+<p>습식 캔 라벨에 적힌 '조단백 10%'는 수분 80%가 포함된 수치입니다. 수분을 제외한 Dry Matter(건물 기준)로 환산하면 (10 / 20) * 100 = 50%로 고단백 식품이 됩니다.</p>
+
+<h2>2. 20종 캔 영양 성분표 전수 조사 결과</h2>
+<p>AAFCO 가이드라인 단백질 26% 최소 기준을 상회하는 15종 및 칼슘:인 비율 1.2:1 황금 비율 제품 목록을 공개합니다.</p>
     `,
   },
   {
     id: 'art-3',
-    slug: 'automatic-litter-box-safety-sensor-test',
-    title: '자동화장실 5종 협착 안전 센서 반응 속도 & 악취 차단 100% 테스트',
-    subtitle: '아이가 들어갔을 때 모터가 멈추는 데 걸리는 시간(ms)과 배변통 악취 밀폐력 물리 실험',
-    summary: '고양이 자동 화장실의 가장 중요한 요소는 안전입니다. 샌드위치 무게 센서 및 적외선 센서의 오작동율을 시뮬레이션 인형으로 테스트했습니다.',
-    category: 'travel', // mapped to 스마트 가전
+    slug: 'cat-litter-box-weight-sensor-safety-test',
+    title: '자동 화장실 300g 무게 센서 정밀 감지 실험: 끼임 사고 방지 안전 장치',
+    subtitle: '아기 고양이 안전과 모터 끼임 방지 레이저 센서 5종 가전 장비 오작동 테스트',
+    summary: '자동 화장실 끼임 안전사고 방지를 위해 300g 인형 및 레이저 차단 테스트를 진행했습니다. 안전 센서 반응 속도를 밀리초 단위로 기록했습니다.',
+    category: 'travel',
     categoryName: '스마트 가전',
-    tags: ['자동화장실', '안전센서', '스마트가전', '소음측정', '내돈내산'],
+    tags: ['자동화장실', '안전센서', '스마트가전', '물리실험', '끼임방지'],
     author: AUTHORS[2],
     coverImage: 'https://images.unsplash.com/photo-1513360371669-4adf3dd7dff8?w=1200&auto=format&fit=crop&q=80',
-    readingTime: 8,
-    difficulty: '전문가 (Expert)',
-    publishedAt: fiveDaysAgo,
-    updatedAt: fiveDaysAgo,
-    likes: 389,
-    views: 5400,
-    commentsCount: 29,
-    isFeatured: true,
-    isTrending: false,
-    isEditorsPick: false,
-    aiGenerated: false,
-    status: 'archived',
-    freeAccessDurationHours: 24,
-    isPremium: true,
-    isPremiumOnly: false,
-    content: `
-<h2>1. 오작동 협착 방지 센서 테스트</h2>
-<p>회전 돔 내부 300g 가벼운 아기 고양이 무게 감지 센서 반응 여부를 50회 연속 실험했습니다.</p>
-    `,
-  },
-  {
-    id: 'art-4',
-    slug: 'cat-tree-wooden-pole-[#0064FF]-test-2026',
-    title: '원목 캣폴 7종 하중 수직 흔들림 & 스크래쳐 카페트 내구성 검증',
-    subtitle: '7kg 거대묘 2마리가 동시 점프할 때의 천장 고정력과 마모율 분석',
-    summary: '캣폴 천장 고정 장치의 나사 풀림 현상과 수직 하중 50kg 인장 테스트 결과를 공개합니다.',
-    category: 'behavior', // mapped to 캣타워 & 가구
-    categoryName: '캣타워 & 가구',
-    tags: ['캣폴', '원목캣타워', '스크래쳐', '하중실험', '가구리뷰'],
-    author: AUTHORS[2],
-    coverImage: 'https://images.unsplash.com/photo-1574158622682-e40e69881006?w=1200&auto=format&fit=crop&q=80',
     readingTime: 5,
     difficulty: '입문 (Easy)',
-    publishedAt: twelveHoursAgo, // Live 24h Free active!
+    publishedAt: twelveHoursAgo,
     updatedAt: twelveHoursAgo,
-    likes: 290,
+    likes: 289,
     views: 4100,
     commentsCount: 19,
+    isHero: false,
     isFeatured: true,
-    isTrending: true,
+    isTrending: false,
     isEditorsPick: false,
     aiGenerated: false,
     status: 'published',
     freeAccessDurationHours: 24,
     isPremium: false,
     isPremiumOnly: false,
+    seoTitle: '자동 화장실 300g 무게 센서 안전 실험 - LITTER PAPER',
+    seoDescription: '자동 화장실 끼임 사고 방지 센서 실측 데이터.',
     content: `
-<h2>1. 천장 고정 장치 인장 강도 테스트</h2>
-<p>천장 석고보드 무너짐 없이 50kg 수직 하중을 버티는 원목 캣폴 3종을 선정했습니다.</p>
+<h2>1. 자동 화장실 300g 감지 센서의 중요성</h2>
+<p>아기 고양이가 작동 중인 화장실 통에 들어갔을 때 모터가 즉시 멈춰야 안전사고를 막을 수 있습니다.</p>
+
+<h2>2. 5종 브랜드 멈춤 반응속도 실측</h2>
+<p>300g 가중치 개입 시 0.2초 만에 역회전 멈춤이 작동한 A 제품과 반응 시간이 1.5초 이상 지연된 B 제품을 비교했습니다.</p>
+    `,
+  },
+  {
+    id: 'art-4',
+    slug: 'cat-scratching-post-wood-durability',
+    title: '원목 캣폴 100kg 하중 인장 테스트 및 삼줄 vs 삼아마 원단 6개월 비교',
+    subtitle: '흔들림 없는 구조 설계를 위한 원목 천장 마감 고정 장치와 스크래처 내구성 실험',
+    summary: '다묘 가정 필수 가구 캣폴의 원목 변형 여부와 100kg 가중 피크 하중 내구성을 기계 장비로 내돈내산 테스트했습니다.',
+    category: 'behavior',
+    categoryName: '캣타워 & 가구',
+    tags: ['캣폴', '원목캣타워', '하중테스트', '스크래쳐', '내구성'],
+    author: AUTHORS[2],
+    coverImage: 'https://images.unsplash.com/photo-1545249390-6bdfa286032f?w=1200&auto=format&fit=crop&q=80',
+    readingTime: 8,
+    difficulty: '전문가 (Expert)',
+    publishedAt: fiveDaysAgo, // Expired -> Premium Archive!
+    updatedAt: fiveDaysAgo,
+    likes: 620,
+    views: 11200,
+    commentsCount: 54,
+    isHero: false,
+    isFeatured: false,
+    isTrending: true,
+    isEditorsPick: true,
+    aiGenerated: false,
+    status: 'published',
+    freeAccessDurationHours: 24,
+    isPremium: true,
+    isPremiumOnly: false,
+    seoTitle: '원목 캣폴 하중 인장 테스트 - LITTER PAPER',
+    seoDescription: '100kg 하중 내구성 실측 리포트.',
+    content: `
+<h2>1. 캣폴 흔들림과 천장 고정 장치 구조</h2>
+<p>스프링 방식 압착 원목 캣폴은 6개월 사용 후 나사 풀림으로 기울어짐이 발생할 수 있습니다.</p>
     `,
   },
   {
     id: 'art-5',
-    slug: 'exclusive-feliway-pheromone-lab-test-2026',
-    title: '[프리미엄 독점] 페로몬 디퓨저 3종 스트레스 호르몬(코르티솔) 분광 감소율 검증',
-    subtitle: '펠리웨이 vs 국내산 페로몬 디퓨저의 다묘가정 혈액 코르티솔 수치 변화 실험 리포트',
-    summary: '프리미엄 구독자 전용 단독 실험 리포트. 페로몬 디퓨저 설치 전후 다묘가정 고양이의 대변 내 코르티솔 호르몬 농도 변화를 질량분석기로 정밀 측정한 데이터를 독점 공개합니다.',
-    category: 'health', // mapped to 위생 & 케어
-    categoryName: '위생 & 케어용품',
-    tags: ['프리미엄독점', '페로몬디퓨저', '펠리웨이', '스트레스호르몬', '실험리포트'],
-    author: AUTHORS[0],
-    coverImage: 'https://images.unsplash.com/photo-1518791841217-8f162f1e1131?w=1200&auto=format&fit=crop&q=80',
-    readingTime: 9,
-    difficulty: '전문가 (Expert)',
-    publishedAt: fourHoursAgo,
-    updatedAt: fourHoursAgo,
-    likes: 620,
-    views: 9500,
-    commentsCount: 54,
+    slug: 'cat-feline-idiopathic-cystitis-fic-guide-2026',
+    title: '원인 불명의 방광염 FIC, 집사가 반드시 알아야 할 5가지 행동적 신호',
+    subtitle: '음수량 부족만이 원인이 아니다? 고양이 스트레스가 방광에 미치는 놀라운 영향을 수의학 논문 기반으로 분석합니다.',
+    summary: '특발성 방광염(FIC)은 소변 검사에서 세균이 나오지 않는 경우가 90% 이상입니다. 수의학 전문 논문 15편을 분석하여 가정에서 실천 가능한 행동 환경 조성 가이드를 정립했습니다.',
+    category: 'veterinary',
+    categoryName: '수의학 지식',
+    tags: ['수의학', '방광염', 'FIC', '음수량', '고양이건강'],
+    author: {
+      id: 'author-vet-1',
+      name: '김서연 수의사',
+      role: '수의학 임상 에디터',
+      avatar: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=300&auto=format&fit=crop&q=80',
+      bio: '서울대 수의대 졸업, 임상 10년 차 수의사. 고양이 하부유로질환(FLUTD) 전문 칼럼을 연재합니다.',
+      articlesCount: 52,
+      followersCount: 21000,
+      verified: true,
+    },
+    coverImage: 'https://images.unsplash.com/photo-1573865526739-10659fec78a5?w=1200&auto=format&fit=crop&q=80',
+    readingTime: 6,
+    difficulty: '중급 (Medium)',
+    publishedAt: eighteenHoursFromNow, // Scheduled release
+    updatedAt: eighteenHoursFromNow,
+    likes: 342,
+    views: 4890,
+    commentsCount: 27,
+    isHero: false,
     isFeatured: true,
     isTrending: true,
     isEditorsPick: true,
-    aiGenerated: false,
-    status: 'premium_only',
-    freeAccessDurationHours: 0,
-    isPremium: true,
-    isPremiumOnly: true,
-    content: `
-<h2>1. 대변 내 코르티솔(Cortisol) 호르몬 분석</h2>
-<p>본 리포트는 프리미엄 멤버 전용 독점 연구 보고서입니다. 페로몬 농도 분사 2주 후 스트레스 지수가 42% 감소한 실험군 데이터 분석을 다룹니다.</p>
-    `,
-  },
-  {
-    id: 'art-6',
-    slug: 'scheduled-automatic-water-fountain-test-2026',
-    title: '[예정 리뷰] 고양이 정수기 8종 세균 번식 속도 & 모터 무소음(dB) 실측',
-    subtitle: '내일 아침 08:00 정식 공개! UV 살균등 효과와 3일 세균 배양 실험 결과',
-    summary: '고양이 정수기 물때 발생과 모터 소음(dB)을 72시간 배양 검사로 비교한 리뷰가 내일 오전 8시 정식 공개됩니다.',
-    category: 'travel',
-    categoryName: '스마트 가전',
-    tags: ['정수기리뷰', '무소음모터', 'UV살균', '음수량', '내일공개'],
-    author: AUTHORS[2],
-    coverImage: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=1200&auto=format&fit=crop&q=80',
-    readingTime: 6,
-    difficulty: '중급 (Medium)',
-    publishedAt: eighteenHoursFromNow,
-    scheduledAt: eighteenHoursFromNow,
-    updatedAt: eighteenHoursFromNow,
-    likes: 150,
-    views: 110,
-    commentsCount: 0,
-    isFeatured: false,
-    isTrending: false,
-    isEditorsPick: false,
     aiGenerated: false,
     status: 'scheduled',
     freeAccessDurationHours: 24,
     isPremium: false,
     isPremiumOnly: false,
+    seoTitle: '고양이 특발성 방광염 FIC 치료 가이드 - LITTER PAPER',
+    seoDescription: '수의학 논문 기반 방광염 5가지 관리 수칙.',
     content: `
-<h2>1. 고양이 정수기 세균 배양 실험 프리뷰</h2>
-<p>내일 아침 8시, 72시간 미청소 시 정수기 필터 세균 수(CFU) 및 데시벨(dB) 측정 결과가 정식 공개됩니다.</p>
+<h2>1. 특발성 방광염(FIC)이란 무엇인가?</h2>
+<p>방광염 증상으로 병원을 찾는 고양이의 60~70%는 결석이나 세균 감염이 아닌 '원인 불명(FIC)' 진단을 받습니다. 이는 뇌와 방광 축(Brain-Bladder Axis) 사이의 스트레스 호르몬 과다 분비가 주원인입니다.</p>
+
+<h2>2. 집사가 체크해야 할 5가지 이상 행동 신호</h2>
+<ul>
+  <li>화장실에 들어가서 오랫동안 울거나 주저앉음</li>
+  <li>소변 뭉치가 5백원 동전 크기로 작아짐</li>
+  <li>이불이나 옷가지 등 화장실 이외의 장소에 배뇨 시도</li>
+  <li>하복부 부위를 과도하게 그루밍하여 털이 빠짐</li>
+  <li>혈뇨 또는 붉은 빛을 띠는 배뇨</li>
+</ul>
     `,
   },
 ];
 
 export const BREEDS: Breed[] = [
   {
-    id: 'breed-ragdoll',
-    name: '렉돌',
-    nameEn: 'Ragdoll',
-    origin: '미국',
-    description: '안으면 인형처럼 몸을 맡기는 온순하고 부드러운 성격의 대형 묘종. 비단결 같은 긴 털과 푸른 눈이 특징입니다.',
-    temperament: ['온순함', '사람을좋아함', '조용함', '안기기좋아함'],
-    weight: '4.5 ~ 9 kg',
+    id: 'br-1',
+    name: '코리안 숏헤어 (Korean Shorthair)',
+    nameEn: 'Korean Shorthair',
+    origin: '대한민국',
+    description: '자연발생종으로 면역력이 강하며 치즈, 삼색, 턱시도, 고등어 등 다양한 모색 보유.',
+    temperament: ['영리함', '강인한 생명력', '친근함', '뛰어난 호기심'],
+    weight: '3.5 - 6.0 kg',
+    activityLevel: '높음',
+    groomingNeed: '쉬움',
+    lifespan: '15 - 20 년',
+    image: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=600&auto=format&fit=crop&q=80',
+    healthCareTips: ['정기 예방접종', '음수량 확보'],
+  },
+  {
+    id: 'br-2',
+    name: '페르시안 (Persian)',
+    nameEn: 'Persian Cat',
+    origin: '이그제틱/이란',
+    description: '풍성한 장모와 납작한 얼굴이 특징. 매일 빗질이 필요하며 얌전한 성격.',
+    temperament: ['조용함', '온순함', '느긋함', '개냥이성향'],
+    weight: '3.0 - 5.5 kg',
     activityLevel: '낮음',
-    groomingNeed: '보통',
-    lifespan: '12 ~ 17년',
-    image: 'https://images.unsplash.com/photo-1513360371669-4adf3dd7dff8?w=800&auto=format&fit=crop&q=80',
-    healthCareTips: [
-      '비후성 심근증(HCM) 유전자 검사 권장',
-      '털 엉킴 방지를 위한 주 2~3회 브러싱 필수',
-      '활동량이 낮아 체중 관리가 중요함',
-    ],
-  },
-  {
-    id: 'breed-british-shorthair',
-    name: '브리티시 숏헤어',
-    nameEn: 'British Shorthair',
-    origin: '영국',
-    description: '단단하고 체구가 동글동글한 테디베어 같은 외모. 독립적이면서도 조용히 보호자 곁을 지키는 젠틀맨 고양이입니다.',
-    temperament: ['차분함', '독립적', '적응력높음', '충직함'],
-    weight: '4 ~ 8 kg',
-    activityLevel: '보통',
-    groomingNeed: '쉬움',
-    lifespan: '14 ~ 20년',
-    image: 'https://images.unsplash.com/photo-1573865526739-10659fec78a5?w=800&auto=format&fit=crop&q=80',
-    healthCareTips: [
-      '밀도 높은 빽빽한 털 모질 관리',
-      '과체중 방지를 위한 수직 공간 놀이 유도',
-      '치주 질환 예방 양치질 매일 권장',
-    ],
-  },
-  {
-    id: 'breed-russian-blue',
-    name: '러시안 블루',
-    nameEn: 'Russian Blue',
-    origin: '러시아',
-    description: '에메랄드빛 눈동자와 은빛 감도는 블루 단모가 매력적인 고양이. 낯가림이 있지만 주인을 깊이 사랑합니다.',
-    temperament: ['조용함', '지혜로움', '주인해바라기', '신중함'],
-    weight: '3 ~ 5.5 kg',
-    activityLevel: '보통',
-    groomingNeed: '쉬움',
-    lifespan: '15 ~ 20년',
-    image: 'https://images.unsplash.com/photo-1518791841217-8f162f1e1131?w=800&auto=format&fit=crop&q=80',
-    healthCareTips: [
-      '소음에 민감하므로 조용한 환경 조성',
-      '음수량 부족으로 인한 요로결석 주의',
-    ],
+    groomingNeed: '자주',
+    lifespan: '12 - 17 년',
+    image: 'https://images.unsplash.com/photo-1548802673-380ab8ebc7b7?w=600&auto=format&fit=crop&q=80',
+    healthCareTips: ['매일 모질 빗질', '안구 세정'],
   },
 ];
 
 export const RSS_SOURCES: RssSource[] = [
   {
     id: 'rss-1',
-    name: '한국소비자원 반려동물용품 안전실태',
-    url: 'https://www.kca.go.kr/rss/news.xml',
-    category: 'news',
+    name: '수의학 신문 (Daily Vet)',
+    url: 'https://www.dailyvet.co.kr/feed',
+    category: 'veterinary',
     active: true,
-    lastFetchedAt: '2026-07-21T08:00:00Z',
+    lastFetchedAt: '2026-07-21T01:00:00Z',
     itemsCount: 142,
   },
   {
     id: 'rss-2',
-    name: 'PET Food Institute & Lab',
-    url: 'https://petfoodinstitute.org/feed/reviews',
+    name: 'AAFCO 반려동물 영양 표준 학회 뉴스',
+    url: 'https://www.aafco.org/news/rss',
     category: 'nutrition',
     active: true,
-    lastFetchedAt: '2026-07-20T18:30:00Z',
+    lastFetchedAt: '2026-07-20T18:00:00Z',
     itemsCount: 89,
   },
 ];
 
 export const RSS_IMPORTED: RssImportedArticle[] = [
   {
-    id: 'rss-item-101',
-    sourceName: '한국소비자원 반려동물용품 안전실태',
-    title: '시중 고양이 장난감 15종 미량 유해물질 불검출 안정성 결과 발표',
-    originalUrl: 'https://kca.go.kr/news/10892',
-    snippet: '소비자원은 고양이 플라스틱 장난감 및 깃털 스틱의 환경호르몬 안전 점검 결과 15종 모두 기준치 이하로 안전하다 발표...',
-    category: 'news',
-    status: 'auto_summarized',
-    fetchedAt: '2026-07-21T08:05:00Z',
+    id: 'rss-item-1',
+    sourceName: '수의학 신문 (Daily Vet)',
+    title: '고양이 하부유로질환(FLUTD) 처방식 사료의 적정 투여 기간에 대한 연구',
+    originalUrl: 'https://www.dailyvet.co.kr/news/12345',
+    snippet: '스트루바이트 결석 용해용 처방식 사료의 장기 투여 시 칼슘 결석 위험성 경고...',
+    category: 'veterinary',
+    status: 'imported',
+    fetchedAt: '2026-07-21T00:30:00Z',
   },
 ];
 
-export const TRENDING_KEYWORDS = [
-  '벤토나이트모래',
-  '습식캔비교',
-  '자동화장실안전',
-  '원목캣폴',
-  '내돈내산리뷰',
-  '페로몬디퓨저',
-  'AAFCO성분',
-  '고양이정수기',
-  '스크래쳐추천',
-  '자동급식기',
-];
-
 export const BREAKING_NEWS = [
-  '[리터페이퍼 검증] 벤토나이트 모래 10종 먼지 분광 측정 수치 공개',
-  '[단독 분석] 주식 캔 20종 DM 건조 단백질 환산 수치 비교 리포트',
-  '[실험] 고양이 자동화장실 5종 안전 센서 오작동 정밀 테스트',
-  '[공지] 100% 내돈내산 대가성 협찬 배제 검증 원칙 선언',
+  '벤토나이트 모래 10종 2m 낙하 분광 먼지 측정 수치 결과 전격 공개',
+  '주식 캔 20종 AAFCO 단백질 DM 환산 수치표 단독 업데이트',
+  '자동 화장실 300g 무게 센서 끼임 사고 방지 멈춤 시간 밀리초 실측',
+  '페로몬 디퓨저 스트레스 진정 효과 100% 내돈내산 실험결과 수유',
 ];

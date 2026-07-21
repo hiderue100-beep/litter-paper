@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Article } from '@/types';
-import { getArticleAccessStatus } from '@/lib/utils';
+import { getArticleAccessStatus, formatTimeRemaining } from '@/lib/utils';
 import { Clock, ArrowUpRight, Lock, Heart, Eye } from 'lucide-react';
 
 interface HeroStoryProps {
@@ -11,8 +11,26 @@ interface HeroStoryProps {
 }
 
 export function HeroStory({ article }: HeroStoryProps) {
-  const access = getArticleAccessStatus(article);
   const [activeTab, setActiveTab] = useState<'today' | 'premium'>('today');
+  const [remainingSeconds, setRemainingSeconds] = useState<number>(0);
+  const [isFreeNow, setIsFreeNow] = useState<boolean>(true);
+
+  useEffect(() => {
+    const publishedDate = new Date(article.publishedAt);
+    const freeDurationHours = article.freeAccessDurationHours || 24;
+    const freeWindowEndsAt = new Date(publishedDate.getTime() + freeDurationHours * 3600 * 1000);
+
+    const updateTimer = () => {
+      const now = Date.now();
+      const diff = Math.max(0, Math.floor((freeWindowEndsAt.getTime() - now) / 1000));
+      setRemainingSeconds(diff);
+      setIsFreeNow(diff > 0 && publishedDate.getTime() <= now && !article.isPremiumOnly);
+    };
+
+    updateTimer();
+    const interval = setInterval(updateTimer, 1000);
+    return () => clearInterval(interval);
+  }, [article]);
 
   return (
     <section className="rounded-3xl overflow-hidden bg-[#242424] border border-[#333333] shadow-2xl text-[#FAF8F5] font-sans">
@@ -32,7 +50,7 @@ export function HeroStory({ article }: HeroStoryProps) {
             <span className="bg-[#C19A6B] text-white text-xs font-extrabold px-3 py-1 rounded-md uppercase tracking-wider shadow-md">
               {article.categoryName}
             </span>
-            <span className="bg-black/60 backdrop-blur-md text-white/90 text-xs px-3 py-1 rounded-md border border-white/20">
+            <span className="bg-black/60 backdrop-blur-md text-white/90 text-xs px-3 py-1 rounded-md border border-white/20 font-bold">
               100% 내돈내산 검증
             </span>
           </div>
@@ -85,21 +103,21 @@ export function HeroStory({ article }: HeroStoryProps) {
               </span>
             </div>
 
-            {/* Ticking Countdown Header */}
-            {access.isFreeNow ? (
+            {/* LIVE Ticking Countdown Header */}
+            {isFreeNow ? (
               <div className="flex items-center justify-between pt-1">
-                <div className="flex items-center gap-2 text-xs font-semibold text-[#FAF8F5]/90">
+                <div className="flex items-center gap-2 text-xs font-bold text-[#FAF8F5]/90">
                   <Clock className="w-4 h-4 text-[#C19A6B] animate-pulse" />
                   <span>이 시간이 지나면 무료로 읽을 수 없습니다.</span>
                 </div>
-                <div className="text-2xl sm:text-3xl font-extrabold font-mono text-white tracking-widest">
-                  {access.formattedCountdown}
+                <div className="text-2xl sm:text-3xl font-extrabold font-mono text-white tracking-widest bg-black/40 px-3 py-1 rounded-xl border border-white/10">
+                  {formatTimeRemaining(remainingSeconds)}
                 </div>
               </div>
             ) : (
-              <div className="flex items-center gap-2 text-xs font-bold text-[#C19A6B]">
+              <div className="flex items-center gap-2 text-xs font-extrabold text-[#C19A6B]">
                 <Lock className="w-4 h-4" />
-                <span>프리미엄 아카이브 전용 콘텐츠</span>
+                <span>24시간 지나 유료화로 자동 전환되었습니다 (프리미엄 전용)</span>
               </div>
             )}
 
