@@ -16,7 +16,8 @@ import {
   Stethoscope, 
   ShieldCheck,
   TrendingUp,
-  LayoutDashboard
+  LayoutDashboard,
+  Crown
 } from 'lucide-react';
 import { SearchModal } from '../editorial/SearchModal';
 import { storage } from '@/lib/storage';
@@ -70,6 +71,10 @@ export function Navbar() {
           </div>
 
           <div className="hidden sm:flex items-center gap-4 text-[11px] text-[#E8DCC7]/80 shrink-0">
+            <Link href="/premium" className="hover:text-white transition-colors flex items-center gap-1 font-bold text-[#E8DCC7]">
+              <Crown className="w-3.5 h-3.5 text-[#C77B30]" /> 프리미엄 멤버십
+            </Link>
+            <span className="text-[#2F4732]">|</span>
             <Link href="/newsletter" className="hover:text-white transition-colors flex items-center gap-1 font-semibold">
               <Sparkles className="w-3 h-3 text-[#C77B30]" /> 일간 뉴스레터 구독
             </Link>

@@ -10,9 +10,11 @@ import { AuthorCard } from '@/components/editorial/AuthorCard';
 import { CommentSection } from '@/components/editorial/CommentSection';
 import { ArticleCard } from '@/components/editorial/ArticleCard';
 import { AiSummaryModal } from '@/components/editorial/AiSummaryModal';
+import { FreeAccessCountdown } from '@/components/editorial/FreeAccessCountdown';
+import { ArticlePaywall } from '@/components/editorial/ArticlePaywall';
 import { storage } from '@/lib/storage';
-import { Article } from '@/types';
-import { formatDate } from '@/lib/utils';
+import { Article, UserSubscription } from '@/types';
+import { formatDate, getArticleAccessStatus } from '@/lib/utils';
 import { aiEngine } from '@/lib/aiEngine';
 import { useToast } from '@/components/ui/Toast';
 import { 
@@ -27,7 +29,9 @@ import {
   Type, 
   Check, 
   HelpCircle, 
-  ChevronLeft 
+  ChevronLeft,
+  Lock,
+  Crown
 } from 'lucide-react';
 
 export default function ArticleDetailPage() {
@@ -37,6 +41,7 @@ export default function ArticleDetailPage() {
   const slug = params?.slug as string;
 
   const [article, setArticle] = useState<Article | null>(null);
+  const [subscription, setSubscription] = useState<UserSubscription>({ isPremium: false });
   const [fontSize, setFontSize] = useState<'normal' | 'large' | 'xlarge'>('normal');
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
@@ -49,8 +54,10 @@ export default function ArticleDetailPage() {
     if (!slug) return;
     const allArticles = storage.getArticles();
     const found = allArticles.find((a) => a.slug === slug) || allArticles[0];
+    const sub = storage.getUserSubscription();
     
     setArticle(found);
+    setSubscription(sub);
     setIsBookmarked(storage.isBookmarked(found.id));
     setIsLiked(storage.isLiked(found.id));
     setLikesCount(found.likes);
@@ -76,6 +83,8 @@ export default function ArticleDetailPage() {
       </div>
     );
   }
+
+  const access = getArticleAccessStatus(article, subscription.isPremium);
 
   const handleBookmarkToggle = () => {
     const updated = storage.toggleBookmark(article.id);
@@ -131,16 +140,29 @@ export default function ArticleDetailPage() {
 
       <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Back Link */}
-        <div className="mb-6">
+        <div className="mb-6 flex items-center justify-between">
           <button
             onClick={() => router.back()}
             className="inline-flex items-center gap-1 text-xs font-bold text-[#6E6E6E] hover:text-[#3D5A40] dark:hover:text-[#E8DCC7] transition-colors"
           >
             <ChevronLeft className="w-4 h-4" /> 이전 목록으로
           </button>
+
+          {subscription.isPremium && (
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E8DCC7] text-[#3D5A40] text-xs font-bold">
+              <Crown className="w-3.5 h-3.5 text-[#C77B30]" /> 프리미엄 멤버십 전용 해제됨
+            </span>
+          )}
         </div>
 
-        {/* Article Header Header */}
+        {/* 24-Hour Free Countdown Banner */}
+        {access.isFreeNow && (
+          <div className="max-w-4xl mx-auto mb-8">
+            <FreeAccessCountdown freeWindowEndsAt={access.freeWindowEndsAt} />
+          </div>
+        )}
+
+        {/* Article Header */}
         <article className="max-w-4xl mx-auto space-y-6 mb-10 text-center sm:text-left">
           <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
             <Link
@@ -293,15 +315,26 @@ export default function ArticleDetailPage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 max-w-6xl mx-auto">
           {/* Main Prose Content */}
           <div className="lg:col-span-8">
-            <div className={`prose-cat font-serif-editorial ${fontSizeClass}`}>
-              {translatedText ? (
-                <div className="whitespace-pre-line p-6 rounded-2xl bg-[#E8DCC7]/20 border border-[#E8DCC7]">
-                  {translatedText}
+            {access.isLocked ? (
+              <div className="space-y-6">
+                {/* Teaser Preview */}
+                <div className="prose-cat font-serif-editorial text-base leading-relaxed opacity-60">
+                  <div dangerouslySetInnerHTML={{ __html: article.content.slice(0, 350) + '...' }} />
                 </div>
-              ) : (
-                <div dangerouslySetInnerHTML={{ __html: article.content }} />
-              )}
-            </div>
+                {/* Premium Paywall */}
+                <ArticlePaywall reason={access.status === 'premium_only' ? 'premium_only' : 'expired'} />
+              </div>
+            ) : (
+              <div className={`prose-cat font-serif-editorial ${fontSizeClass}`}>
+                {translatedText ? (
+                  <div className="whitespace-pre-line p-6 rounded-2xl bg-[#E8DCC7]/20 border border-[#E8DCC7]">
+                    {translatedText}
+                  </div>
+                ) : (
+                  <div dangerouslySetInnerHTML={{ __html: article.content }} />
+                )}
+              </div>
+            )}
 
             {/* Article Tags */}
             <div className="mt-10 pt-6 border-t border-[#ECECEC] dark:border-[#2A332C] flex flex-wrap gap-2">

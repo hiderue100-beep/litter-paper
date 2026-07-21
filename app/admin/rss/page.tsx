@@ -104,6 +104,8 @@ export default function AdminRssPage() {
       commentsCount: 0,
       rssImported: true,
       aiGenerated: true,
+      status: 'published',
+      freeAccessDurationHours: 24,
     };
 
     storage.saveCustomArticle(newArticle);

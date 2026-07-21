@@ -1,4 +1,4 @@
-import { Article, RssSource, RssImportedArticle } from '@/types';
+import { Article, RssSource, RssImportedArticle, UserSubscription, SubscriptionPlan } from '@/types';
 import { ARTICLES, RSS_SOURCES, RSS_IMPORTED } from './mockData';
 
 const KEYS = {
@@ -10,6 +10,11 @@ const KEYS = {
   SUBSCRIBERS: 'litterpaper_subscribers',
   RSS_SOURCES: 'litterpaper_rss_sources',
   RSS_IMPORTED: 'litterpaper_rss_imported',
+  SUBSCRIPTION: 'litterpaper_user_subscription',
+};
+
+const DEFAULT_SUBSCRIPTION: UserSubscription = {
+  isPremium: false,
 };
 
 export const storage = {
@@ -39,6 +44,54 @@ export const storage = {
     }
     if (typeof window !== 'undefined') {
       localStorage.setItem(KEYS.ARTICLES, JSON.stringify(updated));
+    }
+    return updated;
+  },
+
+  // Subscription & Premium System
+  getUserSubscription(): UserSubscription {
+    if (typeof window === 'undefined') return DEFAULT_SUBSCRIPTION;
+    const data = localStorage.getItem(KEYS.SUBSCRIPTION);
+    if (!data) return DEFAULT_SUBSCRIPTION;
+    try {
+      return JSON.parse(data);
+    } catch {
+      return DEFAULT_SUBSCRIPTION;
+    }
+  },
+
+  activatePremium(plan: SubscriptionPlan = 'monthly', paymentMethod: string = 'TossPay', orderId?: string): UserSubscription {
+    const now = new Date();
+    const expiresAt = new Date();
+    if (plan === 'yearly') {
+      expiresAt.setFullYear(now.getFullYear() + 1);
+    } else {
+      expiresAt.setMonth(now.getMonth() + 1);
+    }
+
+    const subscription: UserSubscription = {
+      isPremium: true,
+      plan,
+      subscribedAt: now.toISOString(),
+      expiresAt: expiresAt.toISOString(),
+      paymentMethod,
+      orderId: orderId || `toss_${Date.now()}`,
+    };
+
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(KEYS.SUBSCRIPTION, JSON.stringify(subscription));
+    }
+    return subscription;
+  },
+
+  cancelPremium(): UserSubscription {
+    const current = this.getUserSubscription();
+    const updated: UserSubscription = {
+      ...current,
+      isPremium: false,
+    };
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(KEYS.SUBSCRIPTION, JSON.stringify(updated));
     }
     return updated;
   },

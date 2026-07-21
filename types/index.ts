@@ -1,27 +1,13 @@
 export type CategorySlug = 
-  | 'news' 
-  | 'health' 
-  | 'nutrition' 
-  | 'behavior' 
-  | 'breeds' 
-  | 'product-reviews' 
-  | 'veterinary' 
-  | 'lifestyle' 
-  | 'travel' 
-  | 'rescue' 
-  | 'community' 
-  | 'columns';
-
-export interface Category {
-  id: string;
-  name: string;
-  nameEn: string;
-  slug: CategorySlug;
-  description: string;
-  icon: string;
-  count: number;
-  featured?: boolean;
-}
+  | 'veterinary'
+  | 'behavior'
+  | 'nutrition'
+  | 'rescue'
+  | 'columns'
+  | 'travel'
+  | 'community'
+  | 'news'
+  | 'health';
 
 export interface Author {
   id: string;
@@ -31,12 +17,52 @@ export interface Author {
   bio: string;
   articlesCount: number;
   followersCount: number;
-  verified: boolean;
+  verified?: boolean;
   socials?: {
     instagram?: string;
-    twitter?: string;
     website?: string;
   };
+}
+
+export interface Category {
+  id: string;
+  name: string;
+  nameEn: string;
+  slug: CategorySlug;
+  description: string;
+  icon?: string;
+  count: number;
+  featured?: boolean;
+}
+
+export interface Comment {
+  id: string;
+  articleId: string;
+  user: {
+    name: string;
+    avatar: string;
+    badge?: string;
+  };
+  content: string;
+  createdAt: string;
+  likes: number;
+  isLiked?: boolean;
+  replies?: Comment[];
+}
+
+export interface Breed {
+  id: string;
+  name: string;
+  nameEn: string;
+  origin: string;
+  description: string;
+  temperament: string[];
+  weight: string;
+  activityLevel: '낮음' | '보통' | '높음';
+  groomingNeed: '쉬움' | '보통' | '자주';
+  lifespan: string;
+  image: string;
+  healthCareTips: string[];
 }
 
 export interface FaqItem {
@@ -44,12 +70,14 @@ export interface FaqItem {
   answer: string;
 }
 
+export type ArticleStatus = 'scheduled' | 'published' | 'archived' | 'premium_only';
+
 export interface Article {
   id: string;
   slug: string;
   title: string;
   subtitle: string;
-  content: string;
+  content: string; // HTML string
   summary: string;
   category: CategorySlug;
   categoryName: string;
@@ -73,37 +101,24 @@ export interface Article {
   seoDescription?: string;
   faq?: FaqItem[];
   tableOfContents?: { id: string; title: string; level: number }[];
+  
+  // Premium Content & 24h Free System
+  status: ArticleStatus;
+  freeAccessDurationHours: number; // Default 24
+  scheduledAt?: string;
+  isPremium?: boolean;
+  isPremiumOnly?: boolean;
 }
 
-export interface Comment {
-  id: string;
-  articleId: string;
-  user: {
-    name: string;
-    avatar: string;
-    badge?: string;
-  };
-  content: string;
-  createdAt: string;
-  likes: number;
-  isLiked?: boolean;
-  isReported?: boolean;
-  replies?: Comment[];
-}
+export type SubscriptionPlan = 'monthly' | 'yearly';
 
-export interface Breed {
-  id: string;
-  name: string;
-  nameEn: string;
-  origin: string;
-  temperament: string[];
-  lifespan: string;
-  weight: string;
-  activityLevel: '낮음' | '보통' | '높음' | '매우 높음';
-  groomingNeed: '쉬움' | '보통' | '자주 필요';
-  description: string;
-  image: string;
-  healthCareTips: string[];
+export interface UserSubscription {
+  isPremium: boolean;
+  plan?: SubscriptionPlan;
+  subscribedAt?: string;
+  expiresAt?: string;
+  paymentMethod?: string;
+  orderId?: string;
 }
 
 export interface RssSource {
@@ -123,26 +138,6 @@ export interface RssImportedArticle {
   originalUrl: string;
   snippet: string;
   category: CategorySlug;
-  status: 'imported' | 'auto_summarized' | 'published' | 'draft';
+  status: 'imported' | 'auto_summarized' | 'draft';
   fetchedAt: string;
-}
-
-export interface ReadingHistoryItem {
-  articleId: string;
-  articleSlug: string;
-  articleTitle: string;
-  categoryName: string;
-  readAt: string;
-  progressPercent: number;
-}
-
-export interface AiToolState {
-  summary?: string[];
-  seoTitle?: string;
-  seoDescription?: string;
-  extractedTags?: string[];
-  translatedContent?: string;
-  qualityScore?: number;
-  faqs?: FaqItem[];
-  headlineOptions?: string[];
 }
