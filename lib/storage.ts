@@ -13,13 +13,59 @@ const KEYS = {
   SUBSCRIPTION: 'litterpaper_user_subscription',
   CURRENT_USER: 'litterpaper_current_user',
   USERS_DB: 'litterpaper_registered_users',
+  ADMIN_SESSION: 'litterpaper_admin_session',
 };
 
 const DEFAULT_SUBSCRIPTION: UserSubscription = {
   isPremium: false,
 };
 
+// Default Admin Credentials
+export const DEFAULT_ADMIN = {
+  email: 'admin@litterpaper.kr',
+  password: 'admin1234!',
+};
+
 export const storage = {
+  // Admin Authentication & Security Lock
+  isAdminLoggedIn(): boolean {
+    if (typeof window === 'undefined') return false;
+    const data = localStorage.getItem(KEYS.ADMIN_SESSION);
+    if (!data) return false;
+    try {
+      const parsed = JSON.parse(data);
+      return parsed.isLoggedIn === true;
+    } catch {
+      return false;
+    }
+  },
+
+  loginAdmin(emailInput: string, passwordInput: string): boolean {
+    if (
+      emailInput.trim().toLowerCase() === DEFAULT_ADMIN.email.toLowerCase() &&
+      passwordInput.trim() === DEFAULT_ADMIN.password
+    ) {
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(
+          KEYS.ADMIN_SESSION,
+          JSON.stringify({
+            isLoggedIn: true,
+            email: DEFAULT_ADMIN.email,
+            loggedInAt: new Date().toISOString(),
+          })
+        );
+      }
+      return true;
+    }
+    return false;
+  },
+
+  logoutAdmin() {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem(KEYS.ADMIN_SESSION);
+    }
+  },
+
   // User Authentication Methods
   getCurrentUser(): UserProfile | null {
     if (typeof window === 'undefined') return null;
@@ -84,7 +130,6 @@ export const storage = {
   loginEmail(email: string, password: string): UserProfile {
     const emailClean = email.trim().toLowerCase();
     
-    // Check if previously registered in mock DB
     let foundUser: UserProfile | null = null;
     if (typeof window !== 'undefined') {
       const usersData = localStorage.getItem(KEYS.USERS_DB);
@@ -176,7 +221,6 @@ export const storage = {
       localStorage.setItem(KEYS.SUBSCRIPTION, JSON.stringify(subscription));
     }
 
-    // Update current user isPremium flag if logged in
     const currentUser = this.getCurrentUser();
     if (currentUser) {
       currentUser.isPremium = true;
