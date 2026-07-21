@@ -1,0 +1,150 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --cat-primary: #3D5A40;
+    --cat-primary-hover: #2F4732;
+    --cat-secondary: #E8DCC7;
+    --cat-accent: #C77B30;
+    --cat-bg: #FAF9F7;
+    --cat-card: #FFFFFF;
+    --cat-text: #202020;
+    --cat-subtext: #6E6E6E;
+    --cat-border: #ECECEC;
+    --cat-shadow: 0 4px 20px -2px rgba(61, 90, 64, 0.05);
+    --cat-shadow-hover: 0 12px 28px -4px rgba(61, 90, 64, 0.12);
+  }
+
+  .dark {
+    --cat-primary: #6E9071;
+    --cat-primary-hover: #81A884;
+    --cat-secondary: #2A332C;
+    --cat-accent: #E08C38;
+    --cat-bg: #141815;
+    --cat-card: #1D231E;
+    --cat-text: #F2F5F3;
+    --cat-subtext: #9EAAA0;
+    --cat-border: #2A332C;
+    --cat-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.3);
+    --cat-shadow-hover: 0 12px 28px -4px rgba(0, 0, 0, 0.45);
+  }
+}
+
+@theme {
+  --color-primary: var(--cat-primary);
+  --color-primary-hover: var(--cat-primary-hover);
+  --color-secondary: var(--cat-secondary);
+  --color-accent: var(--cat-accent);
+  --color-paper: var(--cat-bg);
+  --color-card: var(--cat-card);
+  --color-main: var(--cat-text);
+  --color-sub: var(--cat-subtext);
+  --color-border-custom: var(--cat-border);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--cat-bg);
+  color: var(--cat-text);
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.7;
+  overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.font-serif-editorial {
+  font-family: 'MaruBuri', 'Nanum Myeongjo', 'Batang', Georgia, Cambria, serif;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-track {
+  background: var(--cat-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: #c3cdc4;
+  border-radius: 9999px;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #37473a;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--cat-primary);
+}
+
+/* Glassmorphism Navigation */
+.glass-nav {
+  background-color: rgba(250, 249, 247, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--cat-border);
+}
+
+.dark .glass-nav {
+  background-color: rgba(20, 24, 21, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--cat-border);
+}
+
+/* Reading Typography Styles */
+.prose-cat {
+  color: var(--cat-text);
+  font-size: 1.125rem;
+  line-height: 1.85;
+}
+
+.prose-cat p {
+  margin-bottom: 1.5rem;
+}
+
+.prose-cat h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--cat-primary);
+  margin-top: 2.5rem;
+  margin-bottom: 1.25rem;
+  letter-spacing: -0.02em;
+}
+
+.dark .prose-cat h2 {
+  color: var(--cat-primary);
+}
+
+.prose-cat h3 {
+  font-size: 1.35rem;
+  font-weight: 600;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.prose-cat blockquote {
+  border-left: 3px solid var(--cat-accent);
+  padding-left: 1.5rem;
+  font-style: italic;
+  font-size: 1.2rem;
+  color: var(--cat-text);
+  background: var(--cat-secondary);
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  padding-right: 1.5rem;
+  border-radius: 0 0.5rem 0.5rem 0;
+  margin: 2rem 0;
+}
+
+.dark .prose-cat blockquote {
+  background: rgba(232, 220, 199, 0.1);
+}
+
+/* Smooth transitions */
+.transition-editorial {
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
