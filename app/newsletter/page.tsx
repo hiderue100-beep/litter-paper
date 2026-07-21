@@ -5,60 +5,17 @@ import Link from 'next/link';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { AuthModal } from '@/components/auth/AuthModal';
-import { storage, DEFAULT_NEWSLETTER_SETTINGS } from '@/lib/storage';
-import { UserProfile, NewsletterSettings } from '@/types';
-import { useToast } from '@/components/ui/Toast';
-import { Mail, Sparkles, Check, ArrowRight, ExternalLink, ShieldCheck, Bell } from 'lucide-react';
+import { storage } from '@/lib/storage';
+import { UserProfile } from '@/types';
+import { Sparkles, ExternalLink, Bell } from 'lucide-react';
 
 export default function NewsletterPage() {
-  const { showToast } = useToast();
   const [currentUser, setCurrentUser] = useState<UserProfile | null>(null);
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-
-  // Toggle states matched to screenshot
-  const [dailyNews, setDailyNews] = useState(true);
-  const [sandReport, setSandReport] = useState(true);
-  const [smartGadget, setSmartGadget] = useState(true);
-  const [marketingAlerts, setMarketingAlerts] = useState(true);
 
   useEffect(() => {
     const user = storage.getCurrentUser();
     setCurrentUser(user);
-    if (user && user.newsletterSettings) {
-      setDailyNews(user.newsletterSettings.dailyNews);
-      setSandReport(user.newsletterSettings.sandReport);
-      setSmartGadget(user.newsletterSettings.smartGadget);
-      setMarketingAlerts(user.newsletterSettings.marketingAlerts);
-    }
   }, []);
-
-  const handleSaveSettings = () => {
-    if (!currentUser) {
-      setIsAuthModalOpen(true);
-      return;
-    }
-
-    const updatedSettings: NewsletterSettings = {
-      dailyNews,
-      sandReport,
-      smartGadget,
-      marketingAlerts,
-      agreedAt: '2026. 07. 21',
-    };
-
-    const updatedUser = storage.updateNewsletterSettings(updatedSettings);
-    if (updatedUser) {
-      setCurrentUser(updatedUser);
-      showToast('뉴스레터 알림 설정이 안전하게 저장되었습니다.', 'success');
-    }
-  };
-
-  const scrollToSettings = () => {
-    const settingsElem = document.getElementById('notification-settings-section');
-    if (settingsElem) {
-      settingsElem.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FAF8F5] dark:bg-[#1A1A1A] text-[#333333] dark:text-[#FAF8F5] font-sans">
@@ -193,158 +150,25 @@ export default function NewsletterPage() {
 
         </div>
 
-        {/* Middle CTA Header */}
-        <div className="text-center space-y-4 pt-6">
+        {/* Bottom Action Area with Link Button to /newsletter/settings */}
+        <div className="text-center space-y-4 pt-4 border-t border-[#EAE6DF] dark:border-[#333333]">
           <p className="text-xs text-[#666666] font-medium">
             {currentUser
               ? `${currentUser.email} 계정으로 로그인되어 있습니다.`
-              : '리터페이퍼 회원가입 시 기본 계정 이메일로 자동 수신 설정됩니다.'}
+              : '리터페이퍼 가입 이메일로 뉴스레터 알림이 받아보실 수 있습니다.'}
           </p>
-          <button
-            onClick={scrollToSettings}
+
+          <Link
+            href="/newsletter/settings"
             className="px-8 py-3.5 rounded-2xl bg-[#FF8A00] text-white font-extrabold text-sm hover:bg-[#e07900] transition-all shadow-md inline-flex items-center gap-2"
           >
             <Bell className="w-4 h-4 text-white" />
             <span>뉴스레터 알림 설정</span>
-          </button>
+          </Link>
         </div>
-
-        {/* NOTIFICATION SETTINGS SECTION (Matching Screenshot 1) */}
-        <section
-          id="notification-settings-section"
-          className="pt-12 border-t border-[#EAE6DF] dark:border-[#333333] space-y-8"
-        >
-          <div className="space-y-2">
-            <h2 className="text-2xl font-extrabold tracking-tight">
-              알림 설정
-            </h2>
-            <p className="text-xs font-semibold text-[#666666]">
-              뉴스레터 알림 (구독 이메일 : <span className="font-extrabold text-[#333333] dark:text-[#FAF8F5]">{currentUser ? currentUser.email : '로그인 필요 (로그인 시 이메일로 발송)'}</span>)
-            </p>
-          </div>
-
-          {/* Series Toggles */}
-          <div className="space-y-4 max-w-xl">
-            {/* Toggle 1 */}
-            <div className="flex items-center justify-between">
-              <label className="flex items-center gap-3 cursor-pointer">
-                <button
-                  type="button"
-                  onClick={() => setDailyNews(!dailyNews)}
-                  className={`w-12 h-6 rounded-full transition-colors relative p-0.5 ${
-                    dailyNews ? 'bg-[#FF8A00]' : 'bg-gray-300 dark:bg-gray-700'
-                  }`}
-                >
-                  <div
-                    className={`w-5 h-5 rounded-full bg-white shadow-xs transition-transform ${
-                      dailyNews ? 'translate-x-6' : 'translate-x-0'
-                    }`}
-                  />
-                </button>
-                <span className="text-sm font-extrabold">사료 & 습식캔 데일리 검증</span>
-              </label>
-            </div>
-
-            {/* Toggle 2 */}
-            <div className="flex items-center justify-between">
-              <label className="flex items-center gap-3 cursor-pointer">
-                <button
-                  type="button"
-                  onClick={() => setSandReport(!sandReport)}
-                  className={`w-12 h-6 rounded-full transition-colors relative p-0.5 ${
-                    sandReport ? 'bg-[#FF8A00]' : 'bg-gray-300 dark:bg-gray-700'
-                  }`}
-                >
-                  <div
-                    className={`w-5 h-5 rounded-full bg-white shadow-xs transition-transform ${
-                      sandReport ? 'translate-x-6' : 'translate-x-0'
-                    }`}
-                  />
-                </button>
-                <span className="text-sm font-extrabold">모래 & 배변용품 성분 분석</span>
-              </label>
-            </div>
-
-            {/* Toggle 3 */}
-            <div className="flex items-center justify-between">
-              <label className="flex items-center gap-3 cursor-pointer">
-                <button
-                  type="button"
-                  onClick={() => setSmartGadget(!smartGadget)}
-                  className={`w-12 h-6 rounded-full transition-colors relative p-0.5 ${
-                    smartGadget ? 'bg-[#FF8A00]' : 'bg-gray-300 dark:bg-gray-700'
-                  }`}
-                >
-                  <div
-                    className={`w-5 h-5 rounded-full bg-white shadow-xs transition-transform ${
-                      smartGadget ? 'translate-x-6' : 'translate-x-0'
-                    }`}
-                  />
-                </button>
-                <span className="text-sm font-extrabold">스마트 가전 & 캣타워 안전 실험실</span>
-              </label>
-            </div>
-          </div>
-
-          <p className="text-[11px] text-[#666666]">
-            뉴스레터 구독 시 <Link href="/privacy" className="underline font-bold">광고성 정보 수신</Link>에 동의한 것으로 간주합니다.
-          </p>
-
-          {/* Marketing Alerts Section */}
-          <div className="pt-6 border-t border-[#EAE6DF] dark:border-[#333333] space-y-4 max-w-xl">
-            <h3 className="text-xs font-bold text-[#666666] uppercase tracking-wider">
-              마케팅 알림
-            </h3>
-
-            <div className="flex items-center justify-between">
-              <label className="flex items-center gap-3 cursor-pointer">
-                <button
-                  type="button"
-                  onClick={() => setMarketingAlerts(!marketingAlerts)}
-                  className={`w-12 h-6 rounded-full transition-colors relative p-0.5 ${
-                    marketingAlerts ? 'bg-[#FF8A00]' : 'bg-gray-300 dark:bg-gray-700'
-                  }`}
-                >
-                  <div
-                    className={`w-5 h-5 rounded-full bg-white shadow-xs transition-transform ${
-                      marketingAlerts ? 'translate-x-6' : 'translate-x-0'
-                    }`}
-                  />
-                </button>
-                <span className="text-sm font-extrabold">이벤트 및 소식 알림</span>
-              </label>
-              <Link href="/terms" className="text-xs text-[#666666] underline">
-                약관보기
-              </Link>
-            </div>
-
-            <p className="text-[11px] text-[#666666]">
-              마케팅 정보 수신 동의 : 2026. 07. 21
-            </p>
-          </div>
-
-          {/* Bottom Save Action Bar */}
-          <div className="pt-6 border-t border-[#EAE6DF] dark:border-[#333333] flex justify-end">
-            <button
-              onClick={handleSaveSettings}
-              className="px-8 py-3.5 rounded-2xl bg-[#FF8A00] text-white font-extrabold text-sm hover:bg-[#e07900] transition-all shadow-md"
-            >
-              저장
-            </button>
-          </div>
-        </section>
       </main>
 
       <Footer />
-
-      <AuthModal
-        isOpen={isAuthModalOpen}
-        onClose={() => setIsAuthModalOpen(false)}
-        onSuccess={() => {
-          const u = storage.getCurrentUser();
-          setCurrentUser(u);
-        }}
-      />
     </div>
   );
 }
