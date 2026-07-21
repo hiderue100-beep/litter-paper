@@ -24,6 +24,18 @@ export interface Author {
   };
 }
 
+export type AuthProvider = 'google' | 'naver' | 'email';
+
+export interface UserProfile {
+  id: string;
+  name: string;
+  email: string;
+  avatar: string;
+  provider: AuthProvider;
+  createdAt: string;
+  isPremium?: boolean;
+}
+
 export interface Category {
   id: string;
   name: string;

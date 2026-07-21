@@ -20,25 +20,38 @@ import {
   ShoppingBag,
   Box,
   Zap,
-  Tag
+  Tag,
+  User,
+  LogOut,
+  ChevronDown
 } from 'lucide-react';
 import { SearchModal } from '../editorial/SearchModal';
+import { AuthModal } from '../auth/AuthModal';
 import { storage } from '@/lib/storage';
 import { CATEGORIES, BREAKING_NEWS } from '@/lib/mockData';
+import { UserProfile } from '@/types';
+import { useToast } from '../ui/Toast';
 
 export function Navbar() {
   const pathname = usePathname();
+  const { showToast } = useToast();
+
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
+
+  const [currentUser, setCurrentUser] = useState<UserProfile | null>(null);
   const [bookmarkCount, setBookmarkCount] = useState(0);
   const [tickerIndex, setTickerIndex] = useState(0);
 
-  // Initialize theme & bookmark count
+  // Initialize session & bookmark count
   useEffect(() => {
     const isDark = document.documentElement.classList.contains('dark');
     setIsDarkMode(isDark);
     setBookmarkCount(storage.getBookmarks().length);
+    setCurrentUser(storage.getCurrentUser());
   }, [pathname]);
 
   // Breaking news ticker auto cycle
@@ -57,6 +70,13 @@ export function Navbar() {
     } else {
       document.documentElement.classList.remove('dark');
     }
+  };
+
+  const handleLogout = () => {
+    storage.logout();
+    setCurrentUser(null);
+    setIsUserMenuOpen(false);
+    showToast('안전하게 로그아웃되었습니다.', 'info');
   };
 
   return (
@@ -168,7 +188,7 @@ export function Navbar() {
               </Link>
             </nav>
 
-            {/* Right Action Icons */}
+            {/* Right Action Icons & User Session */}
             <div className="flex items-center gap-3">
               {/* Global Search Trigger */}
               <button
@@ -201,6 +221,89 @@ export function Navbar() {
               >
                 {isDarkMode ? <Sun className="w-5 h-5 text-[#E8DCC7]" /> : <Moon className="w-5 h-5" />}
               </button>
+
+              {/* User Authentication Menu */}
+              {currentUser ? (
+                <div className="relative">
+                  <button
+                    onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                    className="flex items-center gap-2 p-1.5 pl-2 rounded-full border border-[#ECECEC] dark:border-[#2A332C] hover:border-[#3D5A40] transition-colors bg-white dark:bg-[#252C26]"
+                  >
+                    <img
+                      src={currentUser.avatar}
+                      alt={currentUser.name}
+                      className="w-7 h-7 rounded-full object-cover border border-[#3D5A40]"
+                    />
+                    <span className="hidden sm:inline text-xs font-bold text-[#202020] dark:text-[#F2F5F3] max-w-[90px] truncate">
+                      {currentUser.name}
+                    </span>
+                    <ChevronDown className="w-3.5 h-3.5 text-[#6E6E6E]" />
+                  </button>
+
+                  {/* Dropdown Menu */}
+                  {isUserMenuOpen && (
+                    <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-[#1D231E] rounded-2xl shadow-xl border border-[#ECECEC] dark:border-[#2A332C] p-2 space-y-1 text-xs z-50">
+                      <div className="p-3 border-b border-[#ECECEC] dark:border-[#2A332C] space-y-1">
+                        <div className="font-bold text-[#202020] dark:text-[#F2F5F3]">
+                          {currentUser.name}
+                        </div>
+                        <div className="text-[11px] text-[#6E6E6E] truncate">
+                          {currentUser.email}
+                        </div>
+                        <div className="pt-1">
+                          {currentUser.isPremium ? (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#E8DCC7] text-[#3D5A40] text-[10px] font-extrabold">
+                              <Crown className="w-3 h-3 text-[#C77B30]" /> 프리미엄 멤버
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#FAF9F7] dark:bg-[#252C26] text-[#6E6E6E] text-[10px] font-medium border">
+                              일반 독자 회원
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      <Link
+                        href="/bookmarks"
+                        onClick={() => setIsUserMenuOpen(false)}
+                        className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-[#FAF9F7] dark:hover:bg-[#252C26] font-semibold text-[#202020] dark:text-[#F2F5F3]"
+                      >
+                        <Bookmark className="w-4 h-4 text-[#3D5A40]" /> 내 보관함 & 히스토리
+                      </Link>
+
+                      <Link
+                        href="/premium"
+                        onClick={() => setIsUserMenuOpen(false)}
+                        className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-[#FAF9F7] dark:hover:bg-[#252C26] font-bold text-[#C77B30]"
+                      >
+                        <Crown className="w-4 h-4" /> 프리미엄 멤버십 관리
+                      </Link>
+
+                      <Link
+                        href="/admin"
+                        onClick={() => setIsUserMenuOpen(false)}
+                        className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-[#FAF9F7] dark:hover:bg-[#252C26] font-semibold text-[#6E6E6E]"
+                      >
+                        <LayoutDashboard className="w-4 h-4" /> CMS 퍼블리셔
+                      </Link>
+
+                      <button
+                        onClick={handleLogout}
+                        className="flex items-center gap-2 w-full px-3 py-2 rounded-xl hover:bg-red-50 dark:hover:bg-red-950/30 text-red-600 font-bold text-left transition-colors pt-2 border-t border-[#ECECEC] dark:border-[#2A332C]"
+                      >
+                        <LogOut className="w-4 h-4" /> 로그아웃
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <button
+                  onClick={() => setIsAuthModalOpen(true)}
+                  className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#3D5A40] text-white text-xs font-extrabold hover:bg-[#2F4732] transition-colors shadow-xs"
+                >
+                  <User className="w-4 h-4" /> 로그인 / 회원가입
+                </button>
+              )}
 
               {/* Mobile menu trigger */}
               <button
@@ -253,14 +356,19 @@ export function Navbar() {
             </Link>
             <div className="pt-3 border-t border-[#ECECEC] dark:border-[#2A332C] flex justify-between text-xs text-[#6E6E6E]">
               <Link href="/premium" onClick={() => setIsMobileMenuOpen(false)}>프리미엄 멤버십</Link>
-              <Link href="/admin" onClick={() => setIsMobileMenuOpen(false)}>CMS 퍼블리셔</Link>
+              <button onClick={() => { setIsMobileMenuOpen(false); setIsAuthModalOpen(true); }}>로그인/가입</button>
             </div>
           </div>
         )}
       </header>
 
-      {/* Global Search Modal */}
+      {/* Global Modals */}
       <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        onSuccess={() => setCurrentUser(storage.getCurrentUser())}
+      />
     </>
   );
 }

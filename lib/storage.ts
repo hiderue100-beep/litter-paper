@@ -1,4 +1,4 @@
-import { Article, RssSource, RssImportedArticle, UserSubscription, SubscriptionPlan } from '@/types';
+import { Article, RssSource, RssImportedArticle, UserSubscription, SubscriptionPlan, UserProfile, AuthProvider } from '@/types';
 import { ARTICLES, RSS_SOURCES, RSS_IMPORTED } from './mockData';
 
 const KEYS = {
@@ -11,6 +11,8 @@ const KEYS = {
   RSS_SOURCES: 'litterpaper_rss_sources',
   RSS_IMPORTED: 'litterpaper_rss_imported',
   SUBSCRIPTION: 'litterpaper_user_subscription',
+  CURRENT_USER: 'litterpaper_current_user',
+  USERS_DB: 'litterpaper_registered_users',
 };
 
 const DEFAULT_SUBSCRIPTION: UserSubscription = {
@@ -18,6 +20,98 @@ const DEFAULT_SUBSCRIPTION: UserSubscription = {
 };
 
 export const storage = {
+  // User Authentication Methods
+  getCurrentUser(): UserProfile | null {
+    if (typeof window === 'undefined') return null;
+    const data = localStorage.getItem(KEYS.CURRENT_USER);
+    if (!data) return null;
+    try {
+      return JSON.parse(data);
+    } catch {
+      return null;
+    }
+  },
+
+  setCurrentUser(user: UserProfile | null) {
+    if (typeof window === 'undefined') return;
+    if (user) {
+      localStorage.setItem(KEYS.CURRENT_USER, JSON.stringify(user));
+    } else {
+      localStorage.removeItem(KEYS.CURRENT_USER);
+    }
+  },
+
+  loginSocial(provider: 'google' | 'naver'): UserProfile {
+    const isGoogle = provider === 'google';
+    const profile: UserProfile = {
+      id: `usr_${provider}_${Date.now()}`,
+      name: isGoogle ? '구글 독자 집사' : '네이버 독자 집사',
+      email: isGoogle ? 'user.google@gmail.com' : 'user.naver@naver.com',
+      avatar: isGoogle
+        ? 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80'
+        : 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100&auto=format&fit=crop&q=80',
+      provider,
+      createdAt: new Date().toISOString(),
+      isPremium: false,
+    };
+
+    this.setCurrentUser(profile);
+    return profile;
+  },
+
+  signupEmail(email: string, password: string, name: string): UserProfile {
+    const profile: UserProfile = {
+      id: `usr_email_${Date.now()}`,
+      name: name.trim() || '리터페이퍼 독자',
+      email: email.trim().toLowerCase(),
+      avatar: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=100&auto=format&fit=crop&q=80',
+      provider: 'email',
+      createdAt: new Date().toISOString(),
+      isPremium: false,
+    };
+
+    if (typeof window !== 'undefined') {
+      const usersData = localStorage.getItem(KEYS.USERS_DB);
+      const users: UserProfile[] = usersData ? JSON.parse(usersData) : [];
+      users.push(profile);
+      localStorage.setItem(KEYS.USERS_DB, JSON.stringify(users));
+    }
+
+    this.setCurrentUser(profile);
+    return profile;
+  },
+
+  loginEmail(email: string, password: string): UserProfile {
+    const emailClean = email.trim().toLowerCase();
+    
+    // Check if previously registered in mock DB
+    let foundUser: UserProfile | null = null;
+    if (typeof window !== 'undefined') {
+      const usersData = localStorage.getItem(KEYS.USERS_DB);
+      const users: UserProfile[] = usersData ? JSON.parse(usersData) : [];
+      foundUser = users.find((u) => u.email === emailClean) || null;
+    }
+
+    if (!foundUser) {
+      foundUser = {
+        id: `usr_email_${Date.now()}`,
+        name: emailClean.split('@')[0] || '리터페이퍼 독자',
+        email: emailClean,
+        avatar: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=100&auto=format&fit=crop&q=80',
+        provider: 'email',
+        createdAt: new Date().toISOString(),
+        isPremium: false,
+      };
+    }
+
+    this.setCurrentUser(foundUser);
+    return foundUser;
+  },
+
+  logout() {
+    this.setCurrentUser(null);
+  },
+
   getArticles(): Article[] {
     if (typeof window === 'undefined') return ARTICLES;
     const data = localStorage.getItem(KEYS.ARTICLES);
@@ -81,6 +175,14 @@ export const storage = {
     if (typeof window !== 'undefined') {
       localStorage.setItem(KEYS.SUBSCRIPTION, JSON.stringify(subscription));
     }
+
+    // Update current user isPremium flag if logged in
+    const currentUser = this.getCurrentUser();
+    if (currentUser) {
+      currentUser.isPremium = true;
+      this.setCurrentUser(currentUser);
+    }
+
     return subscription;
   },
 
@@ -92,6 +194,11 @@ export const storage = {
     };
     if (typeof window !== 'undefined') {
       localStorage.setItem(KEYS.SUBSCRIPTION, JSON.stringify(updated));
+    }
+    const currentUser = this.getCurrentUser();
+    if (currentUser) {
+      currentUser.isPremium = false;
+      this.setCurrentUser(currentUser);
     }
     return updated;
   },
