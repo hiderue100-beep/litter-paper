@@ -423,34 +423,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Product Lab Testing Guarantee Banner */}
-        <section className="relative overflow-hidden rounded-3xl bg-[#333333] text-white p-8 sm:p-12 shadow-xl border border-[#444444]">
-          <div className="max-w-2xl relative z-10 space-y-4">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#C19A6B] text-white text-xs font-bold">
-              <ShieldCheck className="w-4 h-4" /> 대가성 협찬 0% 보장 원칙
-            </div>
-            <h2 className="text-3xl sm:text-4xl font-extrabold leading-tight text-white">
-              무작위 직접 구매 & 물리 장비 실험,<br />100% 내돈내산 검증 플랫폼
-            </h2>
-            <p className="text-sm sm:text-base text-white/80 leading-relaxed">
-              광고 협찬글에 지친 집사들을 위해 모래 먼지 분광 측정기, 사료 DM 영양 성분 환산, 스마트 가전 안전 센서를 직접 실험하여 객관적 수치로 알립니다.
-            </p>
-            <div className="pt-2 flex flex-wrap gap-3">
-              <Link
-                href="/search?q=내돈내산"
-                className="px-6 py-3 rounded-2xl bg-[#C19A6B] text-white font-extrabold text-sm hover:bg-[#a88354] transition-all shadow-md"
-              >
-                전체 검증 리포트 보기
-              </Link>
-              <Link
-                href="/search?q=벤토나이트"
-                className="px-6 py-3 rounded-2xl bg-white/10 backdrop-blur-md text-white font-bold text-sm hover:bg-white/20 transition-all border border-white/20"
-              >
-                인기 벤토나이트 실험
-              </Link>
-            </div>
-          </div>
-        </section>
+
       </main>
 
       <Footer />
