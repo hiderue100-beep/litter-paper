@@ -13,11 +13,14 @@ import {
   Sparkles, 
   Newspaper, 
   BookOpen, 
-  Stethoscope, 
   ShieldCheck,
   TrendingUp,
   LayoutDashboard,
-  Crown
+  Crown,
+  ShoppingBag,
+  Box,
+  Zap,
+  Tag
 } from 'lucide-react';
 import { SearchModal } from '../editorial/SearchModal';
 import { storage } from '@/lib/storage';
@@ -76,7 +79,7 @@ export function Navbar() {
             </Link>
             <span className="text-[#2F4732]">|</span>
             <Link href="/newsletter" className="hover:text-white transition-colors flex items-center gap-1 font-semibold">
-              <Sparkles className="w-3 h-3 text-[#C77B30]" /> 일간 뉴스레터 구독
+              <Sparkles className="w-3 h-3 text-[#C77B30]" /> 검증 리포트 구독
             </Link>
             <span className="text-[#2F4732]">|</span>
             <Link href="/admin" className="hover:text-white transition-colors flex items-center gap-1 font-semibold">
@@ -94,14 +97,14 @@ export function Navbar() {
             {/* Brand Logo */}
             <Link href="/" className="flex items-center gap-3 group">
               <div className="w-10 h-10 rounded-2xl bg-[#3D5A40] text-[#E8DCC7] flex items-center justify-center font-bold text-xl shadow-md group-hover:scale-105 transition-transform">
-                <BookOpen className="w-5 h-5 text-[#E8DCC7]" />
+                <ShoppingBag className="w-5 h-5 text-[#E8DCC7]" />
               </div>
               <div className="flex flex-col">
                 <span className="font-extrabold text-2xl font-serif-editorial tracking-tight text-[#202020] dark:text-[#F2F5F3] group-hover:text-[#3D5A40] dark:group-hover:text-[#E8DCC7] transition-colors">
                   LITTER PAPER
                 </span>
                 <span className="text-[10px] font-bold text-[#6E6E6E] dark:text-[#9EAAA0] tracking-widest uppercase -mt-1">
-                  리터페이퍼 • Cat Media
+                  리터페이퍼 • 100% 내돈내산 리뷰
                 </span>
               </div>
             </Link>
@@ -109,15 +112,25 @@ export function Navbar() {
             {/* Desktop Navigation Links */}
             <nav className="hidden md:flex items-center gap-8 text-sm font-semibold text-[#6E6E6E] dark:text-[#9EAAA0]">
               <Link
-                href="/veterinary"
-                className={`flex items-center gap-1.5 transition-colors ${
-                  pathname === '/veterinary'
+                href="/category/nutrition"
+                className={`transition-colors ${
+                  pathname === '/category/nutrition'
                     ? 'text-[#3D5A40] dark:text-[#E8DCC7] font-bold'
                     : 'hover:text-[#202020] dark:hover:text-[#F2F5F3]'
                 }`}
               >
-                <Stethoscope className="w-4 h-4 text-[#3D5A40] dark:text-[#E8DCC7]" />
-                수의학 지식
+                사료 & 습식캔
+              </Link>
+
+              <Link
+                href="/category/veterinary"
+                className={`transition-colors ${
+                  pathname === '/category/veterinary'
+                    ? 'text-[#3D5A40] dark:text-[#E8DCC7] font-bold'
+                    : 'hover:text-[#202020] dark:hover:text-[#F2F5F3]'
+                }`}
+              >
+                모래 & 배변
               </Link>
 
               <Link
@@ -128,40 +141,30 @@ export function Navbar() {
                     : 'hover:text-[#202020] dark:hover:text-[#F2F5F3]'
                 }`}
               >
-                행동 심리학
+                캣타워 & 가구
               </Link>
 
               <Link
-                href="/category/nutrition"
+                href="/category/travel"
                 className={`transition-colors ${
-                  pathname === '/category/nutrition'
+                  pathname === '/category/travel'
                     ? 'text-[#3D5A40] dark:text-[#E8DCC7] font-bold'
                     : 'hover:text-[#202020] dark:hover:text-[#F2F5F3]'
                 }`}
               >
-                영양 & 사료
-              </Link>
-
-              <Link
-                href="/breeds"
-                className={`transition-colors ${
-                  pathname === '/breeds'
-                    ? 'text-[#3D5A40] dark:text-[#E8DCC7] font-bold'
-                    : 'hover:text-[#202020] dark:hover:text-[#F2F5F3]'
-                }`}
-              >
-                묘종 도감
+                스마트 가전
               </Link>
 
               <Link
                 href="/category/rescue"
-                className={`transition-colors ${
+                className={`flex items-center gap-1.5 transition-colors ${
                   pathname === '/category/rescue'
                     ? 'text-[#3D5A40] dark:text-[#E8DCC7] font-bold'
                     : 'hover:text-[#202020] dark:hover:text-[#F2F5F3]'
                 }`}
               >
-                입양 & 구조
+                <ShieldCheck className="w-4 h-4 text-[#3D5A40] dark:text-[#E8DCC7]" />
+                내돈내산 검증
               </Link>
             </nav>
 
@@ -171,7 +174,7 @@ export function Navbar() {
               <button
                 onClick={() => setIsSearchOpen(true)}
                 className="p-2.5 rounded-full hover:bg-[#ECECEC]/60 dark:hover:bg-[#2A332C]/60 text-[#202020] dark:text-[#F2F5F3] transition-colors"
-                title="에디토리얼 검색 (Cmd+K)"
+                title="상품 검증 검색 (Cmd+K)"
               >
                 <Search className="w-5 h-5" />
               </button>
@@ -214,42 +217,42 @@ export function Navbar() {
         {isMobileMenuOpen && (
           <div className="md:hidden border-t border-[#ECECEC] dark:border-[#2A332C] bg-[#FAF9F7] dark:bg-[#141815] px-4 pt-3 pb-6 space-y-3">
             <Link
-              href="/veterinary"
+              href="/category/nutrition"
               onClick={() => setIsMobileMenuOpen(false)}
               className="block py-2 text-base font-bold text-[#3D5A40] dark:text-[#E8DCC7]"
             >
-              🩺 수의학 지식 Hub
+              🥫 사료 & 습식캔
+            </Link>
+            <Link
+              href="/category/veterinary"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="block py-2 text-base font-medium text-[#202020] dark:text-[#F2F5F3]"
+            >
+              📦 모래 & 배변용품
             </Link>
             <Link
               href="/category/behavior"
               onClick={() => setIsMobileMenuOpen(false)}
               className="block py-2 text-base font-medium text-[#202020] dark:text-[#F2F5F3]"
             >
-              🐱 행동 심리학
+              🪵 캣타워 & 가구
             </Link>
             <Link
-              href="/category/nutrition"
+              href="/category/travel"
               onClick={() => setIsMobileMenuOpen(false)}
               className="block py-2 text-base font-medium text-[#202020] dark:text-[#F2F5F3]"
             >
-              🐟 영양 & 사료
-            </Link>
-            <Link
-              href="/breeds"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="block py-2 text-base font-medium text-[#202020] dark:text-[#F2F5F3]"
-            >
-              📖 묘종 도감
+              ⚡ 스마트 가전
             </Link>
             <Link
               href="/category/rescue"
               onClick={() => setIsMobileMenuOpen(false)}
               className="block py-2 text-base font-medium text-[#202020] dark:text-[#F2F5F3]"
             >
-              🐾 입양 & 구조
+              🛡️ 내돈내산 검증
             </Link>
             <div className="pt-3 border-t border-[#ECECEC] dark:border-[#2A332C] flex justify-between text-xs text-[#6E6E6E]">
-              <Link href="/newsletter" onClick={() => setIsMobileMenuOpen(false)}>뉴스레터 구독</Link>
+              <Link href="/premium" onClick={() => setIsMobileMenuOpen(false)}>프리미엄 멤버십</Link>
               <Link href="/admin" onClick={() => setIsMobileMenuOpen(false)}>CMS 퍼블리셔</Link>
             </div>
           </div>

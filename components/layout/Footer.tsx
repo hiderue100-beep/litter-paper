@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { BookOpen, ShieldCheck, Mail, Heart, ArrowUpRight } from 'lucide-react';
+import { ShoppingBag, ShieldCheck, Mail, Heart, ArrowUpRight } from 'lucide-react';
 import { CATEGORIES } from '@/lib/mockData';
 
 export function Footer() {
@@ -15,31 +15,31 @@ export function Footer() {
           <div className="md:col-span-5 space-y-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-2xl bg-[#3D5A40] text-[#E8DCC7] flex items-center justify-center font-bold text-xl shadow-inner">
-                <BookOpen className="w-5 h-5 text-[#E8DCC7]" />
+                <ShoppingBag className="w-5 h-5 text-[#E8DCC7]" />
               </div>
               <span className="font-extrabold text-2xl font-serif-editorial text-white tracking-tight">
                 LITTER PAPER
               </span>
             </div>
             <p className="text-xs text-[#E8DCC7]/80 leading-relaxed max-w-md">
-              리터페이퍼(LITTER PAPER)는 수의학 저널리즘, 고양이 건강, 행동 심리학 및 브랜드 검증을 다루는 프리미엄 디지털 에디토리얼 미디어입니다. 최상의 가독성과 편안한 독서 경험을 최우선으로 제작됩니다.
+              리터페이퍼(LITTER PAPER)는 대가성 협찬을 엄격히 배제하고 연구 장비와 실측 데이터로 고양이 용품, 사료, 모래, 가전을 100% 내돈내산으로 검증하는 에디토리얼 미디어입니다.
             </p>
             <div className="flex items-center gap-3 pt-2 text-xs">
               <span className="inline-flex items-center gap-1 text-[#C77B30] font-semibold">
-                <ShieldCheck className="w-4 h-4" /> ISFM 수의사 자문 검증
+                <ShieldCheck className="w-4 h-4" /> 협찬 0% 내돈내산 검증 원칙
               </span>
               <span className="text-[#2F4732]">|</span>
-              <span className="text-[#E8DCC7]/60">클린 에디토리얼 저널리즘</span>
+              <span className="text-[#E8DCC7]/60">분광 분석 & 실측 데이터</span>
             </div>
           </div>
 
           {/* Quick Categories */}
           <div className="md:col-span-3 space-y-3">
             <h4 className="text-xs font-bold uppercase tracking-wider text-[#C77B30]">
-              에디토리얼 카테고리
+              상품 검증 분야
             </h4>
             <ul className="space-y-2 text-xs text-[#E8DCC7]/80">
-              {CATEGORIES.slice(0, 5).map((cat) => (
+              {CATEGORIES.map((cat) => (
                 <li key={cat.id}>
                   <Link
                     href={`/category/${cat.slug}`}
@@ -56,12 +56,12 @@ export function Footer() {
           {/* Special Hubs */}
           <div className="md:col-span-2 space-y-3">
             <h4 className="text-xs font-bold uppercase tracking-wider text-[#C77B30]">
-              전문 Hub & 도감
+              프리미엄 & 도감
             </h4>
             <ul className="space-y-2 text-xs text-[#E8DCC7]/80">
               <li>
-                <Link href="/veterinary" className="hover:text-white transition-colors">
-                  수의학 Knowledge Hub
+                <Link href="/premium" className="hover:text-white transition-colors text-[#C77B30] font-bold">
+                  프리미엄 아카이브 (Toss)
                 </Link>
               </li>
               <li>
@@ -76,11 +76,11 @@ export function Footer() {
               </li>
               <li>
                 <Link href="/newsletter" className="hover:text-white transition-colors">
-                  일간 뉴스레터 신청
+                  검증 뉴스레터 신청
                 </Link>
               </li>
               <li>
-                <Link href="/admin" className="hover:text-white transition-colors text-[#C77B30] font-bold">
+                <Link href="/admin" className="hover:text-white transition-colors text-white font-bold">
                   CMS 퍼블리셔 스위트
                 </Link>
               </li>
@@ -95,7 +95,7 @@ export function Footer() {
             <ul className="space-y-2 text-xs text-[#E8DCC7]/80">
               <li>
                 <Link href="/about" className="hover:text-white transition-colors">
-                  브랜드 미션 & 원칙
+                  검증 원칙 & 사명
                 </Link>
               </li>
               <li>

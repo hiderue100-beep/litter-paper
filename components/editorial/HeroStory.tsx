@@ -2,138 +2,145 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
-import { Bookmark, Clock, Sparkles, ChevronRight, Eye, Heart, Award } from 'lucide-react';
 import { Article } from '@/types';
-import { formatDate } from '@/lib/utils';
-import { storage } from '@/lib/storage';
-import { useToast } from '../ui/Toast';
-import { AiSummaryModal } from './AiSummaryModal';
+import { getArticleAccessStatus } from '@/lib/utils';
+import { Clock, ArrowUpRight, Sparkles, Lock, ShieldCheck, Heart, Eye } from 'lucide-react';
 
 interface HeroStoryProps {
   article: Article;
 }
 
 export function HeroStory({ article }: HeroStoryProps) {
-  const { showToast } = useToast();
-  const [isBookmarked, setIsBookmarked] = useState(false);
-  const [isAiModalOpen, setIsAiModalOpen] = useState(false);
-
-  useEffect(() => {
-    setIsBookmarked(storage.isBookmarked(article.id));
-  }, [article.id]);
-
-  const handleBookmarkToggle = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    const updated = storage.toggleBookmark(article.id);
-    const bookmarkedNow = updated.includes(article.id);
-    setIsBookmarked(bookmarkedNow);
-    showToast(
-      bookmarkedNow ? '기사가 내 보관함에 저장되었습니다.' : '보관함에서 삭제되었습니다.',
-      bookmarkedNow ? 'success' : 'info'
-    );
-  };
+  const access = getArticleAccessStatus(article);
+  const [activeTab, setActiveTab] = useState<'today' | 'premium'>('today');
 
   return (
-    <>
-      <section className="relative overflow-hidden bg-white dark:bg-[#1D231E] rounded-3xl border border-[#ECECEC] dark:border-[#2A332C] shadow-xl transition-all">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
-          {/* Content Column */}
-          <div className="lg:col-span-7 p-6 sm:p-10 lg:p-12 flex flex-col justify-between">
-            <div>
-              {/* Category & Badges */}
-              <div className="flex flex-wrap items-center gap-2 mb-4">
-                <span className="bg-[#3D5A40] text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-                  {article.categoryName}
-                </span>
-                <span className="bg-[#E8DCC7] text-[#3D5A40] dark:bg-white/10 dark:text-[#E8DCC7] text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1">
-                  <Award className="w-3.5 h-3.5 text-[#C77B30]" /> Today's Lead Story
-                </span>
-                <span className="text-xs text-[#6E6E6E] dark:text-[#9EAAA0] font-medium ml-auto sm:ml-0">
-                  난이도: {article.difficulty}
-                </span>
-              </div>
-
-              {/* Title */}
-              <Link href={`/article/${article.slug}`}>
-                <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold font-serif-editorial text-[#202020] dark:text-[#F2F5F3] leading-[1.25] tracking-tight hover:text-[#3D5A40] dark:hover:text-[#E8DCC7] transition-colors mb-4">
-                  {article.title}
-                </h1>
-              </Link>
-
-              {/* Subtitle */}
-              <p className="text-base sm:text-lg text-[#6E6E6E] dark:text-[#9EAAA0] line-clamp-3 leading-relaxed mb-6 font-normal">
-                {article.subtitle}
-              </p>
-            </div>
-
-            {/* Bottom Meta & Action Buttons */}
-            <div>
-              <div className="flex items-center justify-between pt-6 border-t border-[#ECECEC] dark:border-[#2A332C] text-xs text-[#6E6E6E]">
-                {/* Author Info */}
-                <div className="flex items-center gap-3">
-                  <img
-                    src={article.author.avatar}
-                    alt={article.author.name}
-                    className="w-10 h-10 rounded-full object-cover border-2 border-[#3D5A40]"
-                  />
-                  <div>
-                    <div className="font-bold text-[#202020] dark:text-[#F2F5F3] text-sm">
-                      {article.author.name}
-                    </div>
-                    <div className="text-[11px] text-[#6E6E6E]">
-                      {formatDate(article.publishedAt)} • {article.readingTime}분 읽기
-                    </div>
-                  </div>
-                </div>
-
-                {/* Interactive Buttons */}
-                <div className="flex items-center gap-2">
-                  {/* AI Summary Trigger */}
-                  <button
-                    onClick={() => setIsAiModalOpen(true)}
-                    className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#FAF9F7] dark:bg-[#252C26] text-[#3D5A40] dark:text-[#E8DCC7] border border-[#ECECEC] dark:border-[#2A332C] hover:border-[#3D5A40] text-xs font-semibold transition-all shadow-2xs"
-                  >
-                    <Sparkles className="w-4 h-4 text-[#C77B30]" />
-                    AI 3줄 요약
-                  </button>
-
-                  {/* Bookmark Button */}
-                  <button
-                    onClick={handleBookmarkToggle}
-                    className={`p-2.5 rounded-xl border transition-all ${
-                      isBookmarked
-                        ? 'bg-[#3D5A40] text-white border-[#3D5A40]'
-                        : 'bg-white dark:bg-[#252C26] text-[#6E6E6E] border-[#ECECEC] dark:border-[#2A332C] hover:border-[#3D5A40]'
-                    }`}
-                    aria-label="북마크"
-                  >
-                    <Bookmark className="w-4 h-4 fill-current" />
-                  </button>
-                </div>
-              </div>
-            </div>
+    <section className="rounded-3xl overflow-hidden bg-[#1A1A1A] border border-[#2E2E2E] shadow-2xl text-white">
+      <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[520px]">
+        
+        {/* Left Image Section (50%) */}
+        <div className="lg:col-span-6 relative overflow-hidden min-h-[320px] lg:min-h-[520px] bg-[#111]">
+          <img
+            src={article.coverImage}
+            alt={article.title}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+          
+          {/* Top Left Category Badge */}
+          <div className="absolute top-6 left-6 flex items-center gap-2">
+            <span className="bg-[#C77B30] text-white text-xs font-extrabold px-3 py-1 rounded-md uppercase tracking-wider shadow-md">
+              {article.categoryName}
+            </span>
+            <span className="bg-black/60 backdrop-blur-md text-white/90 text-xs px-3 py-1 rounded-md border border-white/20">
+              100% 내돈내산 검증
+            </span>
           </div>
 
-          {/* Cover Image Column */}
-          <div className="lg:col-span-5 relative min-h-[300px] lg:min-h-full overflow-hidden group">
-            <img
-              src={article.coverImage}
-              alt={article.title}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent lg:hidden" />
+          <div className="absolute bottom-6 left-6 right-6 flex items-center justify-between text-xs text-white/80">
+            <div className="flex items-center gap-2">
+              <img
+                src={article.author.avatar}
+                alt={article.author.name}
+                className="w-7 h-7 rounded-full object-cover border border-[#C77B30]"
+              />
+              <span className="font-bold">{article.author.name}</span>
+            </div>
+            <span>{article.readingTime}분 읽기 리포트</span>
           </div>
         </div>
-      </section>
 
-      {/* AI Summary Modal */}
-      <AiSummaryModal
-        isOpen={isAiModalOpen}
-        onClose={() => setIsAiModalOpen(false)}
-        article={article}
-      />
-    </>
+        {/* Right LongBlack-style Dark Editorial Container (50%) */}
+        <div className="lg:col-span-6 p-8 sm:p-12 flex flex-col justify-between space-y-6 bg-[#1A1A1A]">
+          
+          {/* Top Tabs & Live Countdown Header */}
+          <div className="space-y-6">
+            {/* Top Navigation Tabs */}
+            <div className="flex items-center justify-between border-b border-[#333] pb-4">
+              <div className="flex items-center gap-6 font-extrabold tracking-widest text-sm uppercase font-serif-editorial">
+                <button
+                  onClick={() => setActiveTab('today')}
+                  className={`transition-colors flex items-center gap-1.5 pb-1 border-b-2 ${
+                    activeTab === 'today'
+                      ? 'text-[#C77B30] border-[#C77B30]'
+                      : 'text-white/40 border-transparent hover:text-white'
+                  }`}
+                >
+                  TODAY
+                </button>
+                <button
+                  onClick={() => setActiveTab('premium')}
+                  className={`transition-colors flex items-center gap-1.5 pb-1 border-b-2 ${
+                    activeTab === 'premium'
+                      ? 'text-[#C77B30] border-[#C77B30]'
+                      : 'text-white/40 border-transparent hover:text-white'
+                  }`}
+                >
+                  WITH LP
+                </button>
+              </div>
+
+              <span className="text-[11px] text-white/40 font-mono">
+                LITTER PAPER EDITORIAL
+              </span>
+            </div>
+
+            {/* Ticking Countdown Header */}
+            {access.isFreeNow ? (
+              <div className="flex items-center justify-between pt-1">
+                <div className="flex items-center gap-2 text-xs font-semibold text-[#E8DCC7]">
+                  <Clock className="w-4 h-4 text-[#C77B30] animate-pulse" />
+                  <span>이 시간이 지나면 무료로 읽을 수 없습니다.</span>
+                </div>
+                <div className="text-2xl sm:text-3xl font-extrabold font-mono text-white tracking-widest">
+                  {access.formattedCountdown}
+                </div>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2 text-xs font-bold text-[#C77B30]">
+                <Lock className="w-4 h-4" />
+                <span>프리미엄 아카이브 전용 콘텐츠</span>
+              </div>
+            )}
+
+            <div className="h-px bg-[#333]" />
+          </div>
+
+          {/* Main Title & Subtitle */}
+          <div className="space-y-4 my-auto">
+            <Link href={`/article/${article.slug}`}>
+              <h2 className="text-2xl sm:text-4xl font-extrabold font-serif-editorial text-white hover:text-[#C77B30] transition-colors leading-[1.3] tracking-tight">
+                {article.title}
+              </h2>
+            </Link>
+
+            <p className="text-sm sm:text-base text-white/70 font-normal leading-relaxed line-clamp-3">
+              "{article.subtitle}"
+            </p>
+          </div>
+
+          {/* Bottom Action Footer */}
+          <div className="pt-6 border-t border-[#333] flex items-center justify-between">
+            <div className="flex items-center gap-4 text-xs text-white/60">
+              <span className="flex items-center gap-1">
+                <Heart className="w-4 h-4 text-red-500" /> {article.likes}
+              </span>
+              <span className="flex items-center gap-1">
+                <Eye className="w-4 h-4 text-[#C77B30]" /> {article.views.toLocaleString()}회
+              </span>
+            </div>
+
+            <Link
+              href={`/article/${article.slug}`}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-[#C77B30] hover:bg-[#b06b25] text-white text-xs font-extrabold transition-all shadow-lg"
+            >
+              <span>지금 리뷰 읽기</span>
+              <ArrowUpRight className="w-4 h-4" />
+            </Link>
+          </div>
+
+        </div>
+      </div>
+    </section>
   );
 }

@@ -11,8 +11,8 @@ import { Footer } from '@/components/layout/Footer';
 import { CATEGORIES, AUTHORS, BREEDS } from '@/lib/mockData';
 import { storage } from '@/lib/storage';
 import { Article, CategorySlug, UserSubscription } from '@/types';
-import { getArticleAccessStatus, formatTimeRemaining } from '@/lib/utils';
-import { Sparkles, TrendingUp, ChevronRight, Stethoscope, Mail, Send, Award, BookOpen, Flame, Lock, Crown, Clock } from 'lucide-react';
+import { getArticleAccessStatus } from '@/lib/utils';
+import { Sparkles, TrendingUp, ChevronRight, Mail, Send, Award, BookOpen, Flame, Lock, Crown, Clock, ShieldCheck, Box, Zap, ShoppingBag } from 'lucide-react';
 import { useToast } from '@/components/ui/Toast';
 
 export default function HomePage() {
@@ -30,13 +30,13 @@ export default function HomePage() {
   const heroArticle = articles.find((a) => a.isHero) || articles[0];
   const scheduledArticle = articles.find((a) => a.status === 'scheduled');
   
-  // Today's Free Story (published within last 24 hours, live countdown active)
+  // Today's Free Product Review Story
   const todaysFreeStory = articles.find((a) => {
     const access = getArticleAccessStatus(a, subscription.isPremium);
     return access.isFreeNow && !a.isHero;
   }) || articles[1];
 
-  // Premium Archive articles (expired or premium only)
+  // Premium Archive Product Reviews
   const premiumArchiveArticles = articles.filter((a) => {
     const access = getArticleAccessStatus(a, subscription.isPremium);
     return access.status === 'expired_premium' || access.status === 'premium_only';
@@ -51,7 +51,7 @@ export default function HomePage() {
     if (!newsletterEmail.trim()) return;
     const success = storage.addSubscriber(newsletterEmail.trim());
     if (success) {
-      showToast('일간 리터페이퍼 뉴스레터 구독이 성공적으로 신청되었습니다!');
+      showToast('일간 리터페이퍼 상품 검증 뉴스레터 구독이 완료되었습니다!');
     } else {
       showToast('이미 구독 등록된 이메일 주소입니다.', 'info');
     }
@@ -69,10 +69,10 @@ export default function HomePage() {
           <div className="p-4 rounded-2xl bg-[#E8DCC7]/50 dark:bg-white/5 border border-[#E8DCC7] dark:border-[#2A332C] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
             <div className="flex items-center gap-2">
               <span className="px-2.5 py-0.5 rounded-full bg-[#3D5A40] text-white font-extrabold text-[10px]">
-                NEXT EDITORIAL
+                NEXT REVIEW
               </span>
               <span className="font-bold text-[#202020] dark:text-[#F2F5F3]">
-                다음 에디토리얼 공개 예정: "{scheduledArticle.title}"
+                다음 내돈내산 검증 공개 예정: "{scheduledArticle.title}"
               </span>
             </div>
             <div className="flex items-center gap-1.5 font-bold text-[#3D5A40] dark:text-[#E8DCC7]">
@@ -82,7 +82,7 @@ export default function HomePage() {
           </div>
         )}
 
-        {/* Hero Lead Story */}
+        {/* Hero Lead Story (LongBlack-inspired 50/50 Split Container) */}
         {heroArticle && (
           <div className="space-y-4">
             <HeroStory article={heroArticle} />
@@ -95,10 +95,10 @@ export default function HomePage() {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#ECECEC] dark:border-[#2A332C] pb-4">
               <div>
                 <span className="text-xs font-bold uppercase tracking-wider text-[#C77B30] flex items-center gap-1">
-                  <Sparkles className="w-4 h-4" /> Today's 24h Free Story
+                  <Sparkles className="w-4 h-4" /> Today's Free Product Review
                 </span>
                 <h2 className="text-2xl font-extrabold font-serif-editorial text-[#202020] dark:text-[#F2F5F3] mt-1">
-                  오늘의 24시간 무료 공개 에디토리얼
+                  오늘의 24시간 무료 상품 검증 리포트
                 </h2>
               </div>
 
@@ -112,22 +112,22 @@ export default function HomePage() {
           </section>
         )}
 
-        {/* Popular Categories Strip */}
+        {/* Product Review Categories Strip */}
         <section>
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-bold font-serif-editorial text-[#202020] dark:text-[#F2F5F3] flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-[#C77B30]" /> 주요 에디토리얼 분야
+              <ShoppingBag className="w-5 h-5 text-[#C77B30]" /> 주요 상품 검증 분야
             </h2>
             <Link
               href="/search"
               className="text-xs font-bold text-[#3D5A40] dark:text-[#E8DCC7] hover:underline flex items-center gap-1"
             >
-              전체 보기 <ChevronRight className="w-4 h-4" />
+              전체 리뷰 <ChevronRight className="w-4 h-4" />
             </Link>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-            {CATEGORIES.slice(0, 6).map((cat) => (
+            {CATEGORIES.map((cat) => (
               <Link
                 key={cat.id}
                 href={`/category/${cat.slug}`}
@@ -137,22 +137,22 @@ export default function HomePage() {
                   {cat.name}
                 </div>
                 <div className="text-[11px] text-[#6E6E6E] dark:text-[#9EAAA0] mt-1 font-medium">
-                  {cat.count}개 기사
+                  {cat.count}개 리뷰
                 </div>
               </Link>
             ))}
           </div>
         </section>
 
-        {/* Featured Editorial Articles Grid */}
+        {/* Curated Product Reviews Grid */}
         <section>
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
             <div>
               <span className="text-xs font-bold uppercase tracking-wider text-[#C77B30]">
-                Curated Selection
+                Verified Lab Tests
               </span>
               <h2 className="text-2xl sm:text-3xl font-extrabold font-serif-editorial text-[#202020] dark:text-[#F2F5F3] mt-1">
-                에디터 추천 기사 & 수의학 리포트
+                에디터 추천 상품 검증 & 성분 분석 리포트
               </h2>
             </div>
 
@@ -169,6 +169,16 @@ export default function HomePage() {
                 전체
               </button>
               <button
+                onClick={() => setSelectedCategory('nutrition')}
+                className={`px-3.5 py-2 rounded-xl font-bold transition-all whitespace-nowrap ${
+                  selectedCategory === 'nutrition'
+                    ? 'bg-[#3D5A40] text-white shadow-xs'
+                    : 'bg-white dark:bg-[#1D231E] text-[#6E6E6E] border border-[#ECECEC] dark:border-[#2A332C] hover:border-[#3D5A40]'
+                }`}
+              >
+                사료 & 습식캔
+              </button>
+              <button
                 onClick={() => setSelectedCategory('veterinary')}
                 className={`px-3.5 py-2 rounded-xl font-bold transition-all whitespace-nowrap ${
                   selectedCategory === 'veterinary'
@@ -176,7 +186,7 @@ export default function HomePage() {
                     : 'bg-white dark:bg-[#1D231E] text-[#6E6E6E] border border-[#ECECEC] dark:border-[#2A332C] hover:border-[#3D5A40]'
                 }`}
               >
-                수의학
+                모래 & 배변
               </button>
               <button
                 onClick={() => setSelectedCategory('behavior')}
@@ -186,17 +196,7 @@ export default function HomePage() {
                     : 'bg-white dark:bg-[#1D231E] text-[#6E6E6E] border border-[#ECECEC] dark:border-[#2A332C] hover:border-[#3D5A40]'
                 }`}
               >
-                행동학
-              </button>
-              <button
-                onClick={() => setSelectedCategory('nutrition')}
-                className={`px-3.5 py-2 rounded-xl font-bold transition-all whitespace-nowrap ${
-                  selectedCategory === 'nutrition'
-                    ? 'bg-[#3D5A40] text-white shadow-xs'
-                    : 'bg-white dark:bg-[#1D231E] text-[#6E6E6E] border border-[#ECECEC] dark:border-[#2A332C] hover:border-[#3D5A40]'
-                }`}
-              >
-                영양학
+                캣타워 & 가구
               </button>
             </div>
           </div>
@@ -213,13 +213,13 @@ export default function HomePage() {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E8DCC7] text-[#3D5A40] text-xs font-bold">
-                <Crown className="w-4 h-4 text-[#C77B30]" /> LITTER PAPER PREMIUM ARCHIVE
+                <Crown className="w-4 h-4 text-[#C77B30]" /> LITTER PAPER PREMIUM REVIEWS
               </span>
               <h2 className="text-3xl font-extrabold font-serif-editorial mt-2">
-                프리미엄 전용 수의학 & 저널 아카이브
+                프리미엄 전용 상품 검증 아카이브
               </h2>
               <p className="text-xs sm:text-sm text-[#E8DCC7]/80 mt-1 max-w-xl">
-                24시간 무료 기간이 지난 수의학 가이드와 프리미엄 독점 리포트 모음입니다.
+                24시간 무료 기간이 지난 내돈내산 종합 검증 리포트 및 독점 단독 실험 모음입니다.
               </p>
             </div>
 
@@ -238,30 +238,30 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Veterinary Hub Highlight Banner */}
+        {/* Product Lab Testing Guarantee Banner */}
         <section className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#3D5A40] to-[#2F4732] text-white p-8 sm:p-12 shadow-xl">
           <div className="max-w-2xl relative z-10 space-y-4">
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#E8DCC7] text-[#3D5A40] text-xs font-bold">
-              <Stethoscope className="w-4 h-4" /> ISFM 수의사 검증 프로젝트
+              <ShieldCheck className="w-4 h-4 text-[#C77B30]" /> 대가성 협찬 0% 보장 원칙
             </div>
             <h2 className="text-3xl sm:text-4xl font-extrabold font-serif-editorial leading-tight">
-              질환 탐색부터 최신 의학 논문까지,<br />수의학 전문 지식 Hub
+              무작위 직접 구매 & 물리 장비 실험,<br />100% 내돈내산 검증 플랫폼
             </h2>
             <p className="text-sm sm:text-base text-[#E8DCC7]/90 leading-relaxed">
-              인터넷 카더라 정보로 불안해하지 마세요. 15년 차 고양이 전문 수의사진의 자문과 논문 데이터를 기초로 완성된 의학 가이드를 검색할 수 있습니다.
+              광고 협찬글에 지친 집사들을 위해 모래 먼지 분광 측정기, 사료 DM 영양 성분 환산, 스마트 가전 안전 센서를 직접 실험하여 객관적 수치로 알립니다.
             </p>
             <div className="pt-2 flex flex-wrap gap-3">
               <Link
-                href="/veterinary"
+                href="/search?q=내돈내산"
                 className="px-6 py-3 rounded-2xl bg-[#E8DCC7] text-[#3D5A40] font-extrabold text-sm hover:bg-white transition-all shadow-md"
               >
-                수의학 Knowledge Hub 입장
+                전체 검증 리포트 보기
               </Link>
               <Link
-                href="/search?q=방광염"
+                href="/search?q=벤토나이트"
                 className="px-6 py-3 rounded-2xl bg-white/10 backdrop-blur-md text-white font-bold text-sm hover:bg-white/20 transition-all border border-white/20"
               >
-                인기 증상 검색하기
+                인기 벤토나이트 실험
               </Link>
             </div>
           </div>
@@ -274,10 +274,10 @@ export default function HomePage() {
               <Mail className="w-6 h-6" />
             </div>
             <h2 className="text-2xl sm:text-3xl font-extrabold font-serif-editorial text-[#202020] dark:text-[#F2F5F3]">
-              매일 아침 배달되는 리터페이퍼(LITTER PAPER) 일간 에디토리얼
+              매일 아침 배달되는 리터페이퍼(LITTER PAPER) 검증 리포트
             </h2>
             <p className="text-xs sm:text-sm text-[#6E6E6E] dark:text-[#9EAAA0] leading-relaxed">
-              검증된 수의학 팁, 신제품 분석, 따뜻한 입양 일기까지. 15,000명의 스마트한 집사들과 함께 읽어보세요.
+              실패 없는 반려용품 구매 가이드. 신제품 분광 분석부터 성분 표기 해독까지 이메일로 받아보세요.
             </p>
             <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-3 pt-2 max-w-md mx-auto">
               <input
