@@ -12,6 +12,7 @@ import { ArticleCard } from '@/components/editorial/ArticleCard';
 import { AiSummaryModal } from '@/components/editorial/AiSummaryModal';
 import { FreeAccessCountdown } from '@/components/editorial/FreeAccessCountdown';
 import { ArticlePaywall } from '@/components/editorial/ArticlePaywall';
+import { AuthModal } from '@/components/auth/AuthModal';
 import { storage } from '@/lib/storage';
 import { Article, UserSubscription } from '@/types';
 import { formatDate, getArticleAccessStatus } from '@/lib/utils';
@@ -46,6 +47,7 @@ export default function ArticleDetailPage() {
   const [isLiked, setIsLiked] = useState(false);
   const [likesCount, setLikesCount] = useState(0);
   const [isAiModalOpen, setIsAiModalOpen] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [translatedText, setTranslatedText] = useState<string | null>(null);
   const [relatedArticles, setRelatedArticles] = useState<Article[]>([]);
 
@@ -86,6 +88,13 @@ export default function ArticleDetailPage() {
   const access = getArticleAccessStatus(article, subscription.isPremium);
 
   const handleBookmarkToggle = () => {
+    const user = storage.getCurrentUser();
+    if (!user) {
+      showToast('기사를 내 보관함에 저장하려면 로그인해 주세요.', 'info');
+      setIsAuthModalOpen(true);
+      return;
+    }
+
     const updated = storage.toggleBookmark(article.id);
     const bookmarkedNow = updated.includes(article.id);
     setIsBookmarked(bookmarkedNow);
@@ -96,6 +105,13 @@ export default function ArticleDetailPage() {
   };
 
   const handleLikeToggle = () => {
+    const user = storage.getCurrentUser();
+    if (!user) {
+      showToast('기사를 추천하려면 로그인해 주세요.', 'info');
+      setIsAuthModalOpen(true);
+      return;
+    }
+
     const res = storage.toggleLike(article.id);
     setIsLiked(res.isLiked);
     setLikesCount((prev) => (res.isLiked ? prev + 1 : prev - 1));
@@ -404,6 +420,11 @@ export default function ArticleDetailPage() {
         isOpen={isAiModalOpen}
         onClose={() => setIsAiModalOpen(false)}
         article={article}
+      />
+
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
       />
 
       <Footer />
