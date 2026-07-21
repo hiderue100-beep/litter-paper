@@ -17,13 +17,16 @@ import {
   User,
   LogOut,
   ChevronDown,
-  Mail
+  Mail,
+  Info,
+  Flame,
+  Vote
 } from 'lucide-react';
 import { LitterPaperLogo } from '../ui/LitterPaperLogo';
 import { SearchModal } from '../editorial/SearchModal';
 import { AuthModal } from '../auth/AuthModal';
 import { storage } from '@/lib/storage';
-import { CATEGORIES, BREAKING_NEWS } from '@/lib/mockData';
+import { BREAKING_NEWS } from '@/lib/mockData';
 import { UserProfile } from '@/types';
 import { useToast } from '../ui/Toast';
 
@@ -106,7 +109,7 @@ export function Navbar() {
           <div className="flex items-center justify-between h-20">
             
             {/* Brand Logo with Official Cat-in-Box Symbol */}
-            <Link href="/" className="flex items-center gap-3 group">
+            <Link href="/" className="flex items-center gap-3 group shrink-0">
               <div className="w-11 h-11 rounded-2xl bg-white dark:bg-[#242424] border border-[#EAE6DF] dark:border-[#333333] flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform p-1">
                 <LitterPaperLogo size={36} />
               </div>
@@ -120,75 +123,66 @@ export function Navbar() {
               </div>
             </Link>
 
-            {/* Desktop Navigation Links */}
-            <nav className="hidden md:flex items-center gap-7 text-sm font-bold text-[#666666] dark:text-[#A0A0A0]">
+            {/* Desktop Navigation Links (EXACT 5 RESTRUCTURED ITEMS) */}
+            <nav className="hidden md:flex items-center gap-8 text-sm font-extrabold text-[#666666] dark:text-[#A0A0A0]">
+              {/* 1. 리터페이퍼란? */}
               <Link
-                href="/category/nutrition"
+                href="/about"
                 className={`transition-colors ${
-                  pathname === '/category/nutrition'
-                    ? 'text-[#333333] dark:text-[#FAF8F5] font-extrabold border-b-2 border-[#C19A6B] pb-1'
+                  pathname === '/about'
+                    ? 'text-[#333333] dark:text-[#FAF8F5] font-black border-b-2 border-[#C19A6B] pb-1'
                     : 'hover:text-[#333333] dark:hover:text-[#FAF8F5]'
                 }`}
               >
-                사료 & 습식캔
+                리터페이퍼란?
               </Link>
 
+              {/* 2. 요즘 화제 */}
               <Link
-                href="/category/veterinary"
-                className={`transition-colors ${
-                  pathname === '/category/veterinary'
-                    ? 'text-[#333333] dark:text-[#FAF8F5] font-extrabold border-b-2 border-[#C19A6B] pb-1'
+                href="/trending"
+                className={`transition-colors flex items-center gap-1 ${
+                  pathname === '/trending'
+                    ? 'text-[#333333] dark:text-[#FAF8F5] font-black border-b-2 border-[#C19A6B] pb-1'
                     : 'hover:text-[#333333] dark:hover:text-[#FAF8F5]'
                 }`}
               >
-                모래 & 배변
+                <Flame className="w-4 h-4 text-[#C19A6B]" /> 요즘 화제
               </Link>
 
+              {/* 3. 픽캣 */}
               <Link
-                href="/category/behavior"
-                className={`transition-colors ${
-                  pathname === '/category/behavior'
-                    ? 'text-[#333333] dark:text-[#FAF8F5] font-extrabold border-b-2 border-[#C19A6B] pb-1'
+                href="/pickcat"
+                className={`transition-colors flex items-center gap-1 ${
+                  pathname === '/pickcat'
+                    ? 'text-[#333333] dark:text-[#FAF8F5] font-black border-b-2 border-[#C19A6B] pb-1'
                     : 'hover:text-[#333333] dark:hover:text-[#FAF8F5]'
                 }`}
               >
-                캣타워 & 가구
+                <Vote className="w-4 h-4 text-[#C19A6B]" /> 픽캣
               </Link>
 
+              {/* 4. 프리미엄 */}
               <Link
-                href="/category/travel"
-                className={`transition-colors ${
-                  pathname === '/category/travel'
-                    ? 'text-[#333333] dark:text-[#FAF8F5] font-extrabold border-b-2 border-[#C19A6B] pb-1'
-                    : 'hover:text-[#333333] dark:hover:text-[#FAF8F5]'
+                href="/premium"
+                className={`transition-colors flex items-center gap-1 ${
+                  pathname === '/premium'
+                    ? 'text-[#C19A6B] font-black border-b-2 border-[#C19A6B] pb-1'
+                    : 'hover:text-[#C19A6B]'
                 }`}
               >
-                스마트 가전
+                <Crown className="w-4 h-4 text-[#C19A6B]" /> 프리미엄
               </Link>
 
-              <Link
-                href="/category/rescue"
-                className={`flex items-center gap-1.5 transition-colors ${
-                  pathname === '/category/rescue'
-                    ? 'text-[#C19A6B] font-extrabold border-b-2 border-[#C19A6B] pb-1'
-                    : 'hover:text-[#333333] dark:hover:text-[#FAF8F5]'
-                }`}
-              >
-                <ShieldCheck className="w-4 h-4 text-[#C19A6B]" />
-                내돈내산 검증
-              </Link>
-
-              {/* Dedicated Top Newsletter Link (Matching Newneek Style) */}
+              {/* 5. 뉴스레터 */}
               <Link
                 href="/newsletter"
-                className={`transition-colors flex items-center gap-1 text-[#C19A6B] font-extrabold ${
-                  pathname === '/newsletter'
-                    ? 'border-b-2 border-[#C19A6B] pb-1'
+                className={`transition-colors flex items-center gap-1 ${
+                  pathname === '/newsletter' || pathname === '/newsletter/settings'
+                    ? 'text-[#333333] dark:text-[#FAF8F5] font-black border-b-2 border-[#C19A6B] pb-1'
                     : 'hover:text-[#333333] dark:hover:text-[#FAF8F5]'
                 }`}
               >
-                <Mail className="w-4 h-4" />
-                뉴스레터
+                <Mail className="w-4 h-4" /> 뉴스레터
               </Link>
             </nav>
 
@@ -275,7 +269,7 @@ export function Navbar() {
                       </div>
 
                       <Link
-                        href="/newsletter"
+                        href="/newsletter/settings"
                         onClick={() => setIsUserMenuOpen(false)}
                         className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-[#FAF8F5] dark:hover:bg-[#1A1A1A] font-bold text-[#C19A6B]"
                       >
@@ -340,51 +334,44 @@ export function Navbar() {
 
         {/* Mobile Navigation Menu Drawer */}
         {isMobileMenuOpen && (
-          <div className="md:hidden border-t border-[#EAE6DF] dark:border-[#333333] bg-[#FAF8F5] dark:bg-[#1A1A1A] px-4 pt-3 pb-6 space-y-3">
+          <div className="md:hidden border-t border-[#EAE6DF] dark:border-[#333333] bg-[#FAF8F5] dark:bg-[#1A1A1A] px-4 pt-3 pb-6 space-y-3 font-extrabold">
             <Link
-              href="/category/nutrition"
+              href="/about"
               onClick={() => setIsMobileMenuOpen(false)}
               className="block py-2 text-base font-bold text-[#333333] dark:text-[#FAF8F5]"
             >
-              🥫 사료 & 습식캔
+              📖 리터페이퍼란?
             </Link>
             <Link
-              href="/category/veterinary"
+              href="/trending"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="block py-2 text-base font-medium text-[#333333] dark:text-[#FAF8F5]"
+              className="block py-2 text-base font-bold text-[#333333] dark:text-[#FAF8F5]"
             >
-              📦 모래 & 배변용품
+              🔥 요즘 화제
             </Link>
             <Link
-              href="/category/behavior"
+              href="/pickcat"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="block py-2 text-base font-medium text-[#333333] dark:text-[#FAF8F5]"
+              className="block py-2 text-base font-bold text-[#333333] dark:text-[#FAF8F5]"
             >
-              🪵 캣타워 & 가구
+              🐾 픽캣 (투표 & 100자 토론)
             </Link>
             <Link
-              href="/category/travel"
+              href="/premium"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="block py-2 text-base font-medium text-[#333333] dark:text-[#FAF8F5]"
+              className="block py-2 text-base font-bold text-[#C19A6B]"
             >
-              ⚡ 스마트 가전
-            </Link>
-            <Link
-              href="/category/rescue"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="block py-2 text-base font-medium text-[#C19A6B]"
-            >
-              🛡️ 내돈내산 검증
+              👑 프리미엄 아카이브
             </Link>
             <Link
               href="/newsletter"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="block py-2 text-base font-extrabold text-[#C19A6B]"
+              className="block py-2 text-base font-bold text-[#333333] dark:text-[#FAF8F5]"
             >
-              📧 뉴스레터 구독 및 알림 설정
+              📧 뉴스레터
             </Link>
             <div className="pt-3 border-t border-[#EAE6DF] dark:border-[#333333] flex justify-between text-xs text-[#666666]">
-              <Link href="/premium" onClick={() => setIsMobileMenuOpen(false)}>프리미엄 멤버십</Link>
+              <Link href="/newsletter/settings" onClick={() => setIsMobileMenuOpen(false)}>알림 설정</Link>
               <button onClick={() => { setIsMobileMenuOpen(false); setIsAuthModalOpen(true); }}>로그인/가입</button>
             </div>
           </div>
