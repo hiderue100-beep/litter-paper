@@ -253,30 +253,6 @@ export default function HomePage() {
             </div>
           </div>
         </section>
-
-        {/* Dedicated Newsletter Subscription Banner (No Manual Input Required) */}
-        <section className="rounded-3xl bg-white dark:bg-[#242424] border border-[#EAE6DF] dark:border-[#333333] p-8 sm:p-12 text-center shadow-xs relative overflow-hidden">
-          <div className="max-w-xl mx-auto space-y-4">
-            <div className="w-12 h-12 rounded-2xl bg-[#C19A6B]/20 text-[#C19A6B] flex items-center justify-center mx-auto font-bold">
-              <Mail className="w-6 h-6" />
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#333333] dark:text-[#FAF8F5]">
-              매일 아침 배달되는 리터페이퍼(Litter Paper) 검증 리포트
-            </h2>
-            <p className="text-xs sm:text-sm text-[#666666] dark:text-[#A0A0A0] leading-relaxed">
-              별도의 이메일 입력 없이 회원가입 시 자동 수신 설정됩니다.<br />
-              내 관심 카테고리별 수신 여부는 뉴스레터 알림 설정 페이지에서 언제든 직접 맞춤 변경할 수 있습니다.
-            </p>
-            <div className="pt-2">
-              <Link
-                href="/newsletter"
-                className="px-8 py-3.5 rounded-2xl bg-[#FF8A00] text-white font-extrabold text-sm hover:bg-[#e07900] transition-colors shrink-0 shadow-md inline-flex items-center gap-2"
-              >
-                <Bell className="w-4 h-4 text-white" /> 뉴스레터 알림 설정하기
-              </Link>
-            </div>
-          </div>
-        </section>
       </main>
 
       <Footer />
