@@ -4,14 +4,16 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { HeroStory } from '@/components/editorial/HeroStory';
 import { ArticleCard } from '@/components/editorial/ArticleCard';
-import { BreedCard } from '@/components/editorial/BreedCard';
 import { FreeAccessCountdown } from '@/components/editorial/FreeAccessCountdown';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
-import { CATEGORIES, AUTHORS, BREEDS } from '@/lib/mockData';
+import { LitterPaperLogo } from '@/components/ui/LitterPaperLogo';
+import { CATEGORIES, AUTHORS } from '@/lib/mockData';
 import { storage } from '@/lib/storage';
-import { Article, CategorySlug, UserSubscription } from '@/types';
+import { Article, CategorySlug, UserSubscription, UserProfile } from '@/types';
 import { getArticleAccessStatus } from '@/lib/utils';
+import { useToast } from '@/components/ui/Toast';
+import { AuthModal } from '@/components/auth/AuthModal';
 import { 
   Sparkles, 
   TrendingUp, 
@@ -24,18 +26,72 @@ import {
   ShieldCheck, 
   Vote,
   ShoppingBag,
-  Info
+  Info,
+  CheckCircle2,
+  Heart,
+  Send,
+  MessageSquare,
+  Award,
+  ExternalLink,
+  Bell
 } from 'lucide-react';
 
+interface PickCatMemo {
+  id: string;
+  userName: string;
+  userAvatar: string;
+  voteOption: string;
+  memo: string;
+  createdAt: string;
+  likes: number;
+  isLiked?: boolean;
+}
+
+const INITIAL_MEMOS: PickCatMemo[] = [
+  {
+    id: 'm-1',
+    userName: '치즈태비 집사',
+    userAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80',
+    voteOption: '벤토나이트 굳는 모래',
+    memo: '먼지 날림은 벤토가 어쩔 수 없지만 응집력과 기호성 때문에 벤토나이트 절대 못 벗어납니다!',
+    createdAt: '10분 전',
+    likes: 24,
+  },
+  {
+    id: 'm-2',
+    userName: '묘생역전',
+    userAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80',
+    voteOption: '두부/천연 모래',
+    memo: '사막화 걱정 없고 변기 수세가 편해서 두부 모래 5년째 유지 중입니다.',
+    createdAt: '30분 전',
+    likes: 15,
+  },
+];
+
 export default function HomePage() {
+  const { showToast } = useToast();
   const [articles, setArticles] = useState<Article[]>([]);
   const [subscription, setSubscription] = useState<UserSubscription>({ isPremium: false });
   const [selectedCategory, setSelectedCategory] = useState<CategorySlug | 'all'>('all');
+  const [currentUser, setCurrentUser] = useState<UserProfile | null>(null);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+
+  // PickCat Poll State
+  const [votedOption, setVotedOption] = useState<'A' | 'B' | null>(null);
+  const [optionACount, setOptionACount] = useState(1420);
+  const [optionBCount, setOptionBCount] = useState(540);
+  const [memoInput, setMemoInput] = useState('');
+  const [memos, setMemos] = useState<PickCatMemo[]>(INITIAL_MEMOS);
 
   useEffect(() => {
     setArticles(storage.getArticles());
     setSubscription(storage.getUserSubscription());
+    setCurrentUser(storage.getCurrentUser());
   }, []);
+
+  const totalVotes = optionACount + optionBCount;
+  const percentA = Math.round((optionACount / totalVotes) * 100);
+  const percentB = 100 - percentA;
 
   const heroArticle = articles.find((a) => a.isHero) || articles[0];
   const scheduledArticle = articles.find((a) => a.status === 'scheduled');
@@ -56,13 +112,66 @@ export default function HomePage() {
     ? articles
     : articles.filter((a) => a.category === selectedCategory);
 
+  const handleVote = (option: 'A' | 'B') => {
+    if (!currentUser) {
+      showToast('투표에 참여하시려면 먼저 로그인해 주세요.', 'info');
+      setIsAuthModalOpen(true);
+      return;
+    }
+
+    if (votedOption) {
+      showToast('이미 투표에 참여하셨습니다.', 'info');
+      return;
+    }
+
+    setVotedOption(option);
+    if (option === 'A') setOptionACount((prev) => prev + 1);
+    if (option === 'B') setOptionBCount((prev) => prev + 1);
+
+    showToast(
+      option === 'A'
+        ? '벤토나이트 모래에 1표 투표하셨습니다!'
+        : '두부/천연 모래에 1표 투표하셨습니다!'
+    );
+  };
+
+  const handleAddMemo = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!currentUser) {
+      showToast('한줄 메모를 남기시려면 먼저 로그인해 주세요.', 'info');
+      setIsAuthModalOpen(true);
+      return;
+    }
+
+    if (!votedOption) {
+      showToast('투표를 완료한 후 100자 한줄 메모를 남기실 수 있습니다.', 'info');
+      return;
+    }
+
+    if (!memoInput.trim()) return;
+
+    const newMemoItem: PickCatMemo = {
+      id: `m-${Date.now()}`,
+      userName: currentUser.name,
+      userAvatar: currentUser.avatar,
+      voteOption: votedOption === 'A' ? '벤토나이트 굳는 모래' : '두부/천연 모래',
+      memo: memoInput.trim().slice(0, 100),
+      createdAt: '방금 전',
+      likes: 0,
+    };
+
+    setMemos([newMemoItem, ...memos]);
+    setMemoInput('');
+    showToast('100자 한줄 픽캣 메모가 등록되었습니다!');
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-[#FAF8F5] dark:bg-[#1A1A1A] text-[#333333] dark:text-[#FAF8F5] font-sans">
       <Navbar />
 
-      <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-16">
+      <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-20">
         
-        {/* Next Scheduled Article Countdown Banner */}
+        {/* Scheduled Article Alert */}
         {scheduledArticle && (
           <div className="p-4 rounded-2xl bg-[#C19A6B]/15 dark:bg-white/5 border border-[#C19A6B]/30 dark:border-[#333333] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-sans">
             <div className="flex items-center gap-2">
@@ -87,172 +196,78 @@ export default function HomePage() {
           </div>
         )}
 
-        {/* 5 CORE NAVIGATION SECTIONS BANNER GRID (Reflecting GNB Titles) */}
-        <section className="space-y-6">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-extrabold text-[#333333] dark:text-[#FAF8F5] flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-[#C19A6B]" /> 리터페이퍼 5대 서비스 바로가기
-            </h2>
-            <span className="text-xs text-[#666666] font-medium">상단 메인 메뉴</span>
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
-            {/* 1. 리터페이퍼란? */}
+        {/* ========================================================================= */}
+        {/* MENU CONTENT SECTION 1: 📖 리터페이퍼란? (About & 4 Guiding Principles) */}
+        {/* ========================================================================= */}
+        <section className="p-8 sm:p-12 rounded-3xl bg-white dark:bg-[#242424] border border-[#EAE6DF] dark:border-[#333333] space-y-8 shadow-xs">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#EAE6DF] dark:border-[#333333] pb-6">
+            <div className="space-y-1">
+              <span className="text-xs font-extrabold uppercase tracking-wider text-[#C19A6B] flex items-center gap-1.5">
+                <Info className="w-4 h-4" /> 1. 리터페이퍼란?
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#333333] dark:text-[#FAF8F5]">
+                100% 내돈내산 반려동물 용품 검증 저널
+              </h2>
+            </div>
             <Link
               href="/about"
-              className="p-5 rounded-3xl bg-white dark:bg-[#242424] border border-[#EAE6DF] dark:border-[#333333] hover:border-[#C19A6B] dark:hover:border-[#C19A6B] transition-all group flex flex-col justify-between space-y-3 shadow-2xs"
+              className="text-xs font-bold text-[#C19A6B] hover:underline flex items-center gap-1 shrink-0"
             >
-              <div className="w-10 h-10 rounded-2xl bg-[#C19A6B]/20 text-[#C19A6B] flex items-center justify-center font-bold">
-                <Info className="w-5 h-5" />
-              </div>
-              <div>
-                <h3 className="font-extrabold text-sm text-[#333333] dark:text-[#FAF8F5] group-hover:text-[#C19A6B] transition-colors">
-                  리터페이퍼란?
-                </h3>
-                <p className="text-[11px] text-[#666666] dark:text-[#A0A0A0] mt-1 font-medium line-clamp-1">
-                  대가성 0% 검증 저널
-                </p>
-              </div>
-            </Link>
-
-            {/* 2. 요즘 화제 */}
-            <Link
-              href="/trending"
-              className="p-5 rounded-3xl bg-white dark:bg-[#242424] border border-[#EAE6DF] dark:border-[#333333] hover:border-[#C19A6B] dark:hover:border-[#C19A6B] transition-all group flex flex-col justify-between space-y-3 shadow-2xs"
-            >
-              <div className="w-10 h-10 rounded-2xl bg-[#FF8A00]/20 text-[#FF8A00] flex items-center justify-center font-bold">
-                <Flame className="w-5 h-5" />
-              </div>
-              <div>
-                <h3 className="font-extrabold text-sm text-[#333333] dark:text-[#FAF8F5] group-hover:text-[#C19A6B] transition-colors">
-                  요즘 화제
-                </h3>
-                <p className="text-[11px] text-[#666666] dark:text-[#A0A0A0] mt-1 font-medium line-clamp-1">
-                  실시간 최고 인기 기사
-                </p>
-              </div>
-            </Link>
-
-            {/* 3. 픽캣 */}
-            <Link
-              href="/pickcat"
-              className="p-5 rounded-3xl bg-white dark:bg-[#242424] border border-[#EAE6DF] dark:border-[#333333] hover:border-[#C19A6B] dark:hover:border-[#C19A6B] transition-all group flex flex-col justify-between space-y-3 shadow-2xs"
-            >
-              <div className="w-10 h-10 rounded-2xl bg-[#333333] text-[#C19A6B] flex items-center justify-center font-bold">
-                <Vote className="w-5 h-5" />
-              </div>
-              <div>
-                <h3 className="font-extrabold text-sm text-[#333333] dark:text-[#FAF8F5] group-hover:text-[#C19A6B] transition-colors">
-                  픽캣 (Pick Cat)
-                </h3>
-                <p className="text-[11px] text-[#666666] dark:text-[#A0A0A0] mt-1 font-medium line-clamp-1">
-                  투표 & 100자 한줄 토론
-                </p>
-              </div>
-            </Link>
-
-            {/* 4. 프리미엄 */}
-            <Link
-              href="/premium"
-              className="p-5 rounded-3xl bg-white dark:bg-[#242424] border border-[#EAE6DF] dark:border-[#333333] hover:border-[#C19A6B] dark:hover:border-[#C19A6B] transition-all group flex flex-col justify-between space-y-3 shadow-2xs"
-            >
-              <div className="w-10 h-10 rounded-2xl bg-[#C19A6B] text-white flex items-center justify-center font-bold">
-                <Crown className="w-5 h-5" />
-              </div>
-              <div>
-                <h3 className="font-extrabold text-sm text-[#C19A6B] group-hover:text-[#333333] transition-colors">
-                  프리미엄
-                </h3>
-                <p className="text-[11px] text-[#666666] dark:text-[#A0A0A0] mt-1 font-medium line-clamp-1">
-                  독점 검증 아카이브
-                </p>
-              </div>
-            </Link>
-
-            {/* 5. 뉴스레터 */}
-            <Link
-              href="/newsletter"
-              className="p-5 rounded-3xl bg-white dark:bg-[#242424] border border-[#EAE6DF] dark:border-[#333333] hover:border-[#C19A6B] dark:hover:border-[#C19A6B] transition-all group flex flex-col justify-between space-y-3 shadow-2xs"
-            >
-              <div className="w-10 h-10 rounded-2xl bg-[#00B88A]/20 text-[#00B88A] flex items-center justify-center font-bold">
-                <Mail className="w-5 h-5" />
-              </div>
-              <div>
-                <h3 className="font-extrabold text-sm text-[#333333] dark:text-[#FAF8F5] group-hover:text-[#C19A6B] transition-colors">
-                  뉴스레터
-                </h3>
-                <p className="text-[11px] text-[#666666] dark:text-[#A0A0A0] mt-1 font-medium line-clamp-1">
-                  3대 검증 시리즈 수신
-                </p>
-              </div>
+              상세 소개 더보기 <ChevronRight className="w-4 h-4" />
             </Link>
           </div>
-        </section>
 
-        {/* Today's Free Story Highlight Box with Countdown */}
-        {todaysFreeStory && (
-          <section className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#242424] border border-[#EAE6DF] dark:border-[#333333] shadow-xs space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#EAE6DF] dark:border-[#333333] pb-4">
-              <div>
-                <span className="text-xs font-bold uppercase tracking-wider text-[#C19A6B] flex items-center gap-1">
-                  <Sparkles className="w-4 h-4" /> Today's Free Product Review
-                </span>
-                <h2 className="text-2xl font-extrabold text-[#333333] dark:text-[#FAF8F5] mt-1">
-                  오늘의 24시간 무료 상품 검증 리포트
-                </h2>
-              </div>
+          <p className="text-sm text-[#666666] dark:text-[#A0A0A0] leading-relaxed max-w-3xl">
+            리터페이퍼(LITTER PAPER)는 대가성 협찬 글을 엄격히 금지합니다. 직접 무작위 구매한 제품을 분광 먼지 측정기, 300g 무게 감지 센서, DM 영양 성분 환산표로 분석하여 가장 객관적인 수치로 집사들에게 알립니다.
+          </p>
 
-              {/* Free Access Ticking Timer */}
-              <FreeAccessCountdown
-                freeWindowEndsAt={getArticleAccessStatus(todaysFreeStory).freeWindowEndsAt}
-              />
+          {/* 4 Guiding Principles Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="p-5 rounded-2xl bg-[#FAF8F5] dark:bg-[#1A1A1A] border border-[#EAE6DF] dark:border-[#333333] space-y-2">
+              <ShieldCheck className="w-5 h-5 text-[#C19A6B]" />
+              <h3 className="font-extrabold text-sm">1. 대가성 협찬 0% 배제</h3>
+              <p className="text-xs text-[#666666] dark:text-[#A0A0A0] leading-relaxed">
+                제조사 광고비를 받지 않으며 무작위 내돈내산으로 테스트합니다.
+              </p>
             </div>
 
-            <ArticleCard article={todaysFreeStory} variant="horizontal" />
-          </section>
-        )}
+            <div className="p-5 rounded-2xl bg-[#FAF8F5] dark:bg-[#1A1A1A] border border-[#EAE6DF] dark:border-[#333333] space-y-2">
+              <Award className="w-5 h-5 text-[#C19A6B]" />
+              <h3 className="font-extrabold text-sm">2. 연구 장비 실측 데이터</h3>
+              <p className="text-xs text-[#666666] dark:text-[#A0A0A0] leading-relaxed">
+                분광 먼지 수치(ppm), 데시벨(dB), DM 단백질 비율로 수치화합니다.
+              </p>
+            </div>
 
-        {/* Product Review Categories Strip */}
-        <section>
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-extrabold text-[#333333] dark:text-[#FAF8F5] flex items-center gap-2">
-              <ShoppingBag className="w-5 h-5 text-[#C19A6B]" /> 주요 상품 검증 분야
-            </h2>
-            <Link
-              href="/search"
-              className="text-xs font-bold text-[#C19A6B] hover:underline flex items-center gap-1"
-            >
-              전체 리뷰 <ChevronRight className="w-4 h-4" />
-            </Link>
-          </div>
+            <div className="p-5 rounded-2xl bg-[#FAF8F5] dark:bg-[#1A1A1A] border border-[#EAE6DF] dark:border-[#333333] space-y-2">
+              <Sparkles className="w-5 h-5 text-[#C19A6B]" />
+              <h3 className="font-extrabold text-sm">3. 롱블랙 스타일 읽기</h3>
+              <p className="text-xs text-[#666666] dark:text-[#A0A0A0] leading-relaxed">
+                50/50 분할 레이아웃과 프리텐다드 서체로 편안한 읽기를 제공합니다.
+              </p>
+            </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-            {CATEGORIES.map((cat) => (
-              <Link
-                key={cat.id}
-                href={`/category/${cat.slug}`}
-                className="p-4 rounded-2xl bg-white dark:bg-[#242424] border border-[#EAE6DF] dark:border-[#333333] hover:border-[#C19A6B] dark:hover:border-[#C19A6B] transition-all group text-center shadow-2xs"
-              >
-                <div className="text-sm font-bold text-[#333333] dark:text-[#FAF8F5] group-hover:text-[#C19A6B] transition-colors">
-                  {cat.name}
-                </div>
-                <div className="text-[11px] text-[#666666] dark:text-[#A0A0A0] mt-1 font-medium">
-                  {cat.count}개 리뷰
-                </div>
-              </Link>
-            ))}
+            <div className="p-5 rounded-2xl bg-[#FAF8F5] dark:bg-[#1A1A1A] border border-[#EAE6DF] dark:border-[#333333] space-y-2">
+              <Clock className="w-5 h-5 text-[#C19A6B]" />
+              <h3 className="font-extrabold text-sm">4. 24시간 무료 공개</h3>
+              <p className="text-xs text-[#666666] dark:text-[#A0A0A0] leading-relaxed">
+                모든 최신 검증 리포트는 24시간 동안 누구나 무료로 읽습니다.
+              </p>
+            </div>
           </div>
         </section>
 
-        {/* Curated Product Reviews Grid */}
-        <section>
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+        {/* ========================================================================= */}
+        {/* MENU CONTENT SECTION 2: 🔥 요즘 화제 (Trending Articles & Issue Grid) */}
+        {/* ========================================================================= */}
+        <section className="space-y-8">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#EAE6DF] dark:border-[#333333] pb-4">
             <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-[#C19A6B]">
-                Verified Lab Tests
+              <span className="text-xs font-extrabold uppercase tracking-wider text-[#C19A6B] flex items-center gap-1.5">
+                <Flame className="w-4 h-4 text-[#FF8A00]" /> 2. 요즘 화제
               </span>
               <h2 className="text-2xl sm:text-3xl font-extrabold text-[#333333] dark:text-[#FAF8F5] mt-1">
-                에디터 추천 상품 검증 & 성분 분석 리포트
+                실시간 독자 반응 1위 & 검증 이슈 기사 모음
               </h2>
             </div>
 
@@ -308,18 +323,135 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Premium Archive Section */}
-        <section className="p-8 sm:p-12 rounded-3xl bg-[#242424] border border-[#333333] text-white shadow-xl space-y-8">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        {/* ========================================================================= */}
+        {/* MENU CONTENT SECTION 3: 🐾 픽캣 (Pick Cat Live Poll & 100-Char Memo Feed) */}
+        {/* ========================================================================= */}
+        <section className="p-8 sm:p-10 rounded-3xl bg-white dark:bg-[#242424] border border-[#EAE6DF] dark:border-[#333333] shadow-xl space-y-8">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#EAE6DF] dark:border-[#333333] pb-6">
             <div>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#C19A6B] text-white text-xs font-bold">
-                <Crown className="w-4 h-4" /> LITTER PAPER PREMIUM REVIEWS
+              <span className="text-xs font-extrabold uppercase tracking-wider text-[#C19A6B] flex items-center gap-1.5">
+                <Vote className="w-4 h-4" /> 3. 픽캣 (Pick Cat) 커뮤니티
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#333333] dark:text-[#FAF8F5] mt-1">
+                집사들의 투표로 정하는 픽캣 한줄 한마디
+              </h2>
+            </div>
+            <Link
+              href="/pickcat"
+              className="text-xs font-bold text-[#C19A6B] hover:underline flex items-center gap-1 shrink-0"
+            >
+              전체 픽캣 피드 보기 <ChevronRight className="w-4 h-4" />
+            </Link>
+          </div>
+
+          {/* Interactive Poll Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* Option A */}
+            <button
+              type="button"
+              onClick={() => handleVote('A')}
+              className={`p-6 rounded-2xl border-2 transition-all text-left space-y-3 ${
+                votedOption === 'A'
+                  ? 'border-[#C19A6B] bg-[#C19A6B]/10 dark:bg-[#C19A6B]/20 shadow-md'
+                  : 'border-[#EAE6DF] dark:border-[#333333] hover:border-[#C19A6B] bg-[#FAF8F5] dark:bg-[#1A1A1A]'
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <span className="font-extrabold text-base">A. 벤토나이트 굳는 모래</span>
+                {votedOption === 'A' && <CheckCircle2 className="w-5 h-5 text-[#C19A6B]" />}
+              </div>
+              <p className="text-xs text-[#666666]">
+                기호성과 응집력이 압도적! 먼지 수치 5ppm 이하 선택
+              </p>
+              
+              <div className="space-y-1 pt-2">
+                <div className="w-full h-2 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden">
+                  <div
+                    className="h-full bg-[#C19A6B] transition-all duration-700"
+                    style={{ width: `${percentA}%` }}
+                  />
+                </div>
+                <div className="flex justify-between text-[11px] font-extrabold text-[#C19A6B]">
+                  <span>{percentA}%</span>
+                  <span>{optionACount.toLocaleString()}표</span>
+                </div>
+              </div>
+            </button>
+
+            {/* Option B */}
+            <button
+              type="button"
+              onClick={() => handleVote('B')}
+              className={`p-6 rounded-2xl border-2 transition-all text-left space-y-3 ${
+                votedOption === 'B'
+                  ? 'border-[#C19A6B] bg-[#C19A6B]/10 dark:bg-[#C19A6B]/20 shadow-md'
+                  : 'border-[#EAE6DF] dark:border-[#333333] hover:border-[#C19A6B] bg-[#FAF8F5] dark:bg-[#1A1A1A]'
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <span className="font-extrabold text-base">B. 두부 / 카사바 / 천연 모래</span>
+                {votedOption === 'B' && <CheckCircle2 className="w-5 h-5 text-[#C19A6B]" />}
+              </div>
+              <p className="text-xs text-[#666666]">
+                사막화 걱정 제로! 변기 수세 및 가벼운 청소 용이
+              </p>
+
+              <div className="space-y-1 pt-2">
+                <div className="w-full h-2 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden">
+                  <div
+                    className="h-full bg-[#333333] dark:bg-white transition-all duration-700"
+                    style={{ width: `${percentB}%` }}
+                  />
+                </div>
+                <div className="flex justify-between text-[11px] font-extrabold text-[#333333] dark:text-[#FAF8F5]">
+                  <span>{percentB}%</span>
+                  <span>{optionBCount.toLocaleString()}표</span>
+                </div>
+              </div>
+            </button>
+          </div>
+
+          {/* 100-Char Memo Form */}
+          <form onSubmit={handleAddMemo} className="p-4 rounded-2xl bg-[#FAF8F5] dark:bg-[#1A1A1A] border border-[#EAE6DF] dark:border-[#333333] space-y-3">
+            <div className="flex justify-between text-xs font-bold text-[#666666]">
+              <span>100자 이하 한줄 픽캣 메모</span>
+              <span>{memoInput.length} / 100자</span>
+            </div>
+            <textarea
+              value={memoInput}
+              onChange={(e) => setMemoInput(e.target.value.slice(0, 100))}
+              maxLength={100}
+              placeholder={votedOption ? '투표한 이유나 실전 노하우를 100자 이내로 적어주세요...' : '투표에 참여하신 후 100자 한줄 메모를 작성할 수 있습니다.'}
+              rows={2}
+              disabled={!votedOption}
+              className="w-full bg-transparent text-sm focus:outline-hidden resize-none placeholder:text-[#666666]"
+            />
+            <div className="flex justify-end pt-2">
+              <button
+                type="submit"
+                disabled={!votedOption || !memoInput.trim()}
+                className="px-4 py-2 rounded-xl bg-[#333333] text-white font-extrabold text-xs disabled:opacity-50 hover:bg-[#C19A6B] transition-colors inline-flex items-center gap-1.5"
+              >
+                <Send className="w-3.5 h-3.5 text-[#C19A6B]" /> 메모 남기기
+              </button>
+            </div>
+          </form>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* MENU CONTENT SECTION 4: 👑 프리미엄 (Premium Exclusive Archive) */}
+        {/* ========================================================================= */}
+        <section className="p-8 sm:p-12 rounded-3xl bg-[#242424] border border-[#333333] text-white shadow-xl space-y-8">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#333333] pb-6">
+            <div>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#C19A6B] text-white text-xs font-extrabold">
+                <Crown className="w-4 h-4" /> 4. 프리미엄 (Premium Archive)
               </span>
               <h2 className="text-3xl font-extrabold mt-2 text-white">
                 프리미엄 전용 상품 검증 아카이브
               </h2>
               <p className="text-xs sm:text-sm text-white/70 mt-1 max-w-xl">
-                24시간 무료 기간이 지난 내돈내산 종합 검증 리포트 및 독점 단독 실험 모음입니다.
+                24시간 무료 기간이 지났거나 독점 공개되는 100% 내돈내산 종합 검증 리포트 모음입니다.
               </p>
             </div>
 
@@ -338,37 +470,101 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Product Lab Testing Guarantee Banner */}
-        <section className="relative overflow-hidden rounded-3xl bg-[#333333] text-white p-8 sm:p-12 shadow-xl border border-[#444444]">
-          <div className="max-w-2xl relative z-10 space-y-4">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#C19A6B] text-white text-xs font-bold">
-              <ShieldCheck className="w-4 h-4" /> 대가성 협찬 0% 보장 원칙
+        {/* ========================================================================= */}
+        {/* MENU CONTENT SECTION 5: 📧 뉴스레터 (Newsletter Series Cards & Settings Link) */}
+        {/* ========================================================================= */}
+        <section className="space-y-8">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#EAE6DF] dark:border-[#333333] pb-4">
+            <div>
+              <span className="text-xs font-extrabold uppercase tracking-wider text-[#C19A6B] flex items-center gap-1.5">
+                <Mail className="w-4 h-4" /> 5. 뉴스레터
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#333333] dark:text-[#FAF8F5] mt-1">
+                매일 아침 배달되는 3대 검증 뉴스레터 시리즈
+              </h2>
             </div>
-            <h2 className="text-3xl sm:text-4xl font-extrabold leading-tight text-white">
-              무작위 직접 구매 & 물리 장비 실험,<br />100% 내돈내산 검증 플랫폼
-            </h2>
-            <p className="text-sm sm:text-base text-white/80 leading-relaxed">
-              광고 협찬글에 지친 집사들을 위해 모래 먼지 분광 측정기, 사료 DM 영양 성분 환산, 스마트 가전 안전 센서를 직접 실험하여 객관적 수치로 알립니다.
-            </p>
-            <div className="pt-2 flex flex-wrap gap-3">
-              <Link
-                href="/search?q=내돈내산"
-                className="px-6 py-3 rounded-2xl bg-[#C19A6B] text-white font-extrabold text-sm hover:bg-[#a88354] transition-all shadow-md"
-              >
-                전체 검증 리포트 보기
-              </Link>
-              <Link
-                href="/search?q=벤토나이트"
-                className="px-6 py-3 rounded-2xl bg-white/10 backdrop-blur-md text-white font-bold text-sm hover:bg-white/20 transition-all border border-white/20"
-              >
-                인기 벤토나이트 실험
-              </Link>
+
+            <Link
+              href="/newsletter/settings"
+              className="px-6 py-2.5 rounded-2xl bg-[#FF8A00] text-white font-extrabold text-xs hover:bg-[#e07900] transition-colors shadow-md inline-flex items-center gap-1.5 shrink-0"
+            >
+              <Bell className="w-4 h-4 text-white" /> 뉴스레터 알림 설정
+            </Link>
+          </div>
+
+          {/* 3 Newsletter Series Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Series 1 */}
+            <div className="p-6 rounded-3xl bg-[#FFF9F2] dark:bg-[#25201A] border border-[#F5E6D3] dark:border-[#3D3227] space-y-4 shadow-xs">
+              <div className="w-12 h-12 rounded-2xl bg-[#FF8A00] text-white flex items-center justify-center font-extrabold text-lg shadow-md">
+                🥫
+              </div>
+              <div>
+                <h3 className="text-lg font-extrabold text-[#333333] dark:text-[#FAF8F5]">
+                  사료 & 습식캔 데일리
+                </h3>
+                <div className="flex gap-1 mt-1 text-[10px] font-bold text-white">
+                  <span className="w-4 h-4 rounded-full bg-[#FF8A00] flex items-center justify-center">월</span>
+                  <span className="w-4 h-4 rounded-full bg-[#FF8A00] flex items-center justify-center">화</span>
+                  <span className="w-4 h-4 rounded-full bg-[#FF8A00] flex items-center justify-center">수</span>
+                  <span className="w-4 h-4 rounded-full bg-[#FF8A00] flex items-center justify-center">목</span>
+                  <span className="w-4 h-4 rounded-full bg-[#FF8A00] flex items-center justify-center">금</span>
+                </div>
+              </div>
+              <p className="text-xs text-[#666666] dark:text-[#A0A0A0] leading-relaxed">
+                AAFCO 기준 달성 여부와 DM 영양 성분 환산표를 차근차근 따져서 보내드립니다.
+              </p>
+            </div>
+
+            {/* Series 2 */}
+            <div className="p-6 rounded-3xl bg-[#F0FAF7] dark:bg-[#1A2623] border border-[#D5EFE8] dark:border-[#273B36] space-y-4 shadow-xs">
+              <div className="w-12 h-12 rounded-2xl bg-[#00B88A] text-white flex items-center justify-center font-extrabold text-lg shadow-md">
+                🧪
+              </div>
+              <div>
+                <h3 className="text-lg font-extrabold text-[#333333] dark:text-[#FAF8F5]">
+                  모래 & 배변 분광 리포트
+                </h3>
+                <div className="flex gap-1 mt-1 text-[10px] font-bold text-white">
+                  <span className="w-4 h-4 rounded-full bg-[#00B88A] flex items-center justify-center">화</span>
+                  <span className="w-4 h-4 rounded-full bg-[#00B88A] flex items-center justify-center">목</span>
+                </div>
+              </div>
+              <p className="text-xs text-[#666666] dark:text-[#A0A0A0] leading-relaxed">
+                벤토나이트 10종 먼지 분광 수치 측정과 30초 응집력 실측 데이터를 전합니다.
+              </p>
+            </div>
+
+            {/* Series 3 */}
+            <div className="p-6 rounded-3xl bg-[#FAF4FC] dark:bg-[#251A29] border border-[#EEDBF5] dark:border-[#3A2740] space-y-4 shadow-xs">
+              <div className="w-12 h-12 rounded-2xl bg-[#A855F7] text-white flex items-center justify-center font-extrabold text-lg shadow-md">
+                ⚡
+              </div>
+              <div>
+                <h3 className="text-lg font-extrabold text-[#333333] dark:text-[#FAF8F5]">
+                  스마트 가전 & 캣타워
+                </h3>
+                <div className="flex gap-1 mt-1 text-[10px] font-bold text-white">
+                  <span className="w-4 h-4 rounded-full bg-[#A855F7] flex items-center justify-center">수</span>
+                  <span className="w-4 h-4 rounded-full bg-[#A855F7] flex items-center justify-center">금</span>
+                </div>
+              </div>
+              <p className="text-xs text-[#666666] dark:text-[#A0A0A0] leading-relaxed">
+                자동 화장실 300g 무게 센서 감지 정밀 실험과 원목 캣폴 하중 인장 테스트를 알립니다.
+              </p>
             </div>
           </div>
         </section>
+
       </main>
 
       <Footer />
+
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        onSuccess={() => setCurrentUser(storage.getCurrentUser())}
+      />
     </div>
   );
 }
