@@ -12,11 +12,22 @@ import { CATEGORIES, AUTHORS, BREEDS } from '@/lib/mockData';
 import { storage } from '@/lib/storage';
 import { Article, CategorySlug, UserSubscription } from '@/types';
 import { getArticleAccessStatus } from '@/lib/utils';
-import { Sparkles, TrendingUp, ChevronRight, Mail, Send, Award, BookOpen, Flame, Lock, Crown, Clock, ShieldCheck, Box, Zap, ShoppingBag, Bell } from 'lucide-react';
-import { useToast } from '@/components/ui/Toast';
+import { 
+  Sparkles, 
+  TrendingUp, 
+  ChevronRight, 
+  Mail, 
+  BookOpen, 
+  Flame, 
+  Crown, 
+  Clock, 
+  ShieldCheck, 
+  Vote,
+  ShoppingBag,
+  Info
+} from 'lucide-react';
 
 export default function HomePage() {
-  const { showToast } = useToast();
   const [articles, setArticles] = useState<Article[]>([]);
   const [subscription, setSubscription] = useState<UserSubscription>({ isPremium: false });
   const [selectedCategory, setSelectedCategory] = useState<CategorySlug | 'all'>('all');
@@ -75,6 +86,108 @@ export default function HomePage() {
             <HeroStory article={heroArticle} />
           </div>
         )}
+
+        {/* 5 CORE NAVIGATION SECTIONS BANNER GRID (Reflecting GNB Titles) */}
+        <section className="space-y-6">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-extrabold text-[#333333] dark:text-[#FAF8F5] flex items-center gap-2">
+              <Sparkles className="w-5 h-5 text-[#C19A6B]" /> 리터페이퍼 5대 서비스 바로가기
+            </h2>
+            <span className="text-xs text-[#666666] font-medium">상단 메인 메뉴</span>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+            {/* 1. 리터페이퍼란? */}
+            <Link
+              href="/about"
+              className="p-5 rounded-3xl bg-white dark:bg-[#242424] border border-[#EAE6DF] dark:border-[#333333] hover:border-[#C19A6B] dark:hover:border-[#C19A6B] transition-all group flex flex-col justify-between space-y-3 shadow-2xs"
+            >
+              <div className="w-10 h-10 rounded-2xl bg-[#C19A6B]/20 text-[#C19A6B] flex items-center justify-center font-bold">
+                <Info className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="font-extrabold text-sm text-[#333333] dark:text-[#FAF8F5] group-hover:text-[#C19A6B] transition-colors">
+                  리터페이퍼란?
+                </h3>
+                <p className="text-[11px] text-[#666666] dark:text-[#A0A0A0] mt-1 font-medium line-clamp-1">
+                  대가성 0% 검증 저널
+                </p>
+              </div>
+            </Link>
+
+            {/* 2. 요즘 화제 */}
+            <Link
+              href="/trending"
+              className="p-5 rounded-3xl bg-white dark:bg-[#242424] border border-[#EAE6DF] dark:border-[#333333] hover:border-[#C19A6B] dark:hover:border-[#C19A6B] transition-all group flex flex-col justify-between space-y-3 shadow-2xs"
+            >
+              <div className="w-10 h-10 rounded-2xl bg-[#FF8A00]/20 text-[#FF8A00] flex items-center justify-center font-bold">
+                <Flame className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="font-extrabold text-sm text-[#333333] dark:text-[#FAF8F5] group-hover:text-[#C19A6B] transition-colors">
+                  요즘 화제
+                </h3>
+                <p className="text-[11px] text-[#666666] dark:text-[#A0A0A0] mt-1 font-medium line-clamp-1">
+                  실시간 최고 인기 기사
+                </p>
+              </div>
+            </Link>
+
+            {/* 3. 픽캣 */}
+            <Link
+              href="/pickcat"
+              className="p-5 rounded-3xl bg-white dark:bg-[#242424] border border-[#EAE6DF] dark:border-[#333333] hover:border-[#C19A6B] dark:hover:border-[#C19A6B] transition-all group flex flex-col justify-between space-y-3 shadow-2xs"
+            >
+              <div className="w-10 h-10 rounded-2xl bg-[#333333] text-[#C19A6B] flex items-center justify-center font-bold">
+                <Vote className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="font-extrabold text-sm text-[#333333] dark:text-[#FAF8F5] group-hover:text-[#C19A6B] transition-colors">
+                  픽캣 (Pick Cat)
+                </h3>
+                <p className="text-[11px] text-[#666666] dark:text-[#A0A0A0] mt-1 font-medium line-clamp-1">
+                  투표 & 100자 한줄 토론
+                </p>
+              </div>
+            </Link>
+
+            {/* 4. 프리미엄 */}
+            <Link
+              href="/premium"
+              className="p-5 rounded-3xl bg-white dark:bg-[#242424] border border-[#EAE6DF] dark:border-[#333333] hover:border-[#C19A6B] dark:hover:border-[#C19A6B] transition-all group flex flex-col justify-between space-y-3 shadow-2xs"
+            >
+              <div className="w-10 h-10 rounded-2xl bg-[#C19A6B] text-white flex items-center justify-center font-bold">
+                <Crown className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="font-extrabold text-sm text-[#C19A6B] group-hover:text-[#333333] transition-colors">
+                  프리미엄
+                </h3>
+                <p className="text-[11px] text-[#666666] dark:text-[#A0A0A0] mt-1 font-medium line-clamp-1">
+                  독점 검증 아카이브
+                </p>
+              </div>
+            </Link>
+
+            {/* 5. 뉴스레터 */}
+            <Link
+              href="/newsletter"
+              className="p-5 rounded-3xl bg-white dark:bg-[#242424] border border-[#EAE6DF] dark:border-[#333333] hover:border-[#C19A6B] dark:hover:border-[#C19A6B] transition-all group flex flex-col justify-between space-y-3 shadow-2xs"
+            >
+              <div className="w-10 h-10 rounded-2xl bg-[#00B88A]/20 text-[#00B88A] flex items-center justify-center font-bold">
+                <Mail className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="font-extrabold text-sm text-[#333333] dark:text-[#FAF8F5] group-hover:text-[#C19A6B] transition-colors">
+                  뉴스레터
+                </h3>
+                <p className="text-[11px] text-[#666666] dark:text-[#A0A0A0] mt-1 font-medium line-clamp-1">
+                  3대 검증 시리즈 수신
+                </p>
+              </div>
+            </Link>
+          </div>
+        </section>
 
         {/* Today's Free Story Highlight Box with Countdown */}
         {todaysFreeStory && (
