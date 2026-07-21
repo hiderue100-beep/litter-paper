@@ -11,7 +11,6 @@ interface HeroStoryProps {
 }
 
 export function HeroStory({ article }: HeroStoryProps) {
-  const [activeTab, setActiveTab] = useState<'today' | 'premium'>('today');
   const [remainingSeconds, setRemainingSeconds] = useState<number>(0);
   const [isFreeNow, setIsFreeNow] = useState<boolean>(true);
 
@@ -71,31 +70,14 @@ export function HeroStory({ article }: HeroStoryProps) {
         {/* Right LongBlack-style Dark Editorial Container (50%) */}
         <div className="lg:col-span-6 p-8 sm:p-12 flex flex-col justify-between space-y-6 bg-[#242424]">
           
-          {/* Top Tabs & Live Countdown Header */}
+          {/* Top Header without WITH LP */}
           <div className="space-y-6">
-            {/* Top Navigation Tabs */}
+            {/* Top Navigation Bar */}
             <div className="flex items-center justify-between border-b border-[#3D3D3D] pb-4">
-              <div className="flex items-center gap-6 font-extrabold tracking-widest text-sm uppercase">
-                <button
-                  onClick={() => setActiveTab('today')}
-                  className={`transition-colors flex items-center gap-1.5 pb-1 border-b-2 ${
-                    activeTab === 'today'
-                      ? 'text-[#C19A6B] border-[#C19A6B]'
-                      : 'text-white/40 border-transparent hover:text-white'
-                  }`}
-                >
+              <div className="flex items-center gap-2 font-extrabold tracking-widest text-sm uppercase">
+                <span className="text-[#C19A6B] border-b-2 border-[#C19A6B] pb-1">
                   TODAY
-                </button>
-                <button
-                  onClick={() => setActiveTab('premium')}
-                  className={`transition-colors flex items-center gap-1.5 pb-1 border-b-2 ${
-                    activeTab === 'premium'
-                      ? 'text-[#C19A6B] border-[#C19A6B]'
-                      : 'text-white/40 border-transparent hover:text-white'
-                  }`}
-                >
-                  WITH LP
-                </button>
+                </span>
               </div>
 
               <span className="text-[11px] text-white/40 font-mono tracking-wider">
