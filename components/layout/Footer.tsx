@@ -80,11 +80,6 @@ export function Footer() {
                   검증 뉴스레터 신청
                 </Link>
               </li>
-              <li>
-                <Link href="/admin" className="hover:text-white transition-colors text-white font-bold">
-                  CMS 퍼블리셔 스위트
-                </Link>
-              </li>
             </ul>
           </div>
 

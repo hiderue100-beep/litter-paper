@@ -34,6 +34,7 @@ export interface UserProfile {
   provider: AuthProvider;
   createdAt: string;
   isPremium?: boolean;
+  isAdmin?: boolean;
 }
 
 export interface Category {

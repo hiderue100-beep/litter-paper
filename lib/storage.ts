@@ -20,16 +20,18 @@ const DEFAULT_SUBSCRIPTION: UserSubscription = {
   isPremium: false,
 };
 
-// Default Admin Credentials
+// Admin Credentials
 export const DEFAULT_ADMIN = {
   email: 'admin@litterpaper.kr',
   password: 'admin1234!',
 };
 
 export const storage = {
-  // Admin Authentication & Security Lock
+  // Admin Authentication Check
   isAdminLoggedIn(): boolean {
     if (typeof window === 'undefined') return false;
+    const user = this.getCurrentUser();
+    if (user && user.isAdmin) return true;
     const data = localStorage.getItem(KEYS.ADMIN_SESSION);
     if (!data) return false;
     try {
@@ -99,6 +101,7 @@ export const storage = {
       provider,
       createdAt: new Date().toISOString(),
       isPremium: false,
+      isAdmin: false,
     };
 
     this.setCurrentUser(profile);
@@ -106,15 +109,23 @@ export const storage = {
   },
 
   signupEmail(email: string, password: string, name: string): UserProfile {
+    const emailClean = email.trim().toLowerCase();
+    const isAdmin = emailClean === DEFAULT_ADMIN.email.toLowerCase();
+
     const profile: UserProfile = {
       id: `usr_email_${Date.now()}`,
-      name: name.trim() || '리터페이퍼 독자',
-      email: email.trim().toLowerCase(),
+      name: isAdmin ? '리터페이퍼 최고 관리자' : (name.trim() || '리터페이퍼 독자'),
+      email: emailClean,
       avatar: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=100&auto=format&fit=crop&q=80',
       provider: 'email',
       createdAt: new Date().toISOString(),
-      isPremium: false,
+      isPremium: isAdmin,
+      isAdmin,
     };
+
+    if (isAdmin) {
+      this.loginAdmin(emailClean, password);
+    }
 
     if (typeof window !== 'undefined') {
       const usersData = localStorage.getItem(KEYS.USERS_DB);
@@ -129,6 +140,23 @@ export const storage = {
 
   loginEmail(email: string, password: string): UserProfile {
     const emailClean = email.trim().toLowerCase();
+    const isAdmin = emailClean === DEFAULT_ADMIN.email.toLowerCase();
+
+    if (isAdmin) {
+      this.loginAdmin(emailClean, password);
+      const adminProfile: UserProfile = {
+        id: 'usr_admin_master',
+        name: '리터페이퍼 최고 관리자',
+        email: DEFAULT_ADMIN.email,
+        avatar: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=100&auto=format&fit=crop&q=80',
+        provider: 'email',
+        createdAt: new Date().toISOString(),
+        isPremium: true,
+        isAdmin: true,
+      };
+      this.setCurrentUser(adminProfile);
+      return adminProfile;
+    }
     
     let foundUser: UserProfile | null = null;
     if (typeof window !== 'undefined') {
@@ -146,6 +174,7 @@ export const storage = {
         provider: 'email',
         createdAt: new Date().toISOString(),
         isPremium: false,
+        isAdmin: false,
       };
     }
 
@@ -155,6 +184,7 @@ export const storage = {
 
   logout() {
     this.setCurrentUser(null);
+    this.logoutAdmin();
   },
 
   getArticles(): Article[] {

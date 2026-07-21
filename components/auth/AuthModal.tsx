@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { X, Mail, Lock, User, Check, ArrowRight, ShieldCheck } from 'lucide-react';
+import { X, Mail, Lock, User, ArrowRight } from 'lucide-react';
 import { storage } from '@/lib/storage';
 import { useToast } from '../ui/Toast';
 
@@ -48,10 +48,18 @@ export function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
         return;
       }
       const user = storage.signupEmail(email, password, name);
-      showToast(`반갑습니다, ${user.name}님! 회원가입이 완료되었습니다.`);
+      showToast(
+        user.isAdmin
+          ? '최고 관리자 계정으로 가입 및 인증되었습니다.'
+          : `반갑습니다, ${user.name}님! 회원가입이 완료되었습니다.`
+      );
     } else {
       const user = storage.loginEmail(email, password);
-      showToast(`${user.name}님, 환영합니다!`);
+      showToast(
+        user.isAdmin
+          ? '리터페이퍼 최고 관리자 계정으로 로그인되었습니다.'
+          : `${user.name}님, 환영합니다!`
+      );
     }
 
     if (onSuccess) onSuccess();
@@ -59,36 +67,36 @@ export function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
-      <div className="relative w-full max-w-md bg-white dark:bg-[#1D231E] rounded-3xl shadow-2xl border border-[#ECECEC] dark:border-[#2A332C] p-6 sm:p-8 space-y-6 overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs font-sans">
+      <div className="relative w-full max-w-md bg-white dark:bg-[#242424] rounded-3xl shadow-2xl border border-[#EAE6DF] dark:border-[#333333] p-6 sm:p-8 space-y-6 overflow-hidden">
         
         {/* Header */}
-        <div className="flex items-center justify-between pb-4 border-b border-[#ECECEC] dark:border-[#2A332C]">
+        <div className="flex items-center justify-between pb-4 border-b border-[#EAE6DF] dark:border-[#333333]">
           <div>
-            <h3 className="font-bold font-serif-editorial text-lg text-[#202020] dark:text-[#F2F5F3]">
-              LITTER PAPER 독자 라운지
+            <h3 className="font-extrabold text-lg text-[#333333] dark:text-[#FAF8F5]">
+              Litter Paper 독자 라운지
             </h3>
-            <p className="text-xs text-[#6E6E6E]">
+            <p className="text-xs text-[#666666] dark:text-[#A0A0A0]">
               100% 내돈내산 반려동물 용품 검증 저널
             </p>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-white/10 text-[#6E6E6E]"
+            className="p-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-white/10 text-[#666666]"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Login / Signup Tabs */}
-        <div className="grid grid-cols-2 p-1 rounded-2xl bg-[#FAF9F7] dark:bg-[#252C26] border border-[#ECECEC] dark:border-[#2A332C] text-xs">
+        <div className="grid grid-cols-2 p-1 rounded-2xl bg-[#FAF8F5] dark:bg-[#1A1A1A] border border-[#EAE6DF] dark:border-[#333333] text-xs">
           <button
             type="button"
             onClick={() => setActiveTab('login')}
-            className={`py-2.5 rounded-xl font-bold transition-all ${
+            className={`py-2.5 rounded-xl font-extrabold transition-all ${
               activeTab === 'login'
-                ? 'bg-[#3D5A40] text-white shadow-xs'
-                : 'text-[#6E6E6E] hover:text-[#202020]'
+                ? 'bg-[#333333] text-white shadow-xs'
+                : 'text-[#666666] hover:text-[#333333]'
             }`}
           >
             로그인
@@ -96,10 +104,10 @@ export function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
           <button
             type="button"
             onClick={() => setActiveTab('signup')}
-            className={`py-2.5 rounded-xl font-bold transition-all ${
+            className={`py-2.5 rounded-xl font-extrabold transition-all ${
               activeTab === 'signup'
-                ? 'bg-[#3D5A40] text-white shadow-xs'
-                : 'text-[#6E6E6E] hover:text-[#202020]'
+                ? 'bg-[#333333] text-white shadow-xs'
+                : 'text-[#666666] hover:text-[#333333]'
             }`}
           >
             회원가입
@@ -112,7 +120,7 @@ export function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
           <button
             type="button"
             onClick={() => handleSocialLogin('google')}
-            className="w-full py-3 px-4 rounded-2xl bg-white dark:bg-[#252C26] border border-[#ECECEC] dark:border-[#2A332C] hover:border-[#3D5A40] text-[#202020] dark:text-[#F2F5F3] font-bold text-xs flex items-center justify-center gap-3 transition-all shadow-2xs"
+            className="w-full py-3 px-4 rounded-2xl bg-white dark:bg-[#1A1A1A] border border-[#EAE6DF] dark:border-[#333333] hover:border-[#C19A6B] text-[#333333] dark:text-[#FAF8F5] font-extrabold text-xs flex items-center justify-center gap-3 transition-all shadow-2xs"
           >
             <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24">
               <path
@@ -139,7 +147,7 @@ export function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
           <button
             type="button"
             onClick={() => handleSocialLogin('naver')}
-            className="w-full py-3 px-4 rounded-2xl bg-[#03CF5D] hover:bg-[#02b350] text-white font-bold text-xs flex items-center justify-center gap-3 transition-all shadow-2xs"
+            className="w-full py-3 px-4 rounded-2xl bg-[#03CF5D] hover:bg-[#02b350] text-white font-extrabold text-xs flex items-center justify-center gap-3 transition-all shadow-2xs"
           >
             <span className="w-4 h-4 rounded-md bg-white text-[#03CF5D] flex items-center justify-center font-extrabold text-[10px] shrink-0">
               N
@@ -149,68 +157,68 @@ export function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
         </div>
 
         {/* Divider */}
-        <div className="flex items-center gap-3 text-[11px] text-[#6E6E6E]">
-          <div className="flex-1 h-px bg-[#ECECEC] dark:bg-[#2A332C]" />
+        <div className="flex items-center gap-3 text-[11px] text-[#666666]">
+          <div className="flex-1 h-px bg-[#EAE6DF] dark:bg-[#333333]" />
           <span>또는 이메일로 {activeTab === 'signup' ? '가입' : '로그인'}</span>
-          <div className="flex-1 h-px bg-[#ECECEC] dark:bg-[#2A332C]" />
+          <div className="flex-1 h-px bg-[#EAE6DF] dark:bg-[#333333]" />
         </div>
 
         {/* Email & Password Form */}
         <form onSubmit={handleEmailSubmit} className="space-y-3.5 text-xs">
           {activeTab === 'signup' && (
             <div>
-              <label className="block font-bold text-[#6E6E6E] mb-1">이름 / 닉네임</label>
+              <label className="block font-bold text-[#666666] mb-1">이름 / 닉네임</label>
               <div className="relative">
-                <User className="absolute left-3.5 top-3 w-4 h-4 text-[#6E6E6E]" />
+                <User className="absolute left-3.5 top-3 w-4 h-4 text-[#666666]" />
                 <input
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="예: 치즈태비 집사"
                   required={activeTab === 'signup'}
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[#FAF9F7] dark:bg-[#252C26] border border-[#ECECEC] dark:border-[#2A332C] focus:outline-hidden focus:border-[#3D5A40]"
+                  className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[#FAF8F5] dark:bg-[#1A1A1A] border border-[#EAE6DF] dark:border-[#333333] focus:outline-hidden focus:border-[#C19A6B]"
                 />
               </div>
             </div>
           )}
 
           <div>
-            <label className="block font-bold text-[#6E6E6E] mb-1">이메일 주소</label>
+            <label className="block font-bold text-[#666666] mb-1">이메일 주소</label>
             <div className="relative">
-              <Mail className="absolute left-3.5 top-3 w-4 h-4 text-[#6E6E6E]" />
+              <Mail className="absolute left-3.5 top-3 w-4 h-4 text-[#666666]" />
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="name@example.com"
                 required
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[#FAF9F7] dark:bg-[#252C26] border border-[#ECECEC] dark:border-[#2A332C] focus:outline-hidden focus:border-[#3D5A40]"
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[#FAF8F5] dark:bg-[#1A1A1A] border border-[#EAE6DF] dark:border-[#333333] focus:outline-hidden focus:border-[#C19A6B]"
               />
             </div>
           </div>
 
           <div>
-            <label className="block font-bold text-[#6E6E6E] mb-1">비밀번호</label>
+            <label className="block font-bold text-[#666666] mb-1">비밀번호</label>
             <div className="relative">
-              <Lock className="absolute left-3.5 top-3 w-4 h-4 text-[#6E6E6E]" />
+              <Lock className="absolute left-3.5 top-3 w-4 h-4 text-[#666666]" />
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 required
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[#FAF9F7] dark:bg-[#252C26] border border-[#ECECEC] dark:border-[#2A332C] focus:outline-hidden focus:border-[#3D5A40]"
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[#FAF8F5] dark:bg-[#1A1A1A] border border-[#EAE6DF] dark:border-[#333333] focus:outline-hidden focus:border-[#C19A6B]"
               />
             </div>
           </div>
 
           {activeTab === 'signup' && (
-            <label className="flex items-center gap-2 text-[11px] text-[#6E6E6E] pt-1 cursor-pointer">
+            <label className="flex items-center gap-2 text-[11px] text-[#666666] pt-1 cursor-pointer">
               <input
                 type="checkbox"
                 checked={agreeTerms}
                 onChange={(e) => setAgreeTerms(e.target.checked)}
-                className="w-3.5 h-3.5 rounded text-[#3D5A40]"
+                className="w-3.5 h-3.5 rounded text-[#C19A6B]"
               />
               <span>서비스 이용약관 및 개인정보 처리방침 동의</span>
             </label>
@@ -218,10 +226,10 @@ export function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
 
           <button
             type="submit"
-            className="w-full py-3 rounded-xl bg-[#3D5A40] text-white font-extrabold text-xs hover:bg-[#2F4732] transition-colors shadow-md flex items-center justify-center gap-1.5"
+            className="w-full py-3 rounded-xl bg-[#333333] text-white font-extrabold text-xs hover:bg-[#C19A6B] transition-colors shadow-md flex items-center justify-center gap-1.5"
           >
             <span>{activeTab === 'signup' ? '회원가입 완료' : '이메일 로그인'}</span>
-            <ArrowRight className="w-4 h-4 text-[#E8DCC7]" />
+            <ArrowRight className="w-4 h-4 text-[#C19A6B]" />
           </button>
         </form>
       </div>

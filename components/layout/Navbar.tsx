@@ -95,10 +95,6 @@ export function Navbar() {
             <Link href="/newsletter" className="hover:text-white transition-colors flex items-center gap-1 font-semibold">
               <Sparkles className="w-3 h-3 text-[#C19A6B]" /> 검증 리포트 구독
             </Link>
-            <span className="text-[#555555]">|</span>
-            <Link href="/admin" className="hover:text-white transition-colors flex items-center gap-1 font-semibold">
-              <LayoutDashboard className="w-3 h-3" /> CMS 퍼블리셔
-            </Link>
           </div>
         </div>
       </div>
@@ -244,15 +240,22 @@ export function Navbar() {
                         <div className="text-[11px] text-[#666666] truncate">
                           {currentUser.email}
                         </div>
-                        <div className="pt-1">
+                        <div className="pt-1 flex flex-wrap gap-1">
+                          {currentUser.isAdmin && (
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#333333] text-white text-[10px] font-extrabold">
+                              ⚙️ 최고 관리자
+                            </span>
+                          )}
                           {currentUser.isPremium ? (
                             <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#C19A6B] text-white text-[10px] font-extrabold">
                               <Crown className="w-3 h-3" /> 프리미엄 멤버
                             </span>
                           ) : (
-                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#FAF8F5] dark:bg-[#1A1A1A] text-[#666666] text-[10px] font-medium border">
-                              일반 독자 회원
-                            </span>
+                            !currentUser.isAdmin && (
+                              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#FAF8F5] dark:bg-[#1A1A1A] text-[#666666] text-[10px] font-medium border">
+                                일반 독자 회원
+                              </span>
+                            )
                           )}
                         </div>
                       </div>
@@ -273,13 +276,16 @@ export function Navbar() {
                         <Crown className="w-4 h-4" /> 프리미엄 멤버십 관리
                       </Link>
 
-                      <Link
-                        href="/admin"
-                        onClick={() => setIsUserMenuOpen(false)}
-                        className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-[#FAF8F5] dark:hover:bg-[#1A1A1A] font-semibold text-[#666666]"
-                      >
-                        <LayoutDashboard className="w-4 h-4" /> CMS 퍼블리셔
-                      </Link>
+                      {/* Display CMS Link ONLY for Admin Users */}
+                      {currentUser.isAdmin && (
+                        <Link
+                          href="/admin"
+                          onClick={() => setIsUserMenuOpen(false)}
+                          className="flex items-center gap-2 px-3 py-2 rounded-xl bg-[#333333] text-white font-extrabold shadow-2xs hover:bg-[#C19A6B] transition-colors"
+                        >
+                          <LayoutDashboard className="w-4 h-4 text-[#C19A6B]" /> CMS 퍼블리셔 관리자
+                        </Link>
+                      )}
 
                       <button
                         onClick={handleLogout}
