@@ -7,8 +7,7 @@ import { ArticleCard } from '@/components/editorial/ArticleCard';
 import { FreeAccessCountdown } from '@/components/editorial/FreeAccessCountdown';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
-import { LitterPaperLogo } from '@/components/ui/LitterPaperLogo';
-import { CATEGORIES, AUTHORS } from '@/lib/mockData';
+import { CATEGORIES } from '@/lib/mockData';
 import { storage } from '@/lib/storage';
 import { Article, CategorySlug, UserSubscription, UserProfile } from '@/types';
 import { getArticleAccessStatus } from '@/lib/utils';
@@ -16,24 +15,16 @@ import { useToast } from '@/components/ui/Toast';
 import { AuthModal } from '@/components/auth/AuthModal';
 import { 
   Sparkles, 
-  TrendingUp, 
   ChevronRight, 
-  Mail, 
-  BookOpen, 
   Flame, 
   Crown, 
   Clock, 
   ShieldCheck, 
   Vote,
   ShoppingBag,
-  Info,
   CheckCircle2,
   Heart,
-  Send,
-  MessageSquare,
-  Award,
-  ExternalLink,
-  Bell
+  Send
 } from 'lucide-react';
 
 interface PickCatMemo {
@@ -196,75 +187,37 @@ export default function HomePage() {
           </div>
         )}
 
-        {/* ========================================================================= */}
-        {/* MENU CONTENT SECTION 1: 📖 리터페이퍼란? (About & 4 Guiding Principles) */}
-        {/* ========================================================================= */}
-        <section className="p-8 sm:p-12 rounded-3xl bg-white dark:bg-[#242424] border border-[#EAE6DF] dark:border-[#333333] space-y-8 shadow-xs">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#EAE6DF] dark:border-[#333333] pb-6">
-            <div className="space-y-1">
-              <span className="text-xs font-extrabold uppercase tracking-wider text-[#C19A6B] flex items-center gap-1.5">
-                <Info className="w-4 h-4" /> 1. 리터페이퍼란?
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#333333] dark:text-[#FAF8F5]">
-                100% 내돈내산 반려동물 용품 검증 저널
-              </h2>
-            </div>
-            <Link
-              href="/about"
-              className="text-xs font-bold text-[#C19A6B] hover:underline flex items-center gap-1 shrink-0"
-            >
-              상세 소개 더보기 <ChevronRight className="w-4 h-4" />
-            </Link>
-          </div>
+        {/* Today's Free Story Highlight Box with Countdown */}
+        {todaysFreeStory && (
+          <section className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#242424] border border-[#EAE6DF] dark:border-[#333333] shadow-xs space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#EAE6DF] dark:border-[#333333] pb-4">
+              <div>
+                <span className="text-xs font-bold uppercase tracking-wider text-[#C19A6B] flex items-center gap-1">
+                  <Sparkles className="w-4 h-4" /> Today's Free Product Review
+                </span>
+                <h2 className="text-2xl font-extrabold text-[#333333] dark:text-[#FAF8F5] mt-1">
+                  오늘의 24시간 무료 상품 검증 리포트
+                </h2>
+              </div>
 
-          <p className="text-sm text-[#666666] dark:text-[#A0A0A0] leading-relaxed max-w-3xl">
-            리터페이퍼(LITTER PAPER)는 대가성 협찬 글을 엄격히 금지합니다. 직접 무작위 구매한 제품을 분광 먼지 측정기, 300g 무게 감지 센서, DM 영양 성분 환산표로 분석하여 가장 객관적인 수치로 집사들에게 알립니다.
-          </p>
-
-          {/* 4 Guiding Principles Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="p-5 rounded-2xl bg-[#FAF8F5] dark:bg-[#1A1A1A] border border-[#EAE6DF] dark:border-[#333333] space-y-2">
-              <ShieldCheck className="w-5 h-5 text-[#C19A6B]" />
-              <h3 className="font-extrabold text-sm">1. 대가성 협찬 0% 배제</h3>
-              <p className="text-xs text-[#666666] dark:text-[#A0A0A0] leading-relaxed">
-                제조사 광고비를 받지 않으며 무작위 내돈내산으로 테스트합니다.
-              </p>
+              {/* Free Access Ticking Timer */}
+              <FreeAccessCountdown
+                freeWindowEndsAt={getArticleAccessStatus(todaysFreeStory).freeWindowEndsAt}
+              />
             </div>
 
-            <div className="p-5 rounded-2xl bg-[#FAF8F5] dark:bg-[#1A1A1A] border border-[#EAE6DF] dark:border-[#333333] space-y-2">
-              <Award className="w-5 h-5 text-[#C19A6B]" />
-              <h3 className="font-extrabold text-sm">2. 연구 장비 실측 데이터</h3>
-              <p className="text-xs text-[#666666] dark:text-[#A0A0A0] leading-relaxed">
-                분광 먼지 수치(ppm), 데시벨(dB), DM 단백질 비율로 수치화합니다.
-              </p>
-            </div>
-
-            <div className="p-5 rounded-2xl bg-[#FAF8F5] dark:bg-[#1A1A1A] border border-[#EAE6DF] dark:border-[#333333] space-y-2">
-              <Sparkles className="w-5 h-5 text-[#C19A6B]" />
-              <h3 className="font-extrabold text-sm">3. 롱블랙 스타일 읽기</h3>
-              <p className="text-xs text-[#666666] dark:text-[#A0A0A0] leading-relaxed">
-                50/50 분할 레이아웃과 프리텐다드 서체로 편안한 읽기를 제공합니다.
-              </p>
-            </div>
-
-            <div className="p-5 rounded-2xl bg-[#FAF8F5] dark:bg-[#1A1A1A] border border-[#EAE6DF] dark:border-[#333333] space-y-2">
-              <Clock className="w-5 h-5 text-[#C19A6B]" />
-              <h3 className="font-extrabold text-sm">4. 24시간 무료 공개</h3>
-              <p className="text-xs text-[#666666] dark:text-[#A0A0A0] leading-relaxed">
-                모든 최신 검증 리포트는 24시간 동안 누구나 무료로 읽습니다.
-              </p>
-            </div>
-          </div>
-        </section>
+            <ArticleCard article={todaysFreeStory} variant="horizontal" />
+          </section>
+        )}
 
         {/* ========================================================================= */}
-        {/* MENU CONTENT SECTION 2: 🔥 요즘 화제 (Trending Articles & Issue Grid) */}
+        {/* 🔥 요즘 화제 (Trending Articles & Issue Grid) */}
         {/* ========================================================================= */}
         <section className="space-y-8">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#EAE6DF] dark:border-[#333333] pb-4">
             <div>
               <span className="text-xs font-extrabold uppercase tracking-wider text-[#C19A6B] flex items-center gap-1.5">
-                <Flame className="w-4 h-4 text-[#FF8A00]" /> 2. 요즘 화제
+                <Flame className="w-4 h-4 text-[#FF8A00]" /> 요즘 화제
               </span>
               <h2 className="text-2xl sm:text-3xl font-extrabold text-[#333333] dark:text-[#FAF8F5] mt-1">
                 실시간 독자 반응 1위 & 검증 이슈 기사 모음
@@ -324,13 +277,13 @@ export default function HomePage() {
         </section>
 
         {/* ========================================================================= */}
-        {/* MENU CONTENT SECTION 3: 🐾 픽캣 (Pick Cat Live Poll & 100-Char Memo Feed) */}
+        {/* 🐾 픽캣 (Pick Cat Live Poll & 100-Char Memo Feed) */}
         {/* ========================================================================= */}
         <section className="p-8 sm:p-10 rounded-3xl bg-white dark:bg-[#242424] border border-[#EAE6DF] dark:border-[#333333] shadow-xl space-y-8">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#EAE6DF] dark:border-[#333333] pb-6">
             <div>
               <span className="text-xs font-extrabold uppercase tracking-wider text-[#C19A6B] flex items-center gap-1.5">
-                <Vote className="w-4 h-4" /> 3. 픽캣 (Pick Cat) 커뮤니티
+                <Vote className="w-4 h-4" /> 픽캣 (Pick Cat) 커뮤니티
               </span>
               <h2 className="text-2xl sm:text-3xl font-extrabold text-[#333333] dark:text-[#FAF8F5] mt-1">
                 집사들의 투표로 정하는 픽캣 한줄 한마디
@@ -439,13 +392,13 @@ export default function HomePage() {
         </section>
 
         {/* ========================================================================= */}
-        {/* MENU CONTENT SECTION 4: 👑 프리미엄 (Premium Exclusive Archive) */}
+        {/* 👑 프리미엄 (Premium Exclusive Archive) */}
         {/* ========================================================================= */}
         <section className="p-8 sm:p-12 rounded-3xl bg-[#242424] border border-[#333333] text-white shadow-xl space-y-8">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#333333] pb-6">
             <div>
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#C19A6B] text-white text-xs font-extrabold">
-                <Crown className="w-4 h-4" /> 4. 프리미엄 (Premium Archive)
+                <Crown className="w-4 h-4" /> 프리미엄 (Premium Archive)
               </span>
               <h2 className="text-3xl font-extrabold mt-2 text-white">
                 프리미엄 전용 상품 검증 아카이브
@@ -470,92 +423,34 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ========================================================================= */}
-        {/* MENU CONTENT SECTION 5: 📧 뉴스레터 (Newsletter Series Cards & Settings Link) */}
-        {/* ========================================================================= */}
-        <section className="space-y-8">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#EAE6DF] dark:border-[#333333] pb-4">
-            <div>
-              <span className="text-xs font-extrabold uppercase tracking-wider text-[#C19A6B] flex items-center gap-1.5">
-                <Mail className="w-4 h-4" /> 5. 뉴스레터
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#333333] dark:text-[#FAF8F5] mt-1">
-                매일 아침 배달되는 3대 검증 뉴스레터 시리즈
-              </h2>
+        {/* Product Lab Testing Guarantee Banner */}
+        <section className="relative overflow-hidden rounded-3xl bg-[#333333] text-white p-8 sm:p-12 shadow-xl border border-[#444444]">
+          <div className="max-w-2xl relative z-10 space-y-4">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#C19A6B] text-white text-xs font-bold">
+              <ShieldCheck className="w-4 h-4" /> 대가성 협찬 0% 보장 원칙
             </div>
-
-            <Link
-              href="/newsletter/settings"
-              className="px-6 py-2.5 rounded-2xl bg-[#FF8A00] text-white font-extrabold text-xs hover:bg-[#e07900] transition-colors shadow-md inline-flex items-center gap-1.5 shrink-0"
-            >
-              <Bell className="w-4 h-4 text-white" /> 뉴스레터 알림 설정
-            </Link>
-          </div>
-
-          {/* 3 Newsletter Series Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Series 1 */}
-            <div className="p-6 rounded-3xl bg-[#FFF9F2] dark:bg-[#25201A] border border-[#F5E6D3] dark:border-[#3D3227] space-y-4 shadow-xs">
-              <div className="w-12 h-12 rounded-2xl bg-[#FF8A00] text-white flex items-center justify-center font-extrabold text-lg shadow-md">
-                🥫
-              </div>
-              <div>
-                <h3 className="text-lg font-extrabold text-[#333333] dark:text-[#FAF8F5]">
-                  사료 & 습식캔 데일리
-                </h3>
-                <div className="flex gap-1 mt-1 text-[10px] font-bold text-white">
-                  <span className="w-4 h-4 rounded-full bg-[#FF8A00] flex items-center justify-center">월</span>
-                  <span className="w-4 h-4 rounded-full bg-[#FF8A00] flex items-center justify-center">화</span>
-                  <span className="w-4 h-4 rounded-full bg-[#FF8A00] flex items-center justify-center">수</span>
-                  <span className="w-4 h-4 rounded-full bg-[#FF8A00] flex items-center justify-center">목</span>
-                  <span className="w-4 h-4 rounded-full bg-[#FF8A00] flex items-center justify-center">금</span>
-                </div>
-              </div>
-              <p className="text-xs text-[#666666] dark:text-[#A0A0A0] leading-relaxed">
-                AAFCO 기준 달성 여부와 DM 영양 성분 환산표를 차근차근 따져서 보내드립니다.
-              </p>
-            </div>
-
-            {/* Series 2 */}
-            <div className="p-6 rounded-3xl bg-[#F0FAF7] dark:bg-[#1A2623] border border-[#D5EFE8] dark:border-[#273B36] space-y-4 shadow-xs">
-              <div className="w-12 h-12 rounded-2xl bg-[#00B88A] text-white flex items-center justify-center font-extrabold text-lg shadow-md">
-                🧪
-              </div>
-              <div>
-                <h3 className="text-lg font-extrabold text-[#333333] dark:text-[#FAF8F5]">
-                  모래 & 배변 분광 리포트
-                </h3>
-                <div className="flex gap-1 mt-1 text-[10px] font-bold text-white">
-                  <span className="w-4 h-4 rounded-full bg-[#00B88A] flex items-center justify-center">화</span>
-                  <span className="w-4 h-4 rounded-full bg-[#00B88A] flex items-center justify-center">목</span>
-                </div>
-              </div>
-              <p className="text-xs text-[#666666] dark:text-[#A0A0A0] leading-relaxed">
-                벤토나이트 10종 먼지 분광 수치 측정과 30초 응집력 실측 데이터를 전합니다.
-              </p>
-            </div>
-
-            {/* Series 3 */}
-            <div className="p-6 rounded-3xl bg-[#FAF4FC] dark:bg-[#251A29] border border-[#EEDBF5] dark:border-[#3A2740] space-y-4 shadow-xs">
-              <div className="w-12 h-12 rounded-2xl bg-[#A855F7] text-white flex items-center justify-center font-extrabold text-lg shadow-md">
-                ⚡
-              </div>
-              <div>
-                <h3 className="text-lg font-extrabold text-[#333333] dark:text-[#FAF8F5]">
-                  스마트 가전 & 캣타워
-                </h3>
-                <div className="flex gap-1 mt-1 text-[10px] font-bold text-white">
-                  <span className="w-4 h-4 rounded-full bg-[#A855F7] flex items-center justify-center">수</span>
-                  <span className="w-4 h-4 rounded-full bg-[#A855F7] flex items-center justify-center">금</span>
-                </div>
-              </div>
-              <p className="text-xs text-[#666666] dark:text-[#A0A0A0] leading-relaxed">
-                자동 화장실 300g 무게 센서 감지 정밀 실험과 원목 캣폴 하중 인장 테스트를 알립니다.
-              </p>
+            <h2 className="text-3xl sm:text-4xl font-extrabold leading-tight text-white">
+              무작위 직접 구매 & 물리 장비 실험,<br />100% 내돈내산 검증 플랫폼
+            </h2>
+            <p className="text-sm sm:text-base text-white/80 leading-relaxed">
+              광고 협찬글에 지친 집사들을 위해 모래 먼지 분광 측정기, 사료 DM 영양 성분 환산, 스마트 가전 안전 센서를 직접 실험하여 객관적 수치로 알립니다.
+            </p>
+            <div className="pt-2 flex flex-wrap gap-3">
+              <Link
+                href="/search?q=내돈내산"
+                className="px-6 py-3 rounded-2xl bg-[#C19A6B] text-white font-extrabold text-sm hover:bg-[#a88354] transition-all shadow-md"
+              >
+                전체 검증 리포트 보기
+              </Link>
+              <Link
+                href="/search?q=벤토나이트"
+                className="px-6 py-3 rounded-2xl bg-white/10 backdrop-blur-md text-white font-bold text-sm hover:bg-white/20 transition-all border border-white/20"
+              >
+                인기 벤토나이트 실험
+              </Link>
             </div>
           </div>
         </section>
-
       </main>
 
       <Footer />
