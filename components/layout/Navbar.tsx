@@ -11,20 +11,14 @@ import {
   Menu, 
   X, 
   Sparkles, 
-  Newspaper, 
-  BookOpen, 
   ShieldCheck,
-  TrendingUp,
   LayoutDashboard,
   Crown,
-  ShoppingBag,
-  Box,
-  Zap,
-  Tag,
   User,
   LogOut,
   ChevronDown
 } from 'lucide-react';
+import { LitterPaperLogo } from '../ui/LitterPaperLogo';
 import { SearchModal } from '../editorial/SearchModal';
 import { AuthModal } from '../auth/AuthModal';
 import { storage } from '@/lib/storage';
@@ -82,26 +76,26 @@ export function Navbar() {
   return (
     <>
       {/* Top Breaking News Ticker Bar */}
-      <div className="bg-[#3D5A40] text-[#E8DCC7] text-xs py-2 px-4 border-b border-[#2F4732]">
+      <div className="bg-[#333333] text-[#FAF8F5] text-xs py-2.5 px-4 border-b border-[#222222]">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
           <div className="flex items-center gap-2 overflow-hidden truncate">
-            <span className="bg-[#E8DCC7] text-[#3D5A40] font-extrabold text-[10px] px-2 py-0.5 rounded-full shrink-0 tracking-wider">
+            <span className="bg-[#C19A6B] text-white font-extrabold text-[10px] px-2.5 py-0.5 rounded-full shrink-0 tracking-wider">
               LITTER PAPER BRIEF
             </span>
-            <span className="truncate font-medium hover:underline cursor-pointer">
+            <span className="truncate font-medium hover:underline cursor-pointer text-[#EAE6DF]">
               {BREAKING_NEWS[tickerIndex]}
             </span>
           </div>
 
-          <div className="hidden sm:flex items-center gap-4 text-[11px] text-[#E8DCC7]/80 shrink-0">
-            <Link href="/premium" className="hover:text-white transition-colors flex items-center gap-1 font-bold text-[#E8DCC7]">
-              <Crown className="w-3.5 h-3.5 text-[#C77B30]" /> 프리미엄 멤버십
+          <div className="hidden sm:flex items-center gap-4 text-[11px] text-[#FAF8F5]/80 shrink-0">
+            <Link href="/premium" className="hover:text-white transition-colors flex items-center gap-1 font-bold text-[#C19A6B]">
+              <Crown className="w-3.5 h-3.5" /> 프리미엄 멤버십
             </Link>
-            <span className="text-[#2F4732]">|</span>
+            <span className="text-[#555555]">|</span>
             <Link href="/newsletter" className="hover:text-white transition-colors flex items-center gap-1 font-semibold">
-              <Sparkles className="w-3 h-3 text-[#C77B30]" /> 검증 리포트 구독
+              <Sparkles className="w-3 h-3 text-[#C19A6B]" /> 검증 리포트 구독
             </Link>
-            <span className="text-[#2F4732]">|</span>
+            <span className="text-[#555555]">|</span>
             <Link href="/admin" className="hover:text-white transition-colors flex items-center gap-1 font-semibold">
               <LayoutDashboard className="w-3 h-3" /> CMS 퍼블리셔
             </Link>
@@ -110,33 +104,33 @@ export function Navbar() {
       </div>
 
       {/* Main Sticky Header */}
-      <header className="sticky top-0 z-40 bg-[#FAF9F7]/95 dark:bg-[#141815]/95 backdrop-blur-md border-b border-[#ECECEC] dark:border-[#2A332C] transition-colors duration-200">
+      <header className="sticky top-0 z-40 bg-[#FAF8F5]/95 dark:bg-[#1A1A1A]/95 backdrop-blur-md border-b border-[#EAE6DF] dark:border-[#333333] transition-colors duration-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
             
-            {/* Brand Logo */}
+            {/* Brand Logo with Official Cat-in-Box Symbol */}
             <Link href="/" className="flex items-center gap-3 group">
-              <div className="w-10 h-10 rounded-2xl bg-[#3D5A40] text-[#E8DCC7] flex items-center justify-center font-bold text-xl shadow-md group-hover:scale-105 transition-transform">
-                <ShoppingBag className="w-5 h-5 text-[#E8DCC7]" />
+              <div className="w-11 h-11 rounded-2xl bg-white dark:bg-[#242424] border border-[#EAE6DF] dark:border-[#333333] flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform p-1">
+                <LitterPaperLogo size={36} />
               </div>
               <div className="flex flex-col">
-                <span className="font-extrabold text-2xl font-serif-editorial tracking-tight text-[#202020] dark:text-[#F2F5F3] group-hover:text-[#3D5A40] dark:group-hover:text-[#E8DCC7] transition-colors">
-                  LITTER PAPER
+                <span className="font-extrabold text-2xl tracking-tight text-[#333333] dark:text-[#FAF8F5] group-hover:text-[#C19A6B] transition-colors leading-none font-sans">
+                  Litter Paper
                 </span>
-                <span className="text-[10px] font-bold text-[#6E6E6E] dark:text-[#9EAAA0] tracking-widest uppercase -mt-1">
+                <span className="text-[11px] font-extrabold text-[#C19A6B] tracking-wider uppercase mt-1">
                   리터페이퍼 • 100% 내돈내산 리뷰
                 </span>
               </div>
             </Link>
 
             {/* Desktop Navigation Links */}
-            <nav className="hidden md:flex items-center gap-8 text-sm font-semibold text-[#6E6E6E] dark:text-[#9EAAA0]">
+            <nav className="hidden md:flex items-center gap-8 text-sm font-bold text-[#666666] dark:text-[#A0A0A0]">
               <Link
                 href="/category/nutrition"
                 className={`transition-colors ${
                   pathname === '/category/nutrition'
-                    ? 'text-[#3D5A40] dark:text-[#E8DCC7] font-bold'
-                    : 'hover:text-[#202020] dark:hover:text-[#F2F5F3]'
+                    ? 'text-[#333333] dark:text-[#FAF8F5] font-extrabold border-b-2 border-[#C19A6B] pb-1'
+                    : 'hover:text-[#333333] dark:hover:text-[#FAF8F5]'
                 }`}
               >
                 사료 & 습식캔
@@ -146,8 +140,8 @@ export function Navbar() {
                 href="/category/veterinary"
                 className={`transition-colors ${
                   pathname === '/category/veterinary'
-                    ? 'text-[#3D5A40] dark:text-[#E8DCC7] font-bold'
-                    : 'hover:text-[#202020] dark:hover:text-[#F2F5F3]'
+                    ? 'text-[#333333] dark:text-[#FAF8F5] font-extrabold border-b-2 border-[#C19A6B] pb-1'
+                    : 'hover:text-[#333333] dark:hover:text-[#FAF8F5]'
                 }`}
               >
                 모래 & 배변
@@ -157,8 +151,8 @@ export function Navbar() {
                 href="/category/behavior"
                 className={`transition-colors ${
                   pathname === '/category/behavior'
-                    ? 'text-[#3D5A40] dark:text-[#E8DCC7] font-bold'
-                    : 'hover:text-[#202020] dark:hover:text-[#F2F5F3]'
+                    ? 'text-[#333333] dark:text-[#FAF8F5] font-extrabold border-b-2 border-[#C19A6B] pb-1'
+                    : 'hover:text-[#333333] dark:hover:text-[#FAF8F5]'
                 }`}
               >
                 캣타워 & 가구
@@ -168,8 +162,8 @@ export function Navbar() {
                 href="/category/travel"
                 className={`transition-colors ${
                   pathname === '/category/travel'
-                    ? 'text-[#3D5A40] dark:text-[#E8DCC7] font-bold'
-                    : 'hover:text-[#202020] dark:hover:text-[#F2F5F3]'
+                    ? 'text-[#333333] dark:text-[#FAF8F5] font-extrabold border-b-2 border-[#C19A6B] pb-1'
+                    : 'hover:text-[#333333] dark:hover:text-[#FAF8F5]'
                 }`}
               >
                 스마트 가전
@@ -179,11 +173,11 @@ export function Navbar() {
                 href="/category/rescue"
                 className={`flex items-center gap-1.5 transition-colors ${
                   pathname === '/category/rescue'
-                    ? 'text-[#3D5A40] dark:text-[#E8DCC7] font-bold'
-                    : 'hover:text-[#202020] dark:hover:text-[#F2F5F3]'
+                    ? 'text-[#C19A6B] font-extrabold border-b-2 border-[#C19A6B] pb-1'
+                    : 'hover:text-[#333333] dark:hover:text-[#FAF8F5]'
                 }`}
               >
-                <ShieldCheck className="w-4 h-4 text-[#3D5A40] dark:text-[#E8DCC7]" />
+                <ShieldCheck className="w-4 h-4 text-[#C19A6B]" />
                 내돈내산 검증
               </Link>
             </nav>
@@ -193,7 +187,7 @@ export function Navbar() {
               {/* Global Search Trigger */}
               <button
                 onClick={() => setIsSearchOpen(true)}
-                className="p-2.5 rounded-full hover:bg-[#ECECEC]/60 dark:hover:bg-[#2A332C]/60 text-[#202020] dark:text-[#F2F5F3] transition-colors"
+                className="p-2.5 rounded-full hover:bg-[#EAE6DF]/60 dark:hover:bg-[#333333]/60 text-[#333333] dark:text-[#FAF8F5] transition-colors"
                 title="상품 검증 검색 (Cmd+K)"
               >
                 <Search className="w-5 h-5" />
@@ -202,12 +196,12 @@ export function Navbar() {
               {/* Bookmarks */}
               <Link
                 href="/bookmarks"
-                className="relative p-2.5 rounded-full hover:bg-[#ECECEC]/60 dark:hover:bg-[#2A332C]/60 text-[#202020] dark:text-[#F2F5F3] transition-colors"
+                className="relative p-2.5 rounded-full hover:bg-[#EAE6DF]/60 dark:hover:bg-[#333333]/60 text-[#333333] dark:text-[#FAF8F5] transition-colors"
                 title="내 보관함"
               >
                 <Bookmark className="w-5 h-5" />
                 {bookmarkCount > 0 && (
-                  <span className="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-[#C77B30] text-white text-[10px] font-bold flex items-center justify-center">
+                  <span className="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-[#C19A6B] text-white text-[10px] font-bold flex items-center justify-center">
                     {bookmarkCount}
                   </span>
                 )}
@@ -216,10 +210,10 @@ export function Navbar() {
               {/* Dark mode toggle */}
               <button
                 onClick={toggleDarkMode}
-                className="p-2.5 rounded-full hover:bg-[#ECECEC]/60 dark:hover:bg-[#2A332C]/60 text-[#202020] dark:text-[#F2F5F3] transition-colors"
+                className="p-2.5 rounded-full hover:bg-[#EAE6DF]/60 dark:hover:bg-[#333333]/60 text-[#333333] dark:text-[#FAF8F5] transition-colors"
                 title="다크 모드 전환"
               >
-                {isDarkMode ? <Sun className="w-5 h-5 text-[#E8DCC7]" /> : <Moon className="w-5 h-5" />}
+                {isDarkMode ? <Sun className="w-5 h-5 text-[#C19A6B]" /> : <Moon className="w-5 h-5" />}
               </button>
 
               {/* User Authentication Menu */}
@@ -227,36 +221,36 @@ export function Navbar() {
                 <div className="relative">
                   <button
                     onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                    className="flex items-center gap-2 p-1.5 pl-2 rounded-full border border-[#ECECEC] dark:border-[#2A332C] hover:border-[#3D5A40] transition-colors bg-white dark:bg-[#252C26]"
+                    className="flex items-center gap-2 p-1.5 pl-2 rounded-full border border-[#EAE6DF] dark:border-[#333333] hover:border-[#C19A6B] transition-colors bg-white dark:bg-[#242424]"
                   >
                     <img
                       src={currentUser.avatar}
                       alt={currentUser.name}
-                      className="w-7 h-7 rounded-full object-cover border border-[#3D5A40]"
+                      className="w-7 h-7 rounded-full object-cover border border-[#C19A6B]"
                     />
-                    <span className="hidden sm:inline text-xs font-bold text-[#202020] dark:text-[#F2F5F3] max-w-[90px] truncate">
+                    <span className="hidden sm:inline text-xs font-extrabold text-[#333333] dark:text-[#FAF8F5] max-w-[90px] truncate">
                       {currentUser.name}
                     </span>
-                    <ChevronDown className="w-3.5 h-3.5 text-[#6E6E6E]" />
+                    <ChevronDown className="w-3.5 h-3.5 text-[#666666]" />
                   </button>
 
                   {/* Dropdown Menu */}
                   {isUserMenuOpen && (
-                    <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-[#1D231E] rounded-2xl shadow-xl border border-[#ECECEC] dark:border-[#2A332C] p-2 space-y-1 text-xs z-50">
-                      <div className="p-3 border-b border-[#ECECEC] dark:border-[#2A332C] space-y-1">
-                        <div className="font-bold text-[#202020] dark:text-[#F2F5F3]">
+                    <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-[#242424] rounded-2xl shadow-xl border border-[#EAE6DF] dark:border-[#333333] p-2 space-y-1 text-xs z-50">
+                      <div className="p-3 border-b border-[#EAE6DF] dark:border-[#333333] space-y-1">
+                        <div className="font-bold text-[#333333] dark:text-[#FAF8F5]">
                           {currentUser.name}
                         </div>
-                        <div className="text-[11px] text-[#6E6E6E] truncate">
+                        <div className="text-[11px] text-[#666666] truncate">
                           {currentUser.email}
                         </div>
                         <div className="pt-1">
                           {currentUser.isPremium ? (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#E8DCC7] text-[#3D5A40] text-[10px] font-extrabold">
-                              <Crown className="w-3 h-3 text-[#C77B30]" /> 프리미엄 멤버
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#C19A6B] text-white text-[10px] font-extrabold">
+                              <Crown className="w-3 h-3" /> 프리미엄 멤버
                             </span>
                           ) : (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#FAF9F7] dark:bg-[#252C26] text-[#6E6E6E] text-[10px] font-medium border">
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#FAF8F5] dark:bg-[#1A1A1A] text-[#666666] text-[10px] font-medium border">
                               일반 독자 회원
                             </span>
                           )}
@@ -266,15 +260,15 @@ export function Navbar() {
                       <Link
                         href="/bookmarks"
                         onClick={() => setIsUserMenuOpen(false)}
-                        className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-[#FAF9F7] dark:hover:bg-[#252C26] font-semibold text-[#202020] dark:text-[#F2F5F3]"
+                        className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-[#FAF8F5] dark:hover:bg-[#1A1A1A] font-semibold text-[#333333] dark:text-[#FAF8F5]"
                       >
-                        <Bookmark className="w-4 h-4 text-[#3D5A40]" /> 내 보관함 & 히스토리
+                        <Bookmark className="w-4 h-4 text-[#C19A6B]" /> 내 보관함 & 히스토리
                       </Link>
 
                       <Link
                         href="/premium"
                         onClick={() => setIsUserMenuOpen(false)}
-                        className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-[#FAF9F7] dark:hover:bg-[#252C26] font-bold text-[#C77B30]"
+                        className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-[#FAF8F5] dark:hover:bg-[#1A1A1A] font-bold text-[#C19A6B]"
                       >
                         <Crown className="w-4 h-4" /> 프리미엄 멤버십 관리
                       </Link>
@@ -282,14 +276,14 @@ export function Navbar() {
                       <Link
                         href="/admin"
                         onClick={() => setIsUserMenuOpen(false)}
-                        className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-[#FAF9F7] dark:hover:bg-[#252C26] font-semibold text-[#6E6E6E]"
+                        className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-[#FAF8F5] dark:hover:bg-[#1A1A1A] font-semibold text-[#666666]"
                       >
                         <LayoutDashboard className="w-4 h-4" /> CMS 퍼블리셔
                       </Link>
 
                       <button
                         onClick={handleLogout}
-                        className="flex items-center gap-2 w-full px-3 py-2 rounded-xl hover:bg-red-50 dark:hover:bg-red-950/30 text-red-600 font-bold text-left transition-colors pt-2 border-t border-[#ECECEC] dark:border-[#2A332C]"
+                        className="flex items-center gap-2 w-full px-3 py-2 rounded-xl hover:bg-red-50 dark:hover:bg-red-950/30 text-red-600 font-bold text-left transition-colors pt-2 border-t border-[#EAE6DF] dark:border-[#333333]"
                       >
                         <LogOut className="w-4 h-4" /> 로그아웃
                       </button>
@@ -299,7 +293,7 @@ export function Navbar() {
               ) : (
                 <button
                   onClick={() => setIsAuthModalOpen(true)}
-                  className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#3D5A40] text-white text-xs font-extrabold hover:bg-[#2F4732] transition-colors shadow-xs"
+                  className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#333333] text-white text-xs font-extrabold hover:bg-[#C19A6B] transition-colors shadow-xs"
                 >
                   <User className="w-4 h-4" /> 로그인 / 회원가입
                 </button>
@@ -308,7 +302,7 @@ export function Navbar() {
               {/* Mobile menu trigger */}
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="md:hidden p-2.5 rounded-full hover:bg-[#ECECEC]/60 dark:hover:bg-[#2A332C]/60 text-[#202020] dark:text-[#F2F5F3]"
+                className="md:hidden p-2.5 rounded-full hover:bg-[#EAE6DF]/60 dark:hover:bg-[#333333]/60 text-[#333333] dark:text-[#FAF8F5]"
               >
                 {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
               </button>
@@ -318,43 +312,43 @@ export function Navbar() {
 
         {/* Mobile Navigation Menu Drawer */}
         {isMobileMenuOpen && (
-          <div className="md:hidden border-t border-[#ECECEC] dark:border-[#2A332C] bg-[#FAF9F7] dark:bg-[#141815] px-4 pt-3 pb-6 space-y-3">
+          <div className="md:hidden border-t border-[#EAE6DF] dark:border-[#333333] bg-[#FAF8F5] dark:bg-[#1A1A1A] px-4 pt-3 pb-6 space-y-3">
             <Link
               href="/category/nutrition"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="block py-2 text-base font-bold text-[#3D5A40] dark:text-[#E8DCC7]"
+              className="block py-2 text-base font-bold text-[#333333] dark:text-[#FAF8F5]"
             >
               🥫 사료 & 습식캔
             </Link>
             <Link
               href="/category/veterinary"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="block py-2 text-base font-medium text-[#202020] dark:text-[#F2F5F3]"
+              className="block py-2 text-base font-medium text-[#333333] dark:text-[#FAF8F5]"
             >
               📦 모래 & 배변용품
             </Link>
             <Link
               href="/category/behavior"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="block py-2 text-base font-medium text-[#202020] dark:text-[#F2F5F3]"
+              className="block py-2 text-base font-medium text-[#333333] dark:text-[#FAF8F5]"
             >
               🪵 캣타워 & 가구
             </Link>
             <Link
               href="/category/travel"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="block py-2 text-base font-medium text-[#202020] dark:text-[#F2F5F3]"
+              className="block py-2 text-base font-medium text-[#333333] dark:text-[#FAF8F5]"
             >
               ⚡ 스마트 가전
             </Link>
             <Link
               href="/category/rescue"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="block py-2 text-base font-medium text-[#202020] dark:text-[#F2F5F3]"
+              className="block py-2 text-base font-medium text-[#C19A6B]"
             >
               🛡️ 내돈내산 검증
             </Link>
-            <div className="pt-3 border-t border-[#ECECEC] dark:border-[#2A332C] flex justify-between text-xs text-[#6E6E6E]">
+            <div className="pt-3 border-t border-[#EAE6DF] dark:border-[#333333] flex justify-between text-xs text-[#666666]">
               <Link href="/premium" onClick={() => setIsMobileMenuOpen(false)}>프리미엄 멤버십</Link>
               <button onClick={() => { setIsMobileMenuOpen(false); setIsAuthModalOpen(true); }}>로그인/가입</button>
             </div>

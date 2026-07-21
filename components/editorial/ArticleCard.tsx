@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Article } from '@/types';
 import { formatDate, getArticleAccessStatus } from '@/lib/utils';
 import { FreeAccessCountdown } from './FreeAccessCountdown';
-import { Heart, Eye, MessageSquare, Sparkles, Clock, Lock, ShieldCheck, Crown } from 'lucide-react';
+import { Heart, Eye, Lock } from 'lucide-react';
 
 interface ArticleCardProps {
   article: Article;
@@ -20,7 +20,7 @@ export function ArticleCard({ article, variant = 'standard', isUserPremium = fal
     return (
       <Link
         href={`/article/${article.slug}`}
-        className="flex items-center gap-3 p-2 rounded-xl hover:bg-[#FAF9F7] dark:hover:bg-[#252C26] transition-colors group"
+        className="flex items-center gap-3 p-2 rounded-xl hover:bg-[#FAF8F5] dark:hover:bg-[#242424] transition-colors group font-sans"
       >
         <img
           src={article.coverImage}
@@ -28,11 +28,11 @@ export function ArticleCard({ article, variant = 'standard', isUserPremium = fal
           className="w-16 h-16 rounded-lg object-cover group-hover:scale-105 transition-transform"
         />
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-1 text-[10px] font-bold text-[#3D5A40] dark:text-[#E8DCC7] mb-0.5">
+          <div className="flex items-center gap-1 text-[10px] font-bold text-[#C19A6B] mb-0.5">
             <span>{article.categoryName}</span>
-            {access.isLocked && <Lock className="w-3 h-3 text-[#C77B30]" />}
+            {access.isLocked && <Lock className="w-3 h-3 text-[#C19A6B]" />}
           </div>
-          <h4 className="text-xs font-bold text-[#202020] dark:text-[#F2F5F3] group-hover:underline line-clamp-2 leading-snug">
+          <h4 className="text-xs font-bold text-[#333333] dark:text-[#FAF8F5] group-hover:underline line-clamp-2 leading-snug">
             {article.title}
           </h4>
         </div>
@@ -42,7 +42,7 @@ export function ArticleCard({ article, variant = 'standard', isUserPremium = fal
 
   if (variant === 'horizontal') {
     return (
-      <div className="group rounded-3xl bg-white dark:bg-[#1D231E] border border-[#ECECEC] dark:border-[#2A332C] overflow-hidden hover:border-[#3D5A40] dark:hover:border-[#E8DCC7] transition-all shadow-xs hover:shadow-lg flex flex-col sm:flex-row">
+      <div className="group rounded-3xl bg-white dark:bg-[#242424] border border-[#EAE6DF] dark:border-[#333333] overflow-hidden hover:border-[#C19A6B] dark:hover:border-[#C19A6B] transition-all shadow-2xs hover:shadow-lg flex flex-col sm:flex-row font-sans">
         <div className="relative sm:w-2/5 h-48 sm:h-auto overflow-hidden shrink-0">
           <img
             src={article.coverImage}
@@ -50,15 +50,15 @@ export function ArticleCard({ article, variant = 'standard', isUserPremium = fal
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
           <div className="absolute top-3 left-3 flex flex-wrap gap-1">
-            <span className="bg-[#3D5A40] text-white text-[10px] font-extrabold px-2.5 py-1 rounded-md uppercase tracking-wider">
+            <span className="bg-[#333333] text-white text-[10px] font-extrabold px-2.5 py-1 rounded-md uppercase tracking-wider">
               {article.categoryName}
             </span>
             {access.isFreeNow && (
               <FreeAccessCountdown freeWindowEndsAt={access.freeWindowEndsAt} compact />
             )}
             {access.isLocked && (
-              <span className="bg-[#1D231E]/90 backdrop-blur-md text-[#E8DCC7] text-[10px] font-extrabold px-2.5 py-1 rounded-md flex items-center gap-1 border border-white/10">
-                <Lock className="w-3 h-3 text-[#C77B30]" /> 프리미엄 아카이브
+              <span className="bg-black/80 backdrop-blur-md text-[#FAF8F5] text-[10px] font-extrabold px-2.5 py-1 rounded-md flex items-center gap-1 border border-white/20">
+                <Lock className="w-3 h-3 text-[#C19A6B]" /> 프리미엄 아카이브
               </span>
             )}
           </div>
@@ -66,7 +66,7 @@ export function ArticleCard({ article, variant = 'standard', isUserPremium = fal
 
         <div className="p-6 sm:w-3/5 flex flex-col justify-between space-y-3">
           <div className="space-y-1.5">
-            <div className="flex items-center gap-2 text-xs text-[#6E6E6E]">
+            <div className="flex items-center gap-2 text-xs text-[#666666]">
               <span>{article.author.name}</span>
               <span>•</span>
               <span>{formatDate(article.publishedAt)}</span>
@@ -74,27 +74,27 @@ export function ArticleCard({ article, variant = 'standard', isUserPremium = fal
               <span>{article.readingTime}분 읽기</span>
             </div>
             <Link href={`/article/${article.slug}`}>
-              <h3 className="text-lg font-bold font-serif-editorial text-[#202020] dark:text-[#F2F5F3] group-hover:text-[#3D5A40] dark:group-hover:text-[#E8DCC7] transition-colors leading-snug">
+              <h3 className="text-lg font-extrabold text-[#333333] dark:text-[#FAF8F5] group-hover:text-[#C19A6B] transition-colors leading-snug">
                 {article.title}
               </h3>
             </Link>
-            <p className="text-xs text-[#6E6E6E] dark:text-[#9EAAA0] line-clamp-2 leading-relaxed">
+            <p className="text-xs text-[#666666] dark:text-[#A0A0A0] line-clamp-2 leading-relaxed">
               {article.summary}
             </p>
           </div>
 
-          <div className="flex items-center justify-between pt-3 border-t border-[#ECECEC] dark:border-[#2A332C] text-xs text-[#6E6E6E]">
+          <div className="flex items-center justify-between pt-3 border-t border-[#EAE6DF] dark:border-[#333333] text-xs text-[#666666]">
             <div className="flex items-center gap-3">
               <span className="flex items-center gap-1">
                 <Heart className="w-3.5 h-3.5 text-red-500" /> {article.likes}
               </span>
               <span className="flex items-center gap-1">
-                <Eye className="w-3.5 h-3.5 text-[#3D5A40]" /> {article.views.toLocaleString()}
+                <Eye className="w-3.5 h-3.5 text-[#C19A6B]" /> {article.views.toLocaleString()}
               </span>
             </div>
             <Link
               href={`/article/${article.slug}`}
-              className="font-bold text-[#3D5A40] dark:text-[#E8DCC7] hover:underline"
+              className="font-bold text-[#C19A6B] hover:underline"
             >
               기사 읽기 →
             </Link>
@@ -106,7 +106,7 @@ export function ArticleCard({ article, variant = 'standard', isUserPremium = fal
 
   // Standard vertical card
   return (
-    <div className="group rounded-3xl bg-white dark:bg-[#1D231E] border border-[#ECECEC] dark:border-[#2A332C] overflow-hidden hover:border-[#3D5A40] dark:hover:border-[#E8DCC7] transition-all shadow-xs hover:shadow-xl flex flex-col justify-between">
+    <div className="group rounded-3xl bg-white dark:bg-[#242424] border border-[#EAE6DF] dark:border-[#333333] overflow-hidden hover:border-[#C19A6B] dark:hover:border-[#C19A6B] transition-all shadow-2xs hover:shadow-xl flex flex-col justify-between font-sans">
       <div>
         <div className="relative h-52 w-full overflow-hidden">
           <img
@@ -118,15 +118,15 @@ export function ArticleCard({ article, variant = 'standard', isUserPremium = fal
           
           {/* Top Badges */}
           <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
-            <span className="bg-[#3D5A40] text-white text-[10px] font-extrabold px-2.5 py-1 rounded-md uppercase tracking-wider">
+            <span className="bg-[#333333] text-white text-[10px] font-extrabold px-2.5 py-1 rounded-md uppercase tracking-wider">
               {article.categoryName}
             </span>
             {access.isFreeNow && (
               <FreeAccessCountdown freeWindowEndsAt={access.freeWindowEndsAt} compact />
             )}
             {access.isLocked && (
-              <span className="bg-black/70 backdrop-blur-md text-[#E8DCC7] text-[10px] font-extrabold px-2.5 py-1 rounded-md flex items-center gap-1 border border-white/20">
-                <Lock className="w-3 h-3 text-[#C77B30]" /> 프리미엄 아카이브
+              <span className="bg-black/80 backdrop-blur-md text-[#FAF8F5] text-[10px] font-extrabold px-2.5 py-1 rounded-md flex items-center gap-1 border border-white/20">
+                <Lock className="w-3 h-3 text-[#C19A6B]" /> 프리미엄 아카이브
               </span>
             )}
           </div>
@@ -138,17 +138,17 @@ export function ArticleCard({ article, variant = 'standard', isUserPremium = fal
 
         <div className="p-6 space-y-3">
           <Link href={`/article/${article.slug}`}>
-            <h3 className="text-lg font-bold font-serif-editorial text-[#202020] dark:text-[#F2F5F3] group-hover:text-[#3D5A40] dark:group-hover:text-[#E8DCC7] transition-colors leading-snug line-clamp-2">
+            <h3 className="text-lg font-extrabold text-[#333333] dark:text-[#FAF8F5] group-hover:text-[#C19A6B] transition-colors leading-snug line-clamp-2">
               {article.title}
             </h3>
           </Link>
-          <p className="text-xs text-[#6E6E6E] dark:text-[#9EAAA0] line-clamp-2 leading-relaxed">
+          <p className="text-xs text-[#666666] dark:text-[#A0A0A0] line-clamp-2 leading-relaxed">
             {article.summary}
           </p>
         </div>
       </div>
 
-      <div className="px-6 pb-6 pt-3 border-t border-[#ECECEC]/60 dark:border-[#2A332C]/60 flex items-center justify-between text-xs text-[#6E6E6E]">
+      <div className="px-6 pb-6 pt-3 border-t border-[#EAE6DF]/60 dark:border-[#333333]/60 flex items-center justify-between text-xs text-[#666666]">
         <div className="flex items-center gap-2">
           <img
             src={article.author.avatar}

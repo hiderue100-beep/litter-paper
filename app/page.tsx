@@ -59,30 +59,30 @@ export default function HomePage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAF9F7] dark:bg-[#141815] text-[#202020] dark:text-[#F2F5F3]">
+    <div className="min-h-screen flex flex-col bg-[#FAF8F5] dark:bg-[#1A1A1A] text-[#333333] dark:text-[#FAF8F5] font-sans">
       <Navbar />
 
       <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-16">
         
         {/* Next Scheduled Article Countdown Banner */}
         {scheduledArticle && (
-          <div className="p-4 rounded-2xl bg-[#E8DCC7]/50 dark:bg-white/5 border border-[#E8DCC7] dark:border-[#2A332C] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+          <div className="p-4 rounded-2xl bg-[#C19A6B]/15 dark:bg-white/5 border border-[#C19A6B]/30 dark:border-[#333333] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-sans">
             <div className="flex items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded-full bg-[#3D5A40] text-white font-extrabold text-[10px]">
+              <span className="px-2.5 py-0.5 rounded-full bg-[#333333] text-white font-extrabold text-[10px]">
                 NEXT REVIEW
               </span>
-              <span className="font-bold text-[#202020] dark:text-[#F2F5F3]">
+              <span className="font-bold text-[#333333] dark:text-[#FAF8F5]">
                 다음 내돈내산 검증 공개 예정: "{scheduledArticle.title}"
               </span>
             </div>
-            <div className="flex items-center gap-1.5 font-bold text-[#3D5A40] dark:text-[#E8DCC7]">
-              <Clock className="w-4 h-4 text-[#C77B30] animate-pulse" />
+            <div className="flex items-center gap-1.5 font-bold text-[#C19A6B]">
+              <Clock className="w-4 h-4 animate-pulse" />
               <span>공개 카운트다운: {getArticleAccessStatus(scheduledArticle).formattedCountdown}</span>
             </div>
           </div>
         )}
 
-        {/* Hero Lead Story (LongBlack-inspired 50/50 Split Container) */}
+        {/* Hero Lead Story (LongBlack 50/50 Split Container) */}
         {heroArticle && (
           <div className="space-y-4">
             <HeroStory article={heroArticle} />
@@ -91,13 +91,13 @@ export default function HomePage() {
 
         {/* Today's Free Story Highlight Box with Countdown */}
         {todaysFreeStory && (
-          <section className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#1D231E] border border-[#ECECEC] dark:border-[#2A332C] shadow-md space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#ECECEC] dark:border-[#2A332C] pb-4">
+          <section className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#242424] border border-[#EAE6DF] dark:border-[#333333] shadow-xs space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#EAE6DF] dark:border-[#333333] pb-4">
               <div>
-                <span className="text-xs font-bold uppercase tracking-wider text-[#C77B30] flex items-center gap-1">
+                <span className="text-xs font-bold uppercase tracking-wider text-[#C19A6B] flex items-center gap-1">
                   <Sparkles className="w-4 h-4" /> Today's Free Product Review
                 </span>
-                <h2 className="text-2xl font-extrabold font-serif-editorial text-[#202020] dark:text-[#F2F5F3] mt-1">
+                <h2 className="text-2xl font-extrabold text-[#333333] dark:text-[#FAF8F5] mt-1">
                   오늘의 24시간 무료 상품 검증 리포트
                 </h2>
               </div>
@@ -115,12 +115,12 @@ export default function HomePage() {
         {/* Product Review Categories Strip */}
         <section>
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold font-serif-editorial text-[#202020] dark:text-[#F2F5F3] flex items-center gap-2">
-              <ShoppingBag className="w-5 h-5 text-[#C77B30]" /> 주요 상품 검증 분야
+            <h2 className="text-xl font-extrabold text-[#333333] dark:text-[#FAF8F5] flex items-center gap-2">
+              <ShoppingBag className="w-5 h-5 text-[#C19A6B]" /> 주요 상품 검증 분야
             </h2>
             <Link
               href="/search"
-              className="text-xs font-bold text-[#3D5A40] dark:text-[#E8DCC7] hover:underline flex items-center gap-1"
+              className="text-xs font-bold text-[#C19A6B] hover:underline flex items-center gap-1"
             >
               전체 리뷰 <ChevronRight className="w-4 h-4" />
             </Link>
@@ -131,12 +131,12 @@ export default function HomePage() {
               <Link
                 key={cat.id}
                 href={`/category/${cat.slug}`}
-                className="p-4 rounded-2xl bg-white dark:bg-[#1D231E] border border-[#ECECEC] dark:border-[#2A332C] hover:border-[#3D5A40] dark:hover:border-[#E8DCC7] transition-all group text-center shadow-xs"
+                className="p-4 rounded-2xl bg-white dark:bg-[#242424] border border-[#EAE6DF] dark:border-[#333333] hover:border-[#C19A6B] dark:hover:border-[#C19A6B] transition-all group text-center shadow-2xs"
               >
-                <div className="text-sm font-bold text-[#3D5A40] dark:text-[#E8DCC7] group-hover:scale-105 transition-transform">
+                <div className="text-sm font-bold text-[#333333] dark:text-[#FAF8F5] group-hover:text-[#C19A6B] transition-colors">
                   {cat.name}
                 </div>
-                <div className="text-[11px] text-[#6E6E6E] dark:text-[#9EAAA0] mt-1 font-medium">
+                <div className="text-[11px] text-[#666666] dark:text-[#A0A0A0] mt-1 font-medium">
                   {cat.count}개 리뷰
                 </div>
               </Link>
@@ -148,10 +148,10 @@ export default function HomePage() {
         <section>
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
             <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-[#C77B30]">
+              <span className="text-xs font-bold uppercase tracking-wider text-[#C19A6B]">
                 Verified Lab Tests
               </span>
-              <h2 className="text-2xl sm:text-3xl font-extrabold font-serif-editorial text-[#202020] dark:text-[#F2F5F3] mt-1">
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#333333] dark:text-[#FAF8F5] mt-1">
                 에디터 추천 상품 검증 & 성분 분석 리포트
               </h2>
             </div>
@@ -162,8 +162,8 @@ export default function HomePage() {
                 onClick={() => setSelectedCategory('all')}
                 className={`px-3.5 py-2 rounded-xl font-bold transition-all whitespace-nowrap ${
                   selectedCategory === 'all'
-                    ? 'bg-[#3D5A40] text-white shadow-xs'
-                    : 'bg-white dark:bg-[#1D231E] text-[#6E6E6E] border border-[#ECECEC] dark:border-[#2A332C] hover:border-[#3D5A40]'
+                    ? 'bg-[#333333] text-white shadow-xs'
+                    : 'bg-white dark:bg-[#242424] text-[#666666] border border-[#EAE6DF] dark:border-[#333333] hover:border-[#C19A6B]'
                 }`}
               >
                 전체
@@ -172,8 +172,8 @@ export default function HomePage() {
                 onClick={() => setSelectedCategory('nutrition')}
                 className={`px-3.5 py-2 rounded-xl font-bold transition-all whitespace-nowrap ${
                   selectedCategory === 'nutrition'
-                    ? 'bg-[#3D5A40] text-white shadow-xs'
-                    : 'bg-white dark:bg-[#1D231E] text-[#6E6E6E] border border-[#ECECEC] dark:border-[#2A332C] hover:border-[#3D5A40]'
+                    ? 'bg-[#333333] text-white shadow-xs'
+                    : 'bg-white dark:bg-[#242424] text-[#666666] border border-[#EAE6DF] dark:border-[#333333] hover:border-[#C19A6B]'
                 }`}
               >
                 사료 & 습식캔
@@ -182,8 +182,8 @@ export default function HomePage() {
                 onClick={() => setSelectedCategory('veterinary')}
                 className={`px-3.5 py-2 rounded-xl font-bold transition-all whitespace-nowrap ${
                   selectedCategory === 'veterinary'
-                    ? 'bg-[#3D5A40] text-white shadow-xs'
-                    : 'bg-white dark:bg-[#1D231E] text-[#6E6E6E] border border-[#ECECEC] dark:border-[#2A332C] hover:border-[#3D5A40]'
+                    ? 'bg-[#333333] text-white shadow-xs'
+                    : 'bg-white dark:bg-[#242424] text-[#666666] border border-[#EAE6DF] dark:border-[#333333] hover:border-[#C19A6B]'
                 }`}
               >
                 모래 & 배변
@@ -192,8 +192,8 @@ export default function HomePage() {
                 onClick={() => setSelectedCategory('behavior')}
                 className={`px-3.5 py-2 rounded-xl font-bold transition-all whitespace-nowrap ${
                   selectedCategory === 'behavior'
-                    ? 'bg-[#3D5A40] text-white shadow-xs'
-                    : 'bg-white dark:bg-[#1D231E] text-[#6E6E6E] border border-[#ECECEC] dark:border-[#2A332C] hover:border-[#3D5A40]'
+                    ? 'bg-[#333333] text-white shadow-xs'
+                    : 'bg-white dark:bg-[#242424] text-[#666666] border border-[#EAE6DF] dark:border-[#333333] hover:border-[#C19A6B]'
                 }`}
               >
                 캣타워 & 가구
@@ -209,23 +209,23 @@ export default function HomePage() {
         </section>
 
         {/* Premium Archive Section */}
-        <section className="p-8 sm:p-12 rounded-3xl bg-gradient-to-br from-[#1D231E] via-[#2F4732] to-[#3D5A40] text-white shadow-xl space-y-8">
+        <section className="p-8 sm:p-12 rounded-3xl bg-[#242424] border border-[#333333] text-white shadow-xl space-y-8">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E8DCC7] text-[#3D5A40] text-xs font-bold">
-                <Crown className="w-4 h-4 text-[#C77B30]" /> LITTER PAPER PREMIUM REVIEWS
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#C19A6B] text-white text-xs font-bold">
+                <Crown className="w-4 h-4" /> LITTER PAPER PREMIUM REVIEWS
               </span>
-              <h2 className="text-3xl font-extrabold font-serif-editorial mt-2">
+              <h2 className="text-3xl font-extrabold mt-2 text-white">
                 프리미엄 전용 상품 검증 아카이브
               </h2>
-              <p className="text-xs sm:text-sm text-[#E8DCC7]/80 mt-1 max-w-xl">
+              <p className="text-xs sm:text-sm text-white/70 mt-1 max-w-xl">
                 24시간 무료 기간이 지난 내돈내산 종합 검증 리포트 및 독점 단독 실험 모음입니다.
               </p>
             </div>
 
             <Link
               href="/premium"
-              className="px-6 py-3 rounded-2xl bg-[#E8DCC7] text-[#3D5A40] font-extrabold text-xs hover:bg-white transition-all shadow-md shrink-0 text-center"
+              className="px-6 py-3 rounded-2xl bg-[#C19A6B] text-white font-extrabold text-xs hover:bg-[#a88354] transition-all shadow-md shrink-0 text-center"
             >
               프리미엄 멤버십 둘러보기 (Toss Payments)
             </Link>
@@ -239,21 +239,21 @@ export default function HomePage() {
         </section>
 
         {/* Product Lab Testing Guarantee Banner */}
-        <section className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#3D5A40] to-[#2F4732] text-white p-8 sm:p-12 shadow-xl">
+        <section className="relative overflow-hidden rounded-3xl bg-[#333333] text-white p-8 sm:p-12 shadow-xl border border-[#444444]">
           <div className="max-w-2xl relative z-10 space-y-4">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#E8DCC7] text-[#3D5A40] text-xs font-bold">
-              <ShieldCheck className="w-4 h-4 text-[#C77B30]" /> 대가성 협찬 0% 보장 원칙
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#C19A6B] text-white text-xs font-bold">
+              <ShieldCheck className="w-4 h-4" /> 대가성 협찬 0% 보장 원칙
             </div>
-            <h2 className="text-3xl sm:text-4xl font-extrabold font-serif-editorial leading-tight">
+            <h2 className="text-3xl sm:text-4xl font-extrabold leading-tight text-white">
               무작위 직접 구매 & 물리 장비 실험,<br />100% 내돈내산 검증 플랫폼
             </h2>
-            <p className="text-sm sm:text-base text-[#E8DCC7]/90 leading-relaxed">
+            <p className="text-sm sm:text-base text-white/80 leading-relaxed">
               광고 협찬글에 지친 집사들을 위해 모래 먼지 분광 측정기, 사료 DM 영양 성분 환산, 스마트 가전 안전 센서를 직접 실험하여 객관적 수치로 알립니다.
             </p>
             <div className="pt-2 flex flex-wrap gap-3">
               <Link
                 href="/search?q=내돈내산"
-                className="px-6 py-3 rounded-2xl bg-[#E8DCC7] text-[#3D5A40] font-extrabold text-sm hover:bg-white transition-all shadow-md"
+                className="px-6 py-3 rounded-2xl bg-[#C19A6B] text-white font-extrabold text-sm hover:bg-[#a88354] transition-all shadow-md"
               >
                 전체 검증 리포트 보기
               </Link>
@@ -268,15 +268,15 @@ export default function HomePage() {
         </section>
 
         {/* Newsletter Subscription CTA Banner */}
-        <section className="rounded-3xl bg-white dark:bg-[#1D231E] border border-[#ECECEC] dark:border-[#2A332C] p-8 sm:p-12 text-center shadow-lg relative overflow-hidden">
+        <section className="rounded-3xl bg-white dark:bg-[#242424] border border-[#EAE6DF] dark:border-[#333333] p-8 sm:p-12 text-center shadow-xs relative overflow-hidden">
           <div className="max-w-xl mx-auto space-y-4">
-            <div className="w-12 h-12 rounded-2xl bg-[#E8DCC7] text-[#3D5A40] flex items-center justify-center mx-auto font-bold shadow-xs">
+            <div className="w-12 h-12 rounded-2xl bg-[#C19A6B]/20 text-[#C19A6B] flex items-center justify-center mx-auto font-bold">
               <Mail className="w-6 h-6" />
             </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold font-serif-editorial text-[#202020] dark:text-[#F2F5F3]">
-              매일 아침 배달되는 리터페이퍼(LITTER PAPER) 검증 리포트
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#333333] dark:text-[#FAF8F5]">
+              매일 아침 배달되는 리터페이퍼(Litter Paper) 검증 리포트
             </h2>
-            <p className="text-xs sm:text-sm text-[#6E6E6E] dark:text-[#9EAAA0] leading-relaxed">
+            <p className="text-xs sm:text-sm text-[#666666] dark:text-[#A0A0A0] leading-relaxed">
               실패 없는 반려용품 구매 가이드. 신제품 분광 분석부터 성분 표기 해독까지 이메일로 받아보세요.
             </p>
             <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-3 pt-2 max-w-md mx-auto">
@@ -286,11 +286,11 @@ export default function HomePage() {
                 onChange={(e) => setNewsletterEmail(e.target.value)}
                 placeholder="이메일 주소를 입력하세요"
                 required
-                className="flex-1 px-4 py-3 rounded-2xl bg-[#FAF9F7] dark:bg-[#252C26] border border-[#ECECEC] dark:border-[#2A332C] text-sm focus:outline-hidden focus:border-[#3D5A40]"
+                className="flex-1 px-4 py-3 rounded-2xl bg-[#FAF8F5] dark:bg-[#1A1A1A] border border-[#EAE6DF] dark:border-[#333333] text-sm focus:outline-hidden focus:border-[#C19A6B]"
               />
               <button
                 type="submit"
-                className="px-6 py-3 rounded-2xl bg-[#3D5A40] text-white font-bold text-sm hover:bg-[#2F4732] transition-colors shrink-0 shadow-md flex items-center justify-center gap-1.5"
+                className="px-6 py-3 rounded-2xl bg-[#333333] text-white font-extrabold text-sm hover:bg-[#C19A6B] transition-colors shrink-0 shadow-md flex items-center justify-center gap-1.5"
               >
                 <Send className="w-4 h-4" /> 무료 구독하기
               </button>

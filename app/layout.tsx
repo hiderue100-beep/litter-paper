@@ -3,9 +3,9 @@ import "./globals.css";
 import { ToastProvider } from "@/components/ui/Toast";
 
 export const metadata: Metadata = {
-  title: "리터페이퍼 LITTER PAPER — 대한민국 프리미엄 고양이 에디토리얼",
-  description: "리터페이퍼(LITTER PAPER)는 수의학 저널리즘, 행동 심리학, 사료 검증, AI 큐레이션을 가장 편안한 독서 경험으로 제공하는 미디어 플랫폼입니다.",
-  keywords: ["리터페이퍼", "LITTER PAPER", "고양이", "수의학", "방광염", "묘종도감", "고양이사료", "반려묘"],
+  title: "Litter Paper 리터페이퍼 — 100% 내돈내산 반려동물 용품 검증 저널",
+  description: "리터페이퍼(Litter Paper)는 대가성 협찬을 배제하고 연구 장비와 실측 데이터로 고양이 용품, 사료, 모래, 가전을 100% 내돈내산으로 검증하는 에디토리얼 미디어입니다.",
+  keywords: ["리터페이퍼", "Litter Paper", "고양이용품", "내돈내산", "벤토나이트", "습식캔", "반려동물리뷰"],
 };
 
 export default function RootLayout({
@@ -16,14 +16,15 @@ export default function RootLayout({
   return (
     <html lang="ko" className="h-full antialiased">
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://cdn.jsdelivr.net" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;900&family=Pretendard:wght@300;400;500;600;700;800&display=swap"
           rel="stylesheet"
+          as="style"
+          crossOrigin="anonymous"
+          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
         />
       </head>
-      <body className="min-h-full flex flex-col font-sans bg-[#FAF9F7] text-[#202020] dark:bg-[#141815] dark:text-[#F2F5F3] selection:bg-[#E8DCC7] selection:text-[#3D5A40]">
+      <body className="min-h-full flex flex-col font-sans bg-[#FAF8F5] text-[#333333] dark:bg-[#1A1A1A] dark:text-[#FAF8F5] selection:bg-[#C19A6B] selection:text-white">
         <ToastProvider>{children}</ToastProvider>
       </body>
     </html>
