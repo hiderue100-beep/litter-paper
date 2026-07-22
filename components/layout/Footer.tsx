@@ -1,7 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
 import { ShieldCheck, Heart, ArrowUpRight } from 'lucide-react';
-import { LitterPaperLogo } from '../ui/LitterPaperLogo';
 import { CATEGORIES } from '@/lib/mockData';
 
 export function Footer() {
@@ -15,9 +14,6 @@ export function Footer() {
           {/* Brand Info */}
           <div className="md:col-span-5 space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-white dark:bg-[#1A1A1A] flex items-center justify-center p-1 border border-[#333333]">
-                <LitterPaperLogo size={32} />
-              </div>
               <span className="font-black text-2xl text-white tracking-tight">
                 LITTERPAPER
               </span>
