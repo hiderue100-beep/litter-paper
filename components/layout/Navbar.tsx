@@ -109,7 +109,7 @@ export function Navbar() {
             
             {/* Brand Logo - LITTERPAPER Wordmark */}
             <Link href="/" className="group shrink-0">
-              <span className="font-black text-2xl tracking-tight text-[#111111] dark:text-[#FAF8F5] group-hover:text-[#C19A6B] transition-colors leading-none" style={{fontFamily: 'sans-serif', letterSpacing: '-0.02em'}}>
+              <span className="font-black text-2xl sm:text-3xl tracking-tight text-[#111111] dark:text-[#FAF8F5] group-hover:text-[#C19A6B] transition-colors leading-none" style={{fontFamily: 'sans-serif', letterSpacing: '-0.02em'}}>
                 LITTERPAPER
               </span>
             </Link>
