@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { ShieldCheck, Heart, ArrowUpRight } from 'lucide-react';
+import { Heart, ArrowUpRight } from 'lucide-react';
 import { CATEGORIES } from '@/lib/mockData';
 
 export function Footer() {
@@ -14,20 +14,13 @@ export function Footer() {
           {/* Brand Info */}
           <div className="md:col-span-5 space-y-4">
             <div className="flex items-center gap-3">
-              <span className="font-black text-2xl text-white tracking-tight">
+              <span className="font-black text-3xl sm:text-4xl text-white tracking-tight">
                 LITTERPAPER
               </span>
             </div>
             <p className="text-xs text-[#FAF8F5]/80 leading-relaxed max-w-md">
               리터페이퍼(Litter Paper)는 대가성 협찬을 엄격히 배제하고 연구 장비와 실측 데이터로 고양이 용품, 사료, 모래, 가전을 100% 내돈내산으로 검증하는 에디토리얼 미디어입니다.
             </p>
-            <div className="flex items-center gap-3 pt-2 text-xs">
-              <span className="inline-flex items-center gap-1 text-[#C19A6B] font-bold">
-                <ShieldCheck className="w-4 h-4" /> 협찬 0% 내돈내산 검증 원칙
-              </span>
-              <span className="text-[#444444]">|</span>
-              <span className="text-[#FAF8F5]/60">분광 분석 & 실측 데이터</span>
-            </div>
           </div>
 
           {/* Quick Categories */}
