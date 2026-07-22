@@ -32,11 +32,11 @@ export function HeroStory({ article }: HeroStoryProps) {
   }, [article]);
 
   return (
-    <section className="rounded-3xl overflow-hidden bg-[#242424] border border-[#333333] shadow-2xl text-[#FAF8F5] font-sans">
-      <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[520px]">
+    <section className="overflow-hidden bg-white dark:bg-[#242424] border-y border-[#EAE6DF] dark:border-[#333333] text-[#333333] dark:text-[#FAF8F5] font-sans">
+      <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[500px]">
         
         {/* Left Image Section (50%) */}
-        <div className="lg:col-span-6 relative overflow-hidden min-h-[320px] lg:min-h-[520px] bg-[#111]">
+        <div className="lg:col-span-7 relative overflow-hidden min-h-[320px] lg:min-h-[500px] bg-[#111]">
           <img
             src={article.coverImage}
             alt={article.title}
@@ -46,10 +46,10 @@ export function HeroStory({ article }: HeroStoryProps) {
           
           {/* Top Left Category Badge */}
           <div className="absolute top-6 left-6 flex items-center gap-2">
-            <span className="bg-[#C19A6B] text-white text-xs font-extrabold px-3 py-1 rounded-md uppercase tracking-wider shadow-md">
+            <span className="bg-[#C19A6B] text-white text-[11px] font-bold px-3 py-1 uppercase tracking-wider">
               {article.categoryName}
             </span>
-            <span className="bg-black/60 backdrop-blur-md text-white/90 text-xs px-3 py-1 rounded-md border border-white/20 font-bold">
+            <span className="bg-black/60 backdrop-blur-md text-white/90 text-[11px] px-3 py-1 font-semibold">
               100% 내돈내산 검증
             </span>
           </div>
@@ -68,19 +68,19 @@ export function HeroStory({ article }: HeroStoryProps) {
         </div>
 
         {/* Right LongBlack-style Dark Editorial Container (50%) */}
-        <div className="lg:col-span-6 p-8 sm:p-12 flex flex-col justify-between space-y-6 bg-[#242424]">
+        <div className="lg:col-span-5 p-7 sm:p-10 flex flex-col justify-between space-y-6 bg-white dark:bg-[#242424]">
           
           {/* Top Header without WITH LP */}
           <div className="space-y-6">
             {/* Top Navigation Bar */}
-            <div className="flex items-center justify-between border-b border-[#3D3D3D] pb-4">
+            <div className="flex items-center justify-between border-b border-[#EAE6DF] dark:border-[#3D3D3D] pb-4">
               <div className="flex items-center gap-2 font-extrabold tracking-widest text-sm uppercase">
                 <span className="text-[#C19A6B] border-b-2 border-[#C19A6B] pb-1">
                   TODAY
                 </span>
               </div>
 
-              <span className="text-[11px] text-white/40 font-mono tracking-wider">
+              <span className="text-[10px] text-[#888888] dark:text-white/40 font-semibold tracking-[0.15em]">
                 LITTER PAPER EDITORIAL
               </span>
             </div>
@@ -88,11 +88,11 @@ export function HeroStory({ article }: HeroStoryProps) {
             {/* LIVE Ticking Countdown Header */}
             {isFreeNow ? (
               <div className="flex items-center justify-between pt-1">
-                <div className="flex items-center gap-2 text-xs font-bold text-[#FAF8F5]/90">
+                <div className="flex items-center gap-2 text-xs font-semibold text-[#666666] dark:text-[#FAF8F5]/90">
                   <Clock className="w-4 h-4 text-[#C19A6B] animate-pulse" />
                   <span>이 시간이 지나면 무료로 읽을 수 없습니다.</span>
                 </div>
-                <div className="text-2xl sm:text-3xl font-extrabold font-mono text-white tracking-widest bg-black/40 px-3 py-1 rounded-xl border border-white/10">
+                <div className="text-xl sm:text-2xl font-bold font-mono text-[#333333] dark:text-white tracking-wider">
                   {formatTimeRemaining(remainingSeconds)}
                 </div>
               </div>
@@ -103,25 +103,25 @@ export function HeroStory({ article }: HeroStoryProps) {
               </div>
             )}
 
-            <div className="h-px bg-[#3D3D3D]" />
+            <div className="h-px bg-[#EAE6DF] dark:bg-[#3D3D3D]" />
           </div>
 
           {/* Main Title & Subtitle in Pretendard Gothic */}
           <div className="space-y-4 my-auto">
             <Link href={`/article/${article.slug}`}>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-white hover:text-[#C19A6B] transition-colors leading-[1.3] tracking-tight">
+              <h2 className="text-2xl sm:text-[2rem] font-extrabold text-[#222222] dark:text-white hover:text-[#C19A6B] transition-colors leading-[1.35] tracking-tight">
                 {article.title}
               </h2>
             </Link>
 
-            <p className="text-sm sm:text-base text-white/70 font-normal leading-relaxed line-clamp-3">
+            <p className="text-sm text-[#666666] dark:text-white/70 font-normal leading-7 line-clamp-3">
               "{article.subtitle}"
             </p>
           </div>
 
           {/* Bottom Action Footer */}
-          <div className="pt-6 border-t border-[#3D3D3D] flex items-center justify-between">
-            <div className="flex items-center gap-4 text-xs text-white/60 font-medium">
+          <div className="pt-6 border-t border-[#EAE6DF] dark:border-[#3D3D3D] flex items-center justify-between">
+            <div className="flex items-center gap-4 text-xs text-[#777777] dark:text-white/60 font-medium">
               <span className="flex items-center gap-1">
                 <Heart className="w-4 h-4 text-red-500" /> {article.likes}
               </span>
@@ -132,7 +132,7 @@ export function HeroStory({ article }: HeroStoryProps) {
 
             <Link
               href={`/article/${article.slug}`}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-[#C19A6B] hover:bg-[#a88354] text-white text-xs font-extrabold transition-all shadow-lg"
+              className="inline-flex items-center gap-2 px-5 py-3 bg-[#222222] hover:bg-[#C19A6B] text-white text-xs font-bold transition-colors"
             >
               <span>지금 리뷰 읽기</span>
               <ArrowUpRight className="w-4 h-4" />

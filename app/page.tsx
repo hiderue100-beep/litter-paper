@@ -160,11 +160,11 @@ export default function HomePage() {
     <div className="min-h-screen flex flex-col bg-[#FAF8F5] dark:bg-[#1A1A1A] text-[#333333] dark:text-[#FAF8F5] font-sans">
       <Navbar />
 
-      <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-20">
+      <main className="flex-grow max-w-6xl mx-auto px-5 sm:px-6 lg:px-8 pt-10 sm:pt-14 space-y-24">
         
         {/* Scheduled Article Alert */}
         {scheduledArticle && (
-          <div className="p-4 rounded-2xl bg-[#C19A6B]/15 dark:bg-white/5 border border-[#C19A6B]/30 dark:border-[#333333] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-sans">
+          <div className="py-3 border-y border-[#EAE6DF] dark:border-[#333333] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-sans">
             <div className="flex items-center gap-2">
               <span className="px-2.5 py-0.5 rounded-full bg-[#333333] text-white font-extrabold text-[10px]">
                 NEXT REVIEW
@@ -189,7 +189,7 @@ export default function HomePage() {
 
         {/* Today's Free Story Highlight Box with Countdown */}
         {todaysFreeStory && (
-          <section className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#242424] border border-[#EAE6DF] dark:border-[#333333] shadow-xs space-y-6">
+          <section className="py-8 border-y border-[#EAE6DF] dark:border-[#333333] space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#EAE6DF] dark:border-[#333333] pb-4">
               <div>
                 <span className="text-xs font-bold uppercase tracking-wider text-[#C19A6B] flex items-center gap-1">
@@ -214,12 +214,12 @@ export default function HomePage() {
         {/* 🔥 요즘 화제 (Trending Articles & Issue Grid) */}
         {/* ========================================================================= */}
         <section className="space-y-8">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#EAE6DF] dark:border-[#333333] pb-4">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-[#EAE6DF] dark:border-[#333333] pb-5">
             <div>
               <span className="text-xs font-extrabold uppercase tracking-wider text-[#C19A6B] flex items-center gap-1.5">
                 <Flame className="w-4 h-4 text-[#FF8A00]" /> 요즘 화제
               </span>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#333333] dark:text-[#FAF8F5] mt-1">
+              <h2 className="text-2xl sm:text-[2rem] font-extrabold tracking-tight text-[#333333] dark:text-[#FAF8F5] mt-1">
                 실시간 독자 반응 1위 & 검증 이슈 기사 모음
               </h2>
             </div>
@@ -269,7 +269,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10">
             {filteredArticles.slice(0, 6).map((art) => (
               <ArticleCard key={art.id} article={art} />
             ))}
@@ -279,7 +279,7 @@ export default function HomePage() {
         {/* ========================================================================= */}
         {/* 🐾 픽캣 (Pick Cat Live Poll & 100-Char Memo Feed) */}
         {/* ========================================================================= */}
-        <section className="p-8 sm:p-10 rounded-3xl bg-white dark:bg-[#242424] border border-[#EAE6DF] dark:border-[#333333] shadow-xl space-y-8">
+        <section className="py-10 sm:py-12 border-y border-[#EAE6DF] dark:border-[#333333] space-y-8">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#EAE6DF] dark:border-[#333333] pb-6">
             <div>
               <span className="text-xs font-extrabold uppercase tracking-wider text-[#C19A6B] flex items-center gap-1.5">
@@ -394,7 +394,7 @@ export default function HomePage() {
         {/* ========================================================================= */}
         {/* 👑 프리미엄 (Premium Exclusive Archive) */}
         {/* ========================================================================= */}
-        <section className="p-8 sm:p-12 rounded-3xl bg-[#242424] border border-[#333333] text-white shadow-xl space-y-8">
+        <section className="px-6 py-10 sm:px-10 sm:py-12 bg-[#242424] border-y border-[#333333] text-white space-y-8">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#333333] pb-6">
             <div>
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#C19A6B] text-white text-xs font-extrabold">

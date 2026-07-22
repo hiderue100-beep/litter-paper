@@ -42,7 +42,7 @@ export function ArticleCard({ article, variant = 'standard', isUserPremium = fal
 
   if (variant === 'horizontal') {
     return (
-      <div className="group rounded-3xl bg-white dark:bg-[#242424] border border-[#EAE6DF] dark:border-[#333333] overflow-hidden hover:border-[#C19A6B] dark:hover:border-[#C19A6B] transition-all shadow-2xs hover:shadow-lg flex flex-col sm:flex-row font-sans">
+      <div className="group bg-white dark:bg-[#242424] border-y border-[#EAE6DF] dark:border-[#333333] overflow-hidden hover:border-[#C19A6B] dark:hover:border-[#C19A6B] transition-colors flex flex-col sm:flex-row font-sans">
         <div className="relative sm:w-2/5 h-48 sm:h-auto overflow-hidden shrink-0">
           <img
             src={article.coverImage}
@@ -50,7 +50,7 @@ export function ArticleCard({ article, variant = 'standard', isUserPremium = fal
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
           <div className="absolute top-3 left-3 flex flex-wrap gap-1">
-            <span className="bg-[#333333] text-white text-[10px] font-extrabold px-2.5 py-1 rounded-md uppercase tracking-wider">
+            <span className="bg-[#333333] text-white text-[10px] font-bold px-2.5 py-1 uppercase tracking-wider">
               {article.categoryName}
             </span>
             {access.isFreeNow && (
@@ -106,7 +106,7 @@ export function ArticleCard({ article, variant = 'standard', isUserPremium = fal
 
   // Standard vertical card
   return (
-    <div className="group rounded-3xl bg-white dark:bg-[#242424] border border-[#EAE6DF] dark:border-[#333333] overflow-hidden hover:border-[#C19A6B] dark:hover:border-[#C19A6B] transition-all shadow-2xs hover:shadow-xl flex flex-col justify-between font-sans">
+      <div className="group bg-white dark:bg-[#242424] border border-[#EAE6DF] dark:border-[#333333] overflow-hidden hover:border-[#C19A6B] dark:hover:border-[#C19A6B] transition-colors flex flex-col justify-between font-sans">
       <div>
         <div className="relative h-52 w-full overflow-hidden">
           <img
@@ -118,7 +118,7 @@ export function ArticleCard({ article, variant = 'standard', isUserPremium = fal
           
           {/* Top Badges */}
           <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
-            <span className="bg-[#333333] text-white text-[10px] font-extrabold px-2.5 py-1 rounded-md uppercase tracking-wider">
+            <span className="bg-[#333333] text-white text-[10px] font-bold px-2.5 py-1 uppercase tracking-wider">
               {article.categoryName}
             </span>
             {access.isFreeNow && (
@@ -136,7 +136,7 @@ export function ArticleCard({ article, variant = 'standard', isUserPremium = fal
           </div>
         </div>
 
-        <div className="p-6 space-y-3">
+        <div className="p-5 space-y-3">
           <Link href={`/article/${article.slug}`}>
             <h3 className="text-lg font-extrabold text-[#333333] dark:text-[#FAF8F5] group-hover:text-[#C19A6B] transition-colors leading-snug line-clamp-2">
               {article.title}
@@ -148,7 +148,7 @@ export function ArticleCard({ article, variant = 'standard', isUserPremium = fal
         </div>
       </div>
 
-      <div className="px-6 pb-6 pt-3 border-t border-[#EAE6DF]/60 dark:border-[#333333]/60 flex items-center justify-between text-xs text-[#666666]">
+      <div className="px-5 pb-5 pt-3 border-t border-[#EAE6DF]/60 dark:border-[#333333]/60 flex items-center justify-between text-xs text-[#666666]">
         <div className="flex items-center gap-2">
           <img
             src={article.author.avatar}

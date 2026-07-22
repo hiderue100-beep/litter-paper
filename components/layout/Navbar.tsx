@@ -25,7 +25,6 @@ import {
 import { SearchModal } from '../editorial/SearchModal';
 import { AuthModal } from '../auth/AuthModal';
 import { storage } from '@/lib/storage';
-import { BREAKING_NEWS } from '@/lib/mockData';
 import { UserProfile } from '@/types';
 import { useToast } from '../ui/Toast';
 
@@ -41,7 +40,6 @@ export function Navbar() {
 
   const [currentUser, setCurrentUser] = useState<UserProfile | null>(null);
   const [bookmarkCount, setBookmarkCount] = useState(0);
-  const [tickerIndex, setTickerIndex] = useState(0);
 
   // Initialize session & bookmark count
   useEffect(() => {
@@ -50,14 +48,6 @@ export function Navbar() {
     setBookmarkCount(storage.getBookmarks().length);
     setCurrentUser(storage.getCurrentUser());
   }, [pathname]);
-
-  // Breaking news ticker auto cycle
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTickerIndex((prev) => (prev + 1) % BREAKING_NEWS.length);
-    }, 4500);
-    return () => clearInterval(timer);
-  }, []);
 
   const toggleDarkMode = () => {
     const nextDark = !isDarkMode;
@@ -78,44 +68,20 @@ export function Navbar() {
 
   return (
     <>
-      {/* Top Breaking News Ticker Bar */}
-      <div className="bg-[#333333] text-[#FAF8F5] text-xs py-2.5 px-4 border-b border-[#222222]">
-        <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
-          <div className="flex items-center gap-2 overflow-hidden truncate">
-            <span className="bg-[#C19A6B] text-white font-extrabold text-[10px] px-2.5 py-0.5 rounded-full shrink-0 tracking-wider">
-              LITTER PAPER BRIEF
-            </span>
-            <span className="truncate font-medium hover:underline cursor-pointer text-[#EAE6DF]">
-              {BREAKING_NEWS[tickerIndex]}
-            </span>
-          </div>
-
-          <div className="hidden sm:flex items-center gap-4 text-[11px] text-[#FAF8F5]/80 shrink-0">
-            <Link href="/premium" className="hover:text-white transition-colors flex items-center gap-1 font-bold text-[#C19A6B]">
-              <Crown className="w-3.5 h-3.5" /> 프리미엄 멤버십
-            </Link>
-            <span className="text-[#555555]">|</span>
-            <Link href="/newsletter" className="hover:text-white transition-colors flex items-center gap-1 font-bold text-[#C19A6B]">
-              <Mail className="w-3.5 h-3.5" /> 뉴스레터 구독
-            </Link>
-          </div>
-        </div>
-      </div>
-
       {/* Main Sticky Header */}
       <header className="sticky top-0 z-40 bg-[#FAF8F5]/95 dark:bg-[#1A1A1A]/95 backdrop-blur-md border-b border-[#EAE6DF] dark:border-[#333333] transition-colors duration-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-20">
+        <div className="max-w-6xl mx-auto px-5 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16 sm:h-[72px]">
             
             {/* Brand Logo - LITTERPAPER Wordmark */}
             <Link href="/" className="group shrink-0">
-              <span className="font-black text-2xl sm:text-3xl tracking-tight text-[#111111] dark:text-[#FAF8F5] group-hover:text-[#C19A6B] transition-colors leading-none" style={{fontFamily: 'sans-serif', letterSpacing: '-0.02em'}}>
+              <span className="font-black text-2xl sm:text-[28px] tracking-tight text-[#111111] dark:text-[#FAF8F5] group-hover:text-[#C19A6B] transition-colors leading-none" style={{fontFamily: 'sans-serif', letterSpacing: '-0.02em'}}>
                 LITTERPAPER
               </span>
             </Link>
 
             {/* Desktop Navigation Links (EXACT 5 RESTRUCTURED ITEMS) */}
-            <nav className="hidden md:flex items-center gap-8 text-sm font-extrabold text-[#666666] dark:text-[#A0A0A0]">
+            <nav className="hidden md:flex items-center gap-6 text-sm font-semibold text-[#666666] dark:text-[#A0A0A0]">
               {/* 1. 리터페이퍼란? */}
               <Link
                 href="/about"
