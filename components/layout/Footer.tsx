@@ -18,8 +18,8 @@ export function Footer() {
               <div className="w-10 h-10 rounded-2xl bg-white dark:bg-[#1A1A1A] flex items-center justify-center p-1 border border-[#333333]">
                 <LitterPaperLogo size={32} />
               </div>
-              <span className="font-extrabold text-2xl text-white tracking-tight">
-                Litter Paper
+              <span className="font-black text-2xl text-white tracking-tight">
+                LITTERPAPER
               </span>
             </div>
             <p className="text-xs text-[#FAF8F5]/80 leading-relaxed max-w-md">
@@ -115,7 +115,7 @@ export function Footer() {
 
         {/* Bottom Legal Copyright Bar */}
         <div className="pt-8 border-t border-[#333333] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#FAF8F5]/60">
-          <p>© 2026 Litter Paper Media Inc. All rights reserved.</p>
+          <p>© 2026 LITTERPAPER Media Inc. All rights reserved.</p>
           <p className="flex items-center gap-1 text-[11px]">
             Designed with <Heart className="w-3 h-3 text-[#C19A6B] fill-current" /> for all cats in Korea.
           </p>
