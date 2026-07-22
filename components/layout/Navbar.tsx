@@ -22,7 +22,6 @@ import {
   Flame,
   Vote
 } from 'lucide-react';
-import { LitterPaperLogo } from '../ui/LitterPaperLogo';
 import { SearchModal } from '../editorial/SearchModal';
 import { AuthModal } from '../auth/AuthModal';
 import { storage } from '@/lib/storage';
@@ -108,19 +107,11 @@ export function Navbar() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
             
-            {/* Brand Logo with Official Cat-in-Box Symbol */}
-            <Link href="/" className="flex items-center gap-3 group shrink-0">
-              <div className="w-11 h-11 rounded-2xl bg-white dark:bg-[#242424] border border-[#EAE6DF] dark:border-[#333333] flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform p-1">
-                <LitterPaperLogo size={36} />
-              </div>
-              <div className="flex flex-col">
-                <span className="font-extrabold text-2xl tracking-tight text-[#333333] dark:text-[#FAF8F5] group-hover:text-[#C19A6B] transition-colors leading-none font-sans">
-                  Litter Paper
-                </span>
-                <span className="text-[11px] font-extrabold text-[#C19A6B] tracking-wider uppercase mt-1">
-                  리터페이퍼 • 100% 내돈내산 리뷰
-                </span>
-              </div>
+            {/* Brand Logo - LITTERPAPER Wordmark */}
+            <Link href="/" className="group shrink-0">
+              <span className="font-black text-2xl tracking-tight text-[#111111] dark:text-[#FAF8F5] group-hover:text-[#C19A6B] transition-colors leading-none" style={{fontFamily: 'sans-serif', letterSpacing: '-0.02em'}}>
+                LITTERPAPER
+              </span>
             </Link>
 
             {/* Desktop Navigation Links (EXACT 5 RESTRUCTURED ITEMS) */}
